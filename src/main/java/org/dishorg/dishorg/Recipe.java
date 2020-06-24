@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 public class Recipe {
     private @Id
     @GeneratedValue
