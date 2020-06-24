@@ -9,9 +9,6 @@ import javax.persistence.Id;
 @Data
 @Embeddable
 public class Ingredient {
-    private @Id
-    @GeneratedValue
-    Long id;
     private String name;
     private String unit;
     private double quantity;

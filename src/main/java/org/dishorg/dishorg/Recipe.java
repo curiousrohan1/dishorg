@@ -8,10 +8,11 @@ import java.util.List;
 @Data
 @Entity
 public class Recipe {
-    private @Id
-    @GeneratedValue
-    Long id;
+    private @Id @GeneratedValue Long id;
+
+    @Column(unique = true)
     private String name;
+
     @ElementCollection
     private List<Ingredient> ingredients;
 
