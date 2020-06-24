@@ -1,31 +1,27 @@
 package org.dishorg.dishorg;
 
+import lombok.Data;
+
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+@Data
+@Embeddable
 public class Ingredient {
-    private double quantity;
-    private String unit;
+    private @Id
+    @GeneratedValue
+    Long id;
     private String name;
+    private String unit;
+    private double quantity;
 
-    public double getQuantity() {
-        return quantity;
+    public Ingredient() {
     }
 
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Ingredient(String name, String unit, double quantity) {
         this.name = name;
+        this.unit = unit;
+        this.quantity = quantity;
     }
 }

@@ -1,33 +1,25 @@
 package org.dishorg.dishorg;
 
-import javax.persistence.Entity;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.util.List;
+
+@Data
 @Entity
 public class Recipe {
-    private List<Ingredient> ingredients;
+    private @Id
+    @GeneratedValue
+    Long id;
     private String name;
+    @ElementCollection
+    private List<Ingredient> ingredients;
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public Recipe() {
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Recipe(String name, List<Ingredient> ingredients) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Recipe{" +
-                "ingredients=" + ingredients +
-                ", name='" + name + '\'' +
-                '}';
+        this.ingredients = ingredients;
     }
 }
