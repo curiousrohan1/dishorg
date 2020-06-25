@@ -6,7 +6,7 @@ import java.util.List;
 
 @RestController
 public class RecipeController {
-private RecipeRepository repo;
+    private RecipeRepository repo;
 
     public RecipeController(RecipeRepository repo) {
         this.repo = repo;
@@ -21,9 +21,15 @@ private RecipeRepository repo;
         return repo.save(newRecipe);
     }
 
-    @RequestMapping("/")
-    public String index() {
-        return "Greetings from Spring Boot!";
+    @PostMapping("/dummy")
+    String dummy(@RequestBody String data) {
+        System.out.println("data: " + data);
+        return "success";
     }
+//
+//    @RequestMapping("/")
+//    public String index() {
+//        return "Greetings from Spring Boot!";
+//    }
 
 }
