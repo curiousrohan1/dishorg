@@ -16,52 +16,54 @@
             var unit = $("#unit").val();
             var line = quantity + " " + unit + " of " + name;
             $("#ingList").append('<li>' + line + '</li>');
-            recipe.ingredients.push({quantity:quantity, name:name,unit:unit});
+            recipe.ingredients.push({ quantity: quantity, name: name, unit: unit });
         }
-        var recipe = {name:"", ingredients:[]};
-        function setRecipeName(){
-            recipe.name=$("#recipeName").val();
+        var recipe = { name: "", ingredients: [] };
+        function setRecipeName() {
+            recipe.name = $("#recipeName").val();
         }
-        function save(){
-            $.post({url: "recipes", data: JSON.stringify(recipe), contentType: "application/json", dataType: "json", success: function(data, status){
+        function save() {
+            $.post({
+                url: "recipes", data: JSON.stringify(recipe), contentType: "application/json", dataType: "json", success: function (data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
-            }});
+                }
+            });
         };
-</script>
+    </script>
 </head>
 
 <body>
-<div style="position:relative;">
-    <div style="text-align:center;position: absolute;width: 200px; right: 0px;">
-        <h3>Profile</h3>
+    <div style="position:relative;">
+        <div style="text-align:center;position: absolute;width: 200px; right: 0px;">
+            <h3>Profile</h3>
+        </div>
+        <div id="banner" class="jumbotron" style="text-align:center;">
+            <h1>Dishorg ids a cup of tea</h1>
+        </div>
     </div>
-    <div id="banner" class="jumbotron" style="text-align:center;">
-        <h1>Dishorg ids a cup of tea</h1>
-    </div>
-</div>
-<div>
-    Create recipe: <input type="text" id="recipeName">
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsed"
+    <div>
+        Create recipe: <input type="text" id="recipeName">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsed"
             aria-expanded="false" aria-controls="collapsed" onclick="setRecipeName();">
-        OK
-    </button>
-</div>
-<div class="collapse" id=collapsed>
-    Quantity:<input type="text" id="quantity">
+            OK
+        </button>
+    </div>
+    <div class="collapse" id=collapsed>
+        Quantity:<input type="text" id="quantity">
 
-    Unit:<input type="text" id="unit">
+        Unit:<input type="text" id="unit">
 
-    Name:<input type="text" id="name">
+        Name:<input type="text" id="name">
 
-    <button type="button" class="btn btn-dark" onclick="addIngredientToPreview();">Add</button>
+        <button type="button" class="btn btn-dark" onclick="addIngredientToPreview();">Add</button>
 
-</div>
-<hr>
-<div>
-    <ul id="ingList">
-    </ul>
-    <button type="button" class="btn btn-dark" onclick="save();">Save</button>
-</div>
+    </div>
+    <hr>
+    <div>
+        <ul id="ingList">
+        </ul>
+        <button type="button" class="btn btn-dark" onclick="save();">Save</button>
+    </div>
 </body>
 
 </html>
