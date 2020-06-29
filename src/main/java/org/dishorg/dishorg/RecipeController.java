@@ -11,6 +11,7 @@ public class RecipeController {
     public RecipeController(RecipeRepository repo) {
         this.repo = repo;
     }
+
     @GetMapping("/recipes")
     List<Recipe> all() {
         return repo.findAll();
@@ -21,15 +22,9 @@ public class RecipeController {
         return repo.save(newRecipe);
     }
 
-    @PostMapping("/dummy")
-    String dummy(@RequestBody String data) {
-        System.out.println("data: " + data);
-        return "success";
+    @GetMapping("/recipes/{id}")
+    Recipe one(@PathVariable Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RecipeNotFoundException(id));
     }
-//
-//    @RequestMapping("/")
-//    public String index() {
-//        return "Greetings from Spring Boot!";
-//    }
-
 }
