@@ -27,4 +27,19 @@ public class RecipeController {
         return repo.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException(id));
     }
+
+    @PutMapping("/recipes/{id}")
+    Recipe replaceRecipe(@RequestBody Recipe newRecipe, @PathVariable Long id) {
+
+        return repo.findById(id)
+                .map(recipe -> {
+                    recipe.setName(newRecipe.getName());
+                    recipe.setIngredients(newRecipe.getIngredients());
+                    return repo.save(recipe);
+                })
+                .orElseGet(() -> {
+                    newRecipe.setId(id);
+                    return repo.save(newRecipe);
+                });
+    }
 }
