@@ -29,46 +29,41 @@
             <li class="nav-item">
                 <a class="nav-link" href="dishorgopen.html">Sign out</a>
             </li>
-            <li class="nav-item dropdown">
-                <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-                   data-toggle="dropdown" href="#" id="navbarDropdown" role="button">
-                    Dropdown
-                </a>
-                <div aria-labelledby="navbarDropdown" class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a aria-disabled="true" class="nav-link disabled" href="#" tabindex="-1">Disabled</a>
-            </li>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+       <!-- <form class="form-inline my-2 my-lg-0">
             <input aria-label="Search" class="form-control mr-sm-2" placeholder="Search" type="search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        </form>-->
     </div>
 </nav>
 
 <div style="position:relative;width:49%;float:left">
     <h3><strong>Recipes:</strong>
 
-        <button id="plus" style="float:right">+</button>
+        <button id="plusRec" style="float:right">+</button>
     </h3>
     <ul class="list-group" id="recipe-list">
     </ul>
-    <div id="new-title-recipe">
-        <input id="new-recipe-name" type="text">
-        <button id="add">Add</button>
+    <div id="recDiv">
+        <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
+        <button id="addRec">Add</button>
     </div>
 </div>
 <div id="recipe-details-container" style="position:relative;width:49%;float:right;">
-    <h3><strong>Ingredients:</strong></h3>
+    <h3><strong>Ingredients:</strong>
+        <button id="plusIng" style="float:right">+</button>
+    </h3>
     <ul id="recipe-details">
     </ul>
+    <div id="ingDiv">
+        <input id="quantity" placeholder="Quantity" type="text">
+        <input id="unit" placeholder="Unit" type="text">
+        <input id="name" placeholder="Name" type="text">
+        <button class="btn btn-dark" id="addIng"  type="button">Add</button>
+    </div>
 </div>
+
 </body>
 
 </html>
