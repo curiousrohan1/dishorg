@@ -1,4 +1,16 @@
 var currentRec = null;
+
+function createIngDiv(idx) {
+    return `
+       <div id="ingDiv${idx}">
+            <input id="quantity${idx}" placeholder="Quantity" type="text">
+            <input id="unit${idx}" placeholder="Unit" type="text">
+            <input id="name${idx}" placeholder="Name" type="text">
+            <button class="btn btn-dark" id="addIng${idx}" data-index="${idx}" type="button">Apply</button>
+            <button class="btn btn-light" id="cancelIng${idx}" data-index="${idx}" type="button">Cancel</button>
+        </div>`
+}
+
 function successOnAjaxOfRecipe(recipe, status) {
     recipe.ingredients.forEach(function (ingredient, idx, arr) {
         var quantity = ingredient.quantity;
@@ -6,12 +18,17 @@ function successOnAjaxOfRecipe(recipe, status) {
         var unit = ingredient.unit;
         var line = quantity + " " + unit + " of " + name;
         $("#recipe-details").append('<li>' + line + '</li>')
+        $("#recipe-details").append(`<li id="ingEdit${idx}">` + createIngDiv(idx) + '</li>');
+        $("#ingEdit"+idx).hide();
+        $("#quantity"+idx).val(quantity);
+        $("#unit"+idx).val(unit);
+        $("#name"+idx).val(name);
     });
     currentRec=recipe;
 }
 
-function addHandler() {
-    $("button.recipe-list").click(function () {
+function addHandler(matchingButtons) {
+    matchingButtons.click(function () {
         $("#recipe-details-container").show();
         $("button.active.recipe-list").removeClass("active");
         $(this).addClass("active");
@@ -20,6 +37,7 @@ function addHandler() {
     });
 }
 $(document).ready(function () {
+    $("#recipe-details-container").append(createIngDiv(""));
     $("#unit").val("");
     $("#name").val("");
     $("#quantity").val("");
@@ -31,13 +49,14 @@ $(document).ready(function () {
             $("#addRec").click();
         }
     });
+    // On page load, gets the recipe list, and appends as buttons to a ul in left pane.
     $.get("/recipes", function (recipeList, status) {
         recipeList.forEach(function (recipe, idx, arr) {
             $("#recipe-list").append(
                 '<button class="recipe-list list-group-item list-group-item-action " type="button" data-id="'
                 + recipe.id + '">' + recipe.name + '</button>');
         });
-        addHandler();
+        addHandler($("button.recipe-list"));
     }, "json");
     $("#plusRec").click(function () {
         $("#new-recipe-name").val("");
@@ -52,8 +71,9 @@ $(document).ready(function () {
                 $("#recipe-list").append(
                     '<button class="recipe-list list-group-item list-group-item-action " type="button" data-id="'
                     + data.id + '">' + data.name + '</button>');
-                addHandler();
-                $("button.recipe-list.list-group-item-action:last-child").trigger("click");
+                var lastButton=$("button.recipe-list.list-group-item-action:last-child");
+                addHandler(lastButton);
+                lastButton.trigger("click");
             }
         });
     });
