@@ -6,13 +6,13 @@ function createIngDiv(idx) {
             <input id="quantity${idx}" placeholder="Quantity" type="text">
             <input id="unit${idx}" placeholder="Unit" type="text">
             <input id="name${idx}" placeholder="Name" type="text">
-            <button class="btn btn-dark apply" id="addIng${idx}" data-idx="${idx}" type="button">Apply</button>
-            <button class="btn btn-light cancel" id="cancelIng${idx}" data-idx="${idx}" type="button">Cancel</button>
+            <button class="btn btn-dark apply" id="addIng${idx}" data-idx="${idx}" type="button"><img src="images/apply.png"style="width:30px;height:30px;"></button>
+            <button class="btn btn-light cancel" id="cancelIng${idx}" data-idx="${idx}" type="button"><img src="images/cancel.jpg"style="width:30px;height:30px;"></button>
         </div>`
 }
 
 function ingCancel(idx) {
-    if (idx == "") {
+    if (idx === "") {
         $("#ingDiv").hide();
     } else {
         $("#ingEdit"+idx).hide();
@@ -25,7 +25,7 @@ function ingApply(idx) {
     var name = $("#name" + idx).val();
     var unit = $("#unit" + idx).val();
     var line = quantity + " " + unit + " of " + name;
-    if(idx == ""){
+    if(idx === ""){
         currentRec.ingredients.push({ quantity: quantity, name: name, unit: unit });
         $("#unit").val("");
         $("#name").val("");
@@ -57,7 +57,7 @@ function successOnAjaxOfRecipe(recipe, status) {
         var line = quantity + " " + unit + " of " + name;
         $("#recipe-details").append(`
             <li id="ingLineContainer${idx}">
-                <button class="edit-recipes" id="editIng${idx}" data-idx="${idx}"><img src="edit.jpg"style="width:30px;height:30px;"></button>
+                <button class="edit-recipes" id="editIng${idx}" data-idx="${idx}"><img src="images/edit.jpg"style="width:30px;height:30px;"></button>
                 ${line}
             </li>`)
         $("#recipe-details").append(`<li id="ingEdit${idx}">` + createIngDiv(idx) + '</li>');
@@ -68,9 +68,14 @@ function successOnAjaxOfRecipe(recipe, status) {
         $("button.edit-recipes").prop("disabled", false );
     });
     currentRec=recipe;
+    $("#recTitle").text(currentRec.name);
     $("button.edit-recipes").click(function(){
-        $("button.edit-recipes").prop("disabled", true );
         var idx=$(this).data("idx");
+        var ing=currentRec.ingredients[idx];
+        $("#quantity"+idx).val(ing.quantity);
+        $("#unit"+idx).val(ing.unit);
+        $("#name"+idx).val(ing.name);
+        $("button.edit-recipes").prop("disabled", true );
         $("#ingEdit"+idx).show();
         $("#ingLineContainer"+idx).hide();
     });

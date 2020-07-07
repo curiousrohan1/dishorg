@@ -6,16 +6,14 @@
     <title>Recipes</title>
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js">
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="js/recipes.js"></script>
 </head>
-
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Cook It</a>
+    <a class="navbar-brand" href="#"><img src="images/logo.svg" style="width:100px;height:100px;"></a>
     <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
             class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
@@ -51,7 +49,7 @@
     </div>
 </div>
 <div id="recipe-details-container" style="position:relative;width:49%;float:right;">
-    <h3><strong>Ingredients:</strong>
+    <h3><strong id="recTitle"></strong>
         <button id="plusIng" style="float:right">+</button>
     </h3>
     <hr>
