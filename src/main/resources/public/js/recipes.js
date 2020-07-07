@@ -99,6 +99,7 @@ function addRecHandler(matchingButtons) {
     });
 }
 $(document).ready(function() {
+    $("#renamed-recipe-name").hide();
     $("#recipe-details-container").append(createIngDiv(""));
     $("#addIng").click(function() {
         ingApply("");
@@ -151,4 +152,28 @@ $(document).ready(function() {
         $("#quantity").val("");
         $("#ingDiv").show();
     });
+    $("#editRecName").click(function(){
+        $("#recTitle").hide();
+        $("#editRecName").hide();
+        $("#renamed-recipe-name").show();
+        $("#renameRecInput").val($("#recTitle").text());
+    })
+    $("#applyRecRename").click(function(){
+        currentRec.name= $("#renameRecInput").val();
+        $.post({
+            url: "recipes", data: JSON.stringify(currentRec), contentType: "application/json", dataType: "json", success: function (data, status) {
+                $("button.recipe-list.active").text(data.name);
+            }
+         });
+        $("#recTitle").show();
+        $("#editRecName").show();
+        $("#renamed-recipe-name").hide();
+        $("#renameRecInput").val($("#recTitle").text());
+    })
+    $("#cancelRecRename").click(function(){
+        $("#recTitle").show();
+        $("#editRecName").show();
+        $("#renamed-recipe-name").hide();
+        $("#renameRecInput").val($("#recTitle").text());
+    })
 });
