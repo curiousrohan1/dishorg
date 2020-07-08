@@ -1,5 +1,5 @@
 var currentRec = null;
-
+var currentIdx=null;
 function createIngDiv(idx) {
     return `
        <div id="ingDiv${idx}">
@@ -57,7 +57,8 @@ function successOnAjaxOfRecipe(recipe, status) {
         var line = quantity + " " + unit + " of " + name;
         $("#recipe-details").append(`
             <li id="ingLineContainer${idx}">
-                <button class="edit-recipes" id="editIng${idx}" data-idx="${idx}"><img src="images/edit.jpg"style="width:30px;height:30px;"></button>
+                <button class="edit-recipes btn" id="editIng${idx}" data-idx="${idx}"><img src="images/edit.jpg"style="width:30px;height:30px;"></button>
+                <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"id="openModal${idx}" data-target="#confToDelModal"><img src="images/del.png"style="width:30px;height:30px;"></button>
                 ${line}
             </li>`)
         $("#recipe-details").append(`<li id="ingEdit${idx}">` + createIngDiv(idx) + '</li>');
@@ -87,6 +88,22 @@ function successOnAjaxOfRecipe(recipe, status) {
     $("li div button.apply").click(function(){
         var idx=$(this).data("idx");
         ingApply(idx);
+    });
+    $("button.openModal").click(function(){
+        currentIdx=$(this).data("idx");
+    })
+    $("#continueDel").click(function(){
+        var ing = currentRec.ingredients[currentIdx]
+        var newIngArr = [];
+        currentRec.ingredients.forEach(function(ingredient, idx, arr){
+            if(ing!==ingredient){
+                newIngArr.push({quantity:ingredient.quantity,unit:ingredient.unit,name:ingredient.name})
+            }
+        });
+        currentRec.ingredients=newIngArr;
+        $.ajax({
+            type:"PUT", url: "/recipes/"+currentRec.id, data: JSON.stringify(currentRec), contentType: "application/json", dataType: "json", success: successOnAjaxOfRecipe
+        });
     });
 }
 
