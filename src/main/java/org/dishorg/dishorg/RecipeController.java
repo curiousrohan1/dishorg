@@ -42,4 +42,10 @@ public class RecipeController {
                     return repo.save(newRecipe);
                 });
     }
+
+    @DeleteMapping("/recipes/{id}")
+    String deleteRecipe(@PathVariable Long id) {
+        repo.deleteById(id);
+        return "{status: \"Success\"}";
+    }
 }
