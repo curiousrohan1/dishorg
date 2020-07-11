@@ -10,14 +10,14 @@ let currentIdx = null;
   idx - The index of the ingDiv created
 */
 function createIngDiv(idx) {
-    return `
+  return `
        <div id="ingDiv${idx}">
             <input id="quantity${idx}" placeholder="Quantity" type="text"class="inputIngInfo"data-idx="${idx}">
             <input id="unit${idx}" placeholder="Unit" type="text"class="inputIngInfo"data-idx="${idx}">
             <input id="name${idx}" placeholder="Name" type="text" data-idx="${idx}" class="inputIngInfo">
             <button class="btn btn-dark apply" id="addIng${idx}" data-idx="${idx}" type="button"><img src="images/apply.png"style="width:30px;height:30px;"></button>
             <button class="btn btn-light cancel" id="cancelIng${idx}" data-idx="${idx}" type="button"><img src="images/cancel.jpg"style="width:30px;height:30px;"></button>
-        </div>`
+        </div>`;
 }
 /*
   ingCancel
