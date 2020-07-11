@@ -1,5 +1,14 @@
 var currentRec = null;
 var currentIdx = null;
+/*
+  createIngDiv
+
+  Returns an ingDiv, which consists of 3 inputs(denoting quantity, name, and unit) and two buttons(one is a
+  cancel button, the other is an apply/add button).
+
+  Parameters:
+  idx - The index of the ingDiv created
+*/
 function createIngDiv(idx) {
     return `
        <div id="ingDiv${idx}">
@@ -10,7 +19,14 @@ function createIngDiv(idx) {
             <button class="btn btn-light cancel" id="cancelIng${idx}" data-idx="${idx}" type="button"><img src="images/cancel.jpg"style="width:30px;height:30px;"></button>
         </div>`
 }
+/*
+  ingCancel
 
+  Part 2 of the click handler for the cancel buttons of the ingDivs. It determines whether or not the ing that is being canceled was being created or edited, and cancels accordingly.
+
+  Parameters:
+  idx - The index of the ing referenced
+*/
 function ingCancel(idx) {
     if (idx === "") {
         $("#ingDiv").hide();
@@ -19,7 +35,15 @@ function ingCancel(idx) {
         $("#ingLineContainer" + idx).show();
     }
 }
+/*
+  ingApply
 
+  Part 2 of the click handler for the apply buttons of the ingDivs. It determines whether or not the ing that
+  is being applied was being created or edited, and applies accordingly.
+
+  Parameters:
+  idx - The index of the ing denoted
+*/
 function ingApply(idx) {
     var quantity = $("#quantity" + idx).val();
     var name = $("#name" + idx).val();
@@ -75,7 +99,7 @@ function successOnAjaxOfRecipe(recipe, status) {
         var ing = currentRec.ingredients[idx];
         $("#quantity" + idx).val(ing.quantity);
         $("#unit" + idx).val(ing.unit);
-        $("#name" + idx).val(ing.name);
+            $("#name" + idx).val(ing.name);
         $("button.edit-recipes").prop("disabled", true);
         $("#ingEdit" + idx).show();
         $("#ingLineContainer" + idx).hide();
@@ -106,7 +130,14 @@ function successOnAjaxOfRecipe(recipe, status) {
         });
     });
 }
+/*
+  addRecHandler
 
+  Adds a click handler to the buttons of the recipeList.
+
+  Parameters:
+  matchingButtons - The button being referenced
+*/
 function addRecHandler(matchingButtons) {
     matchingButtons.click(function () {
         $("#recipe-details-container").show();
@@ -115,6 +146,15 @@ function addRecHandler(matchingButtons) {
         $.get("/recipes/" + $(this).data("id"), successOnAjaxOfRecipe);
     });
 }
+/*
+  virtualRestart
+
+  Virtually restarts the whole program. Reloads both the left and right panes.
+
+  Parameters:
+  data - The currentRec object being deleted
+  status - string status; should be "success"
+*/
 function virtualRestart(data,status) {
     $("#renamed-recipe-name").hide();
     $("#unit").val("");
