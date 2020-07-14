@@ -30,7 +30,6 @@ public class RecipeController {
 
     @PutMapping("/recipes/{id}")
     Recipe replaceRecipe(@RequestBody Recipe newRecipe, @PathVariable Long id) {
-
         return repo.findById(id)
                 .map(recipe -> {
                     recipe.setName(newRecipe.getName());

@@ -13,21 +13,21 @@
 </head>
 
 <body>
-    <div aria-hidden="true" class="modal fade" id="confToDelModal" role="dialog" tabindex="-1">
+    <div aria-hidden="true" class="modal fade" id="cont-del-modal" role="dialog" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confToDel">Are you sure?</h5>
+                    <h5 class="modal-title" id="cont-del-ing">Are you sure?</h5>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                         <span aria-hidden="true">&times</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>If you delete this ingredient, it will no longer be saved. You will lose it forever.</p>
+                    <p>Ingredient deletion cannot be undone. Please confirm that you want to delete this ingredient.</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-dismiss="modal" id="cancelDel" type="button">Cancel</button>
-                    <button class="btn btn-primary delIng" data-dismiss="modal" id="continueDel" type="button">Continue
+                    <button class="btn btn-secondary" data-dismiss="modal" id="cancel-del" type="button">Cancel Deletion</button>
+                    <button class="btn btn-primary delIng" data-dismiss="modal" id="cont-del" type="button">Confirm Deletion
                     </button>
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbar-supported-content">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="dishorg.html">Recipes <span class="sr-only">(current)</span></a>
@@ -59,26 +59,26 @@
 
     <div style="position:relative;width:49%;float:left">
         <h3><strong>Recipes:</strong>
-            <button id="plusRec" style="float:right">+</button>
+            <button id="plus-rec" style="float:right">+</button>
         </h3>
         <hr>
         <ul class="list-group" id="recipe-list">
         </ul>
-        <div id="recDiv">
+        <div id="add-rec-div">
             <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
-            <button id="addRec">Add</button>
+            <button id="add-rec">Add</button>
         </div>
     </div>
     <div id="recipe-details-container" style="position:relative;width:49%;float:right;">
-        <h3><strong id="recTitle"></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <h3><strong id="rec-title"></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name">
-                <input id="renameRecInput" placeholder="New Name..." type="text">
-                <button id="applyRecRename"><img src="images/apply.png" style="width:30px;height:30px;"></button>
-                <button id="cancelRecRename"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
+                <input id="rename-rec-input" placeholder="New Name..." type="text">
+                <button id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;"></button>
+                <button id="cancel-rec-rename"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
             </div>
-            <button id="editRecName">Rename</button>
-            <button id="delRec"><img src="images/del.png" style="width:30px;height:30px;"></button>
-            <button id="plusIng" style="float:right">+</button>
+            <button id="edit-rec-name"><img src="images/edit.jpg"style="width:30px;height:30px;"></button>
+            <button id="del-rec"><img src="images/del.png" style="width:30px;height:30px;"></button>
+            <button id="plus-ing" style="float:right">+</button>
         </h3>
         <hr>
         <ul id="recipe-details">
