@@ -30,3 +30,4 @@ target
 .settings
 settings.json
 
+node_modules
