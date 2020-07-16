@@ -56,15 +56,20 @@ function ingApply(idx) {
   const quantity = $(`#quantity${idx}`).val();
   const name = $(`#name${idx}`).val();
   const unit = $(`#unit${idx}`).val();
-  const line = `${quantity} ${unit} of ${name}`;
+  var line=``;
+  if(unit ===''){
+    line=`${quantity} ${name}`;
+  }else{
+    line = `${quantity} ${unit} of ${name}`;
+  }
   if (idx === '') {
-    // Idx is empty, so we are adding, not editing.
+//     Idx is empty, so we are adding, not editing.
     currentRec.ingredients.push({ quantity, name, unit });
     $('#unit').val('');
     $('#name').val('');
     $('#quantity').val('');
   } else {
-    // Idx is not empty, so we are editing not adding.
+//     Idx is not empty, so we are editing not adding.
     currentRec.ingredients[idx] = { quantity, name, unit };
   }
   $.ajax({
@@ -95,7 +100,12 @@ function successOnAjaxOfRecipe(recipe, status) {
     const { quantity } = ingredient;
     const { name } = ingredient;
     const { unit } = ingredient;
-    const line = `${quantity} ${unit} of ${name}`;
+    var line=``;
+    if(unit ===''){
+      line=`${quantity} ${name}`;
+    }else{
+      line = `${quantity} ${unit} of ${name}`;
+    }
     $('#recipe-details').append(`
         <li id="ing-line-container${idx}">
             <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
@@ -136,21 +146,20 @@ function successOnAjaxOfRecipe(recipe, status) {
 }
 
 /*
-  addRecHandler
+  recipeButtonCallback
 
-  Adds a click handler to the buttons of the recipeList.
+  The callback of the recipe buttons.
 
-  Parameters:
-  matchingButtons - The button being referenced
+  Parameters: none.
 */
-function addRecHandler(matchingButtons) {
-  matchingButtons.click(function () {
-    $('#recipe-details-container').show();
-    $('button.active.recipe-list').removeClass('active');
-    $(this).addClass('active');
-    $.get(`/recipes/${$(this).data('id')}`, successOnAjaxOfRecipe);
-  });
+function recipeButtonCallback() {
+  $('#recipe-details-container').show();
+  $('button.active.recipe-list').removeClass('active');
+  $(this).addClass('active');
+  $.get(`/recipes/${$(this).data('id')}`, successOnAjaxOfRecipe);
+  $('#ing-div').hide();
 }
+
 
 /*
   reset
@@ -172,7 +181,7 @@ function reset() {
          </button>`,
       );
     });
-    addRecHandler($('button.recipe-list'));
+    $('button.recipe-list').click(recipeButtonCallback);
   }, 'json');
   currentRec = null;
   currentIdx = null;
@@ -216,7 +225,7 @@ $(document).ready(() => {
     if ($(`#quantity${idx}`).val() !== ''
     && $(`#name${idx}`).val() !== ''
     && event.keyCode === 13) {
-      $(`#addIng${idx}`).click();
+      $(`#add-ing${idx}`).click();
     }
   });
 
@@ -240,8 +249,9 @@ $(document).ready(() => {
            </button>`,
         );
         const lastButton = $('button.recipe-list.list-group-item-action:last-child');
-        addRecHandler(lastButton);
+        lastButton.click(recipeButtonCallback);
         lastButton.trigger('click');
+        $('#plus-ing').click();
       },
     });
   });
@@ -250,6 +260,7 @@ $(document).ready(() => {
     $('#name').val('');
     $('#quantity').val('');
     $('#ing-div').show();
+    $('#quantity').focus();
   });
   $('#del-rec').click(() => {
     $.ajax({
