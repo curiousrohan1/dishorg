@@ -1,5 +1,6 @@
 let currentRec = null;
 let currentIdx = null;
+
 /*
   successOnAjaxOfRecipe
 
@@ -133,13 +134,13 @@ function ingApply(idx) {
     line = `${quantity} ${unit} of ${name}`;
   }
   if (idx === '') {
-    //     Idx is empty, so we are adding, not editing.
+    // Idx is empty, so we are adding, not editing.
     currentRec.ingredients.push({ quantity, name, unit });
     $('#unit').val('');
     $('#name').val('');
     $('#quantity').val('');
   } else {
-    //     Idx is not empty, so we are editing not adding.
+    // Idx is not empty, so we are editing not adding.
     currentRec.ingredients[idx] = { quantity, name, unit };
   }
   $.ajax({
