@@ -242,13 +242,14 @@ $(document).ready(() => {
   });
   $('#add-rec').click(() => {
     $('#add-rec-div').hide();
-    const recipe = { name: $('#new-recipe-name').val(), ingredients: [] };
+    currentRec = { name: $('#new-recipe-name').val(), ingredients: [] };
     $.post({
       url: 'recipes',
-      data: JSON.stringify(recipe),
+      data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-      success: () => {
+      success: (recipe) => {
+        currentRec = recipe;
         $('#recipe-list').append(
           `<button class="recipe-list list-group-item list-group-item-action " type="button"
                    data-id="${recipe.id}">${recipe.name}
