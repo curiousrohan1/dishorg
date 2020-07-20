@@ -282,6 +282,7 @@ $(document).ready(() => {
   $('#edit-rec-name').click(() => {
     $('#rec-title').hide();
     $('#renamed-recipe-name').show();
+    $('#rename-rec-input').val(currentRec.name);
   });
   $('#apply-rec-rename').click(() => {
     currentRec.name = $('#rename-rec-input').val();
@@ -300,8 +301,10 @@ $(document).ready(() => {
     $('#rec-title').text(currentRec.name);
   });
   $('#cancel-rec-rename').click(() => {
-    $('#rec-Title').show();
+    const title = $('#rec-title');
+    title.show();
     $('#renamed-recipe-name').hide();
-    $('#rename-rec-input').val($('#rec-title').text());
+    title.text($('#rename-rec-input').val());
+    title.show();
   });
 });
