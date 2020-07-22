@@ -15,6 +15,7 @@ function successOnAjaxOfRecipe(recipe) {
   $('#recipe-details').empty();
   currentRec = recipe;
   $('#rec-title').text(currentRec.name);
+  $('#rec-title').show();
   currentRec.ingredients.forEach((ingredient, idx) => {
     const { quantity } = ingredient;
     const { name } = ingredient;
@@ -149,8 +150,12 @@ function ingApply(idx) {
     data: JSON.stringify(currentRec),
     contentType: 'application/json',
     dataType: 'json',
-    success: successOnAjaxOfRecipe,
-  });
+  }).done(successOnAjaxOfRecipe).fail(
+    (recipe, status) => {
+      alert(recipe);
+      console.log(status);
+    }
+  );
   $('#quantity').focus();
 }
 
@@ -165,7 +170,12 @@ function recipeButtonCallback() {
   $('#recipe-details-container').show();
   $('button.active.recipe-list').removeClass('active');
   $(this).addClass('active');
-  $.get(`/recipes/${$(this).data('id')}`, successOnAjaxOfRecipe);
+  $.get(`/recipes/${$(this).data('id')}`).done(successOnAjaxOfRecipe).fail(
+    (recipe, status) => {
+      alert(recipe);
+      console.log(status);
+    }
+  );
   $('#ing-div').hide();
 }
 
@@ -180,7 +190,7 @@ function recipeButtonCallback() {
 function reset() {
   $('#recipe-details-container').hide();
   // On page load, gets the recipe list, and appends as buttons to a ul in left pane.
-  $.get('/recipes', (recipeList) => {
+  $.get('/recipes', 'json').done((recipeList) => {
     $('#recipe-list').empty();
     recipeList.forEach((recipe) => {
       $('#recipe-list').append(
@@ -190,7 +200,10 @@ function reset() {
       );
     });
     $('button.recipe-list').click(recipeButtonCallback);
-  }, 'json');
+  }).fail((recipe, status) => {
+    alert(recipe);
+    console.log(status);
+  });
   currentRec = null;
   currentIdx = null;
 }
@@ -225,8 +238,12 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-      success: successOnAjaxOfRecipe,
-    });
+    }).done(successOnAjaxOfRecipe).fail(
+      (recipe, status) => {
+        alert(recipe);
+        console.log(status);
+      }
+    );
   });
   $('input.inputIngInfo').keypress(function (event) {
     const idx = $(this).data('idx');
@@ -248,18 +265,20 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-      success: (recipe) => {
-        currentRec = recipe;
-        $('#recipe-list').append(
-          `<button class="recipe-list list-group-item list-group-item-action " type="button"
-                   data-id="${recipe.id}">${recipe.name}
-           </button>`,
-        );
-        const lastButton = $('button.recipe-list.list-group-item-action:last-child');
-        lastButton.click(recipeButtonCallback);
-        lastButton.trigger('click');
-        $('#plus-ing').click();
-      },
+    }).done((recipe) => {
+      currentRec = recipe;
+      $('#recipe-list').append(
+        `<button class="recipe-list list-group-item list-group-item-action " type="button"
+                 data-id="${recipe.id}">${recipe.name}
+         </button>`,
+      );
+      const lastButton = $('button.recipe-list.list-group-item-action:last-child');
+      lastButton.click(recipeButtonCallback);
+      lastButton.trigger('click');
+      $('#plus-ing').click();
+    }).fail((recipe, status) => {
+      alert(recipe);
+      console.log(status);
     });
   });
   $('#plus-ing').click(() => {
@@ -274,13 +293,20 @@ $(document).ready(() => {
       type: 'DELETE',
       url: `/recipes/${currentRec.id}`,
       dataType: 'json',
-      statusCode: {
-        200: reset,
-      },
-    });
+    }).done(
+      ()=>{
+        reset();
+      }
+    ).fail(
+      (recipe, status) => {
+        alert(recipe);
+        console.log(status);
+      }
+    );
   });
   $('#edit-rec-name').click(() => {
     $('#rec-title').hide();
+    $('#edit-rec-name').hide();
     $('#renamed-recipe-name').show();
   });
   $('#apply-rec-rename').click(() => {
@@ -290,17 +316,20 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-      success(data) {
-        $('button.recipe-list.active').text(data.name);
-      },
+    }).done((data) => {
+      $('button.recipe-list.active').text(data.name);
+    }).fail((recipe, status) => {
+      alert(recipe);
+      console.log(status);
     });
     $('#rec-title').show();
     $('#renamed-recipe-name').hide();
-    $('#rename-rec-input').val($('#rec-title').text());
     $('#rec-title').text(currentRec.name);
+    $('#edit-rec-name').show();
   });
   $('#cancel-rec-rename').click(() => {
-    $('#rec-Title').show();
+    $('#rec-title').show();
+    $('#edit-rec-name').hide();
     $('#renamed-recipe-name').hide();
     $('#rename-rec-input').val($('#rec-title').text());
   });
