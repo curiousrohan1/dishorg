@@ -12,9 +12,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {DuplicateRecipeException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        ResponseEntity<Object> r = handleExceptionInternal(ex, new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()),
+        return handleExceptionInternal(ex, new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-        return r;
     }
 
     private static class ApiError {
