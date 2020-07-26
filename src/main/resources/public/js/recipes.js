@@ -276,10 +276,14 @@ $(document).ready(() => {
       lastButton.click(recipeButtonCallback);
       lastButton.trigger('click');
       $('#plus-ing').click();
-    }).fail((recipe, status) => {
-      alert(recipe);
-      console.log(status);
-    });
+    }).fail(
+      (jqXHR, status, errorThrown) => {
+        console.log("jqXHR:");
+        console.log(jqXHR);
+        console.log("status: " + status);
+        console.log("errorThrown: " + errorThrown);
+      }
+    );
   });
   $('#plus-ing').click(() => {
     $('#unit').val('');
@@ -298,9 +302,11 @@ $(document).ready(() => {
         reset();
       }
     ).fail(
-      (recipe, status) => {
-        alert(recipe);
-        console.log(status);
+      (jqXHR, status, errorThrown) => {
+        console.log("jqXHR:");
+        console.log(jqXHR);
+        console.log("status: " + status);
+        console.log("errorThrown: " + errorThrown);
       }
     );
   });
