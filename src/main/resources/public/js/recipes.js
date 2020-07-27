@@ -3,7 +3,7 @@ let currentIdx = null;
 let unitList = null;
 
 /*
-  createIngDiv
+  getIngDiv
 
   Returns an ingDiv, which consists of 3 inputs(denoting quantity, name, and unit) and two buttons
   (one is a cancel button, the other is an apply/add button).
@@ -11,7 +11,7 @@ let unitList = null;
   Parameters:
   idx - The index of the ingDiv created
 */
-function createIngDiv(idx) {
+function getIngDiv(idx) {
   const ingDiv = `
     <div id="ing-div${idx}">
        <input id="quantity${idx}" placeholder="Quantity" type="text" class="inputIngInfo" data-idx="${idx}">
@@ -31,8 +31,8 @@ function createIngDiv(idx) {
        </button>
     </div>
   `;
-  unitList.forEach((unit, subIdx, arr) => {
-    $("#unit-dropdown"+idx).append();
+  unitList.forEach((unit, subIdx, unitList) => {
+    $(`#unit-dropdown${idx}`).append(`<a class="dropdown-item" id="unit${subIdx}" data-sub-idx="${subIdx}" data-idx="${idx}">${unit}</a>`);
   });
   return ingDiv;
 }
@@ -122,14 +122,14 @@ function successOnAjaxOfRecipe(recipe) {
             </button>
             ${line}
         </li>`);
-    $('#recipe-details').append(`<li id="ing-edit${idx}">${createIngDiv(idx)}</li>`);
+    $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
     $(`#ing-edit${idx}`).hide();
   });
   $('button.edit-recipes').prop('disabled', false);
   $('button.edit-recipes').click(function () {
     const idx = $(this).data('idx');
     const ing = currentRec.ingredients[idx];
-    // Populate the ingredient's input fields with the current values from currentRec and then show
+    // Populate the ingredient`s input fields with the current values from currentRec and then show
     // the input fields; also hide the "line".
     $(`#quantity${idx}`).val(ing.quantity);
     $(`#unit${idx}`).val(ing.unit);
@@ -199,7 +199,7 @@ $(document).ready(() => {
   $('#renamed-recipe-name').hide();
   $('#add-rec-div').hide();
   $('#ing-div').hide();
-  $('#recipe-details-container').append(createIngDiv(''));
+  $('#recipe-details-container').append(getIngDiv(''));
   $('#add-ing').click(() => {
     ingApply('');
   });
