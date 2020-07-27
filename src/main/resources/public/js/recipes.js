@@ -1,12 +1,6 @@
 let currentRec = null;
 let currentIdx = null;
-let unitList = null
-
-/*
-*/
-function populateUnitDropdown(idx){
-  $(`#dropdown${idx}`).text($(`#link${idx}`).text())
-}
+let unitList = null;
 
 /*
   createIngDiv
@@ -18,7 +12,7 @@ function populateUnitDropdown(idx){
   idx - The index of the ingDiv created
 */
 function createIngDiv(idx) {
-  var ingDiv=`
+  const ingDiv = `
     <div id="ing-div${idx}">
        <input id="quantity${idx}" placeholder="Quantity" type="text" class="inputIngInfo" data-idx="${idx}">
        <div class="btn-group"id="unit${idx}">
@@ -26,7 +20,6 @@ function createIngDiv(idx) {
            <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
            </button>
            <div class="dropdown-menu" id="unit-dropdown${idx}">
-              <a class="dropdown-item" id="link${idx}" href="populate(idx)">Link 1</a>
            </div>
          </div>
        <input id="name${idx}" placeholder="Name" type="text" data-idx="${idx}" class="inputIngInfo">
@@ -36,8 +29,11 @@ function createIngDiv(idx) {
        <button class="btn btn-light cancel" id="cancel-ing${idx}" data-idx="${idx}" type="button">
          <img src="images/cancel.jpg"style="width:30px;height:30px;">
        </button>
-     </div>`;
-//  unitList.forEach()
+    </div>
+  `;
+  unitList.forEach((unit, subIdx, arr) => {
+    $("#unit-dropdown"+idx).append();
+  });
   return ingDiv;
 }
 
@@ -72,7 +68,7 @@ function ingApply(idx) {
   const quantity = $(`#quantity${idx}`).val();
   const name = $(`#name${idx}`).val();
   const unit = $(`#unit${idx}`).val();
-  const line = `${quantity} ${unit} of ${name}`;
+  //  const line = `${quantity} ${unit} of ${name}`;
   if (idx === '') {
     // Idx is empty, so we are adding, not editing.
     currentRec.ingredients.push({ quantity, name, unit });
@@ -106,11 +102,11 @@ function ingApply(idx) {
   recipe - The recipe object obtained in an ajax (PUT, GET, POST) response
   status - string status; should be "success"
 */
-function successOnAjaxOfRecipe(recipe, status) {
+function successOnAjaxOfRecipe(recipe) {
   $('#recipe-details').empty();
   currentRec = recipe;
   $('#rec-title').text(currentRec.name);
-  currentRec.ingredients.forEach((ingredient, idx, arr) => {
+  currentRec.ingredients.forEach((ingredient, idx) => {
     const { quantity } = ingredient;
     const { name } = ingredient;
     const { unit } = ingredient;
@@ -182,9 +178,9 @@ function addRecHandler(matchingButtons) {
 function reset() {
   $('#recipe-details-container').hide();
   // On page load, gets the recipe list, and appends as buttons to a ul in left pane.
-  $.get('/recipes', (recipeList, status) => {
+  $.get('/recipes', (recipeList) => {
     $('#recipe-list').empty();
-    recipeList.forEach((recipe, idx, arr) => {
+    recipeList.forEach((recipe) => {
       $('#recipe-list').append(
         `<button class="recipe-list list-group-item list-group-item-action " type="button"
                  data-id="${recipe.id}">${recipe.name}
@@ -199,7 +195,7 @@ function reset() {
 
 $(document).ready(() => {
   reset();
-  unitList=$.get('/unitList',successOnAjaxOfRecipe);
+  unitList = $.get('/unitList', successOnAjaxOfRecipe);
   $('#renamed-recipe-name').hide();
   $('#add-rec-div').hide();
   $('#ing-div').hide();
@@ -250,13 +246,13 @@ $(document).ready(() => {
   });
   $('#add-rec').click(() => {
     $('#add-rec-div').hide();
-    const recipe = { name: $('#new-recipe-name').val(), ingredients: [] };
+    const firstRecipe = { name: $('#new-recipe-name').val(), ingredients: [] };
     $.post({
       url: 'recipes',
-      data: JSON.stringify(recipe),
+      data: JSON.stringify(firstRecipe),
       contentType: 'application/json',
       dataType: 'json',
-      success: (recipe, status) => {
+      success: (recipe) => {
         $('#recipe-list').append(
           `<button class="recipe-list list-group-item list-group-item-action " type="button"
                    data-id="${recipe.id}">${recipe.name}
@@ -295,7 +291,7 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-      success(data, status) {
+      success(data) {
         $('button.recipe-list.active').text(data.name);
       },
     });
