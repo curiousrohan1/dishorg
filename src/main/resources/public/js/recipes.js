@@ -151,11 +151,13 @@ function ingApply(idx) {
     contentType: 'application/json',
     dataType: 'json',
   }).done(successOnAjaxOfRecipe).fail(
-    (recipe, status) => {
-      alert(recipe);
-      console.log(status);
-    }
-  );
+      (jqXHR, status, errorThrown) => {
+        console.log("jqXHR:");
+        console.log(jqXHR);
+        console.log("status: " + status);
+        console.log("errorThrown: " + errorThrown);
+      }
+    );
   $('#quantity').focus();
 }
 
@@ -171,11 +173,13 @@ function recipeButtonCallback() {
   $('button.active.recipe-list').removeClass('active');
   $(this).addClass('active');
   $.get(`/recipes/${$(this).data('id')}`).done(successOnAjaxOfRecipe).fail(
-    (recipe, status) => {
-      alert(recipe);
-      console.log(status);
-    }
-  );
+      (jqXHR, status, errorThrown) => {
+        console.log("jqXHR:");
+        console.log(jqXHR);
+        console.log("status: " + status);
+        console.log("errorThrown: " + errorThrown);
+      }
+    );
   $('#ing-div').hide();
 }
 
@@ -200,10 +204,14 @@ function reset() {
       );
     });
     $('button.recipe-list').click(recipeButtonCallback);
-  }).fail((recipe, status) => {
-    alert(recipe);
-    console.log(status);
-  });
+  }).fail(
+      (jqXHR, status, errorThrown) => {
+        console.log("jqXHR:");
+        console.log(jqXHR);
+        console.log("status: " + status);
+        console.log("errorThrown: " + errorThrown);
+      }
+    );
   currentRec = null;
   currentIdx = null;
 }
@@ -239,9 +247,11 @@ $(document).ready(() => {
       contentType: 'application/json',
       dataType: 'json',
     }).done(successOnAjaxOfRecipe).fail(
-      (recipe, status) => {
-        alert(recipe);
-        console.log(status);
+      (jqXHR, status, errorThrown) => {
+        console.log("jqXHR:");
+        console.log(jqXHR);
+        console.log("status: " + status);
+        console.log("errorThrown: " + errorThrown);
       }
     );
   });
@@ -324,10 +334,14 @@ $(document).ready(() => {
       dataType: 'json',
     }).done((data) => {
       $('button.recipe-list.active').text(data.name);
-    }).fail((recipe, status) => {
-      alert(recipe);
-      console.log(status);
-    });
+    }).fail(
+      (jqXHR, status, errorThrown) => {
+        console.log("jqXHR:");
+        console.log(jqXHR);
+        console.log("status: " + status);
+        console.log("errorThrown: " + errorThrown);
+      }
+    );
     $('#rec-title').show();
     $('#renamed-recipe-name').hide();
     $('#rec-title').text(currentRec.name);
