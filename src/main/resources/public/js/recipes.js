@@ -32,7 +32,7 @@ function getIngDiv(idx) {
     </div>
   `;
   unitList.forEach((unit, subIdx, unitList) => {
-    $(`#unit-dropdown${idx}`).append(`<a class="dropdown-item" id="unit${subIdx}" data-sub-idx="${subIdx}" data-idx="${idx}">${unit}</a>`);
+    $(`#unit-dropdown${idx}`).append(`<a class="dropdown-item" id="unit${subIdx}" data-sub-idx="${subIdx}">${unit}</a>`);
   });
   return ingDiv;
 }
