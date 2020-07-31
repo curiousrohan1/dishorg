@@ -150,14 +150,14 @@ function ingApply(idx) {
     data: JSON.stringify(currentRec),
     contentType: 'application/json',
     dataType: 'json',
-  }).done(successOnAjaxOfRecipe).fail(
-      (jqXHR, status, errorThrown) => {
-        console.log("jqXHR:");
-        console.log(jqXHR);
-        console.log("status: " + status);
-        console.log("errorThrown: " + errorThrown);
-      }
-    );
+  }).fail(
+    (jqXHR, status, errorThrown) => {
+      console.log("jqXHR:");
+      console.log(jqXHR);
+      console.log("status: " + status);
+      console.log("errorThrown: " + errorThrown);
+    }
+  ).done(successOnAjaxOfRecipe);
   $('#quantity').focus();
 }
 
@@ -172,14 +172,16 @@ function recipeButtonCallback() {
   $('#recipe-details-container').show();
   $('button.active.recipe-list').removeClass('active');
   $(this).addClass('active');
-  $.get(`/recipes/${$(this).data('id')}`).done(successOnAjaxOfRecipe).fail(
+  $.get(`/recipes/${$(this).data('id')}`)
+  .fail(
       (jqXHR, status, errorThrown) => {
         console.log("jqXHR:");
         console.log(jqXHR);
         console.log("status: " + status);
         console.log("errorThrown: " + errorThrown);
       }
-    );
+    )
+  .done(successOnAjaxOfRecipe);
   $('#ing-div').hide();
 }
 
@@ -194,7 +196,9 @@ function recipeButtonCallback() {
 function reset() {
   $('#recipe-details-container').hide();
   // On page load, gets the recipe list, and appends as buttons to a ul in left pane.
-  $.get('/recipes', 'json').done((recipeList) => {
+  $.get('/recipes', 'json')
+  .done(
+    (recipeList) => {
     $('#recipe-list').empty();
     recipeList.forEach((recipe) => {
       $('#recipe-list').append(
@@ -246,14 +250,16 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-    }).done(successOnAjaxOfRecipe).fail(
+    })
+    .fail(
       (jqXHR, status, errorThrown) => {
         console.log("jqXHR:");
         console.log(jqXHR);
         console.log("status: " + status);
         console.log("errorThrown: " + errorThrown);
       }
-    );
+    )
+    .done(successOnAjaxOfRecipe);
   });
   $('input.inputIngInfo').keypress(function (event) {
     const idx = $(this).data('idx');
@@ -275,7 +281,8 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-    }).done((recipe) => {
+    }).done(
+      (recipe) => {
       currentRec = recipe;
       $('#recipe-list').append(
         `<button class="recipe-list list-group-item list-group-item-action " type="button"
@@ -307,18 +314,16 @@ $(document).ready(() => {
       type: 'DELETE',
       url: `/recipes/${currentRec.id}`,
       dataType: 'json',
-    }).done(
-      ()=>{
-        reset();
-      }
-    ).fail(
+    })
+    .fail(
       (jqXHR, status, errorThrown) => {
         console.log("jqXHR:");
         console.log(jqXHR);
         console.log("status: " + status);
         console.log("errorThrown: " + errorThrown);
       }
-    );
+    )
+        .done(reset);
   });
   $('#edit-rec-name').click(() => {
     $('#rec-title').hide();
@@ -332,9 +337,12 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-    }).done((data) => {
+    })
+    .done(
+      (data) => {
       $('button.recipe-list.active').text(data.name);
-    }).fail(
+    })
+    .fail(
       (jqXHR, status, errorThrown) => {
         console.log("jqXHR:");
         console.log(jqXHR);
