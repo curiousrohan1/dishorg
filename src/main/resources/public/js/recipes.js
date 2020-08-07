@@ -16,12 +16,10 @@ function getIngDiv(idx) {
     <div id="ing-div${idx}">
        <input id="quantity${idx}" placeholder="Quantity" type="text" class="inputIngInfo" data-idx="${idx}">
        <div class="btn-group"id="unit${idx}">
-           <button type="button" class="btn"id="dropdown${idx}"></button>
-           <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
-           </button>
-           <div class="dropdown-menu" id="unit-dropdown${idx}">
-           </div>
-         </div>
+         <button class="btn dropdown-toggle" type="button" id="dropdown${idx}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Unit</button>
+         </button>
+         <div class="dropdown-menu" id="unit-dropdown${idx}"></div>
+       </div>
        <input id="name${idx}" placeholder="Name" type="text" data-idx="${idx}" class="inputIngInfo">
        <button class="btn btn-dark apply" id="add-ing${idx}" data-idx="${idx}" type="button">
          <img src="images/apply.png"style="width:30px;height:30px;">
@@ -31,9 +29,6 @@ function getIngDiv(idx) {
        </button>
     </div>
   `;
-  unitList.forEach((unit, subIdx, unitList) => {
-    $(`#unit-dropdown${idx}`).append(`<a class="dropdown-item" id="unit${subIdx}" data-sub-idx="${subIdx}">${unit}</a>`);
-  });
   return ingDiv;
 }
 
@@ -85,11 +80,11 @@ function ingApply(idx) {
     data: JSON.stringify(currentRec),
     contentType: 'application/json',
     dataType: 'json',
-  });// .done(function (data) {
-//    successOnAjaxOfRecipe(data);
-//  }).fail(function (jqXHR, textStatus) {
-//    console.log("ERROR");
-//  });
+  }).done((data) => {
+    successOnAjaxOfRecipe(data);
+  }).fail((jqXHR, textStatus) => {
+    alert(`${textStatus}, ${jqXHR}`);
+  });
 }
 
 /*
@@ -100,7 +95,6 @@ function ingApply(idx) {
 
   Parameters:
   recipe - The recipe object obtained in an ajax (PUT, GET, POST) response
-  status - string status; should be "success"
 */
 function successOnAjaxOfRecipe(recipe) {
   $('#recipe-details').empty();
@@ -123,6 +117,9 @@ function successOnAjaxOfRecipe(recipe) {
             ${line}
         </li>`);
     $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
+    unitList.forEach((unit, subIdx) => {
+      $(`#unit-dropdown${idx}`).append(`<button class="dropdown-item unit" data-sub-idx="${subIdx}">${unit}</button>`);
+    });
     $(`#ing-edit${idx}`).hide();
   });
   $('button.edit-recipes').prop('disabled', false);
@@ -193,13 +190,32 @@ function reset() {
   currentIdx = null;
 }
 
+let curAnchor = null;
 $(document).ready(() => {
   reset();
-  unitList = $.get('/unitList', successOnAjaxOfRecipe);
+  $.get('/units').done(
+    (units) => {
+      unitList = units;
+      $('#recipe-details-container').append(getIngDiv(''));
+      unitList.forEach((unit, subIdx) => {
+        $('#unit-dropdown').append(`<button class="dropdown-item unit" id="unit${subIdx}" data-sub-idx="${subIdx}" data-text="${unit}">${unit}</button>`);
+      });
+      $('button.unit').click(function () {
+        curAnchor = $(this);
+        const text = $(this).data('text');
+//        alert(`a text: ${text}`);
+        $('#dropdown').text(text);
+      });
+    },
+  ).fail(
+    (jqXHR, textStatus) => {
+      alert(jqXHR);
+      alert(textStatus);
+    },
+  );
   $('#renamed-recipe-name').hide();
   $('#add-rec-div').hide();
   $('#ing-div').hide();
-  $('#recipe-details-container').append(getIngDiv(''));
   $('#add-ing').click(() => {
     ingApply('');
   });
@@ -224,11 +240,11 @@ $(document).ready(() => {
       data: JSON.stringify(currentRec),
       contentType: 'application/json',
       dataType: 'json',
-    });// .done(function (data) {
-    //      successOnAjaxOfRecipe(data);
-    //    }).fail(function (jqXHR, textStatus) {
-    //      console.log("ERROR");
-    //    });
+    }).done((data) => {
+      successOnAjaxOfRecipe(data);
+    }).fail((jqXHR, textStatus) => {
+      alert(`${textStatus}, ${jqXHR}`);
+    });
   });
   $('input.inputIngInfo').keypress(function (event) {
     const idx = $(this).data('idx');
