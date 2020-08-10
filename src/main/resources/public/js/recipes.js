@@ -16,7 +16,8 @@ function getIngDiv(idx) {
     <div id="ing-div${idx}">
        <input id="quantity${idx}" placeholder="Quantity" type="text" class="inputIngInfo" data-idx="${idx}">
        <div class="btn-group"id="unit${idx}">
-         <button class="btn dropdown-toggle" type="button" id="dropdown${idx}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Unit</button>
+         <button class="btn dropdown-toggle" type="button" id="dropdown${idx}" data-toggle="dropdown"
+         aria-haspopup="true" aria-expanded="false">Unit</button>
          </button>
          <div class="dropdown-menu" id="unit-dropdown${idx}"></div>
        </div>
@@ -62,12 +63,11 @@ function ingCancel(idx) {
 function ingApply(idx) {
   const quantity = $(`#quantity${idx}`).val();
   const name = $(`#name${idx}`).val();
-  const unit = $(`#unit${idx}`).val();
-  //  const line = `${quantity} ${unit} of ${name}`;
+  const unit = $(`#dropdown${idx}`).text();
   if (idx === '') {
     // Idx is empty, so we are adding, not editing.
     currentRec.ingredients.push({ quantity, name, unit });
-    $('#unit').val('');
+    $('#dropdown').text('Unit');
     $('#name').val('');
     $('#quantity').val('');
   } else {
@@ -104,7 +104,12 @@ function successOnAjaxOfRecipe(recipe) {
     const { quantity } = ingredient;
     const { name } = ingredient;
     const { unit } = ingredient;
-    const line = `${quantity} ${unit} of ${name}`;
+    let line = '';
+    if (unit === '') {
+      line = `${quantity} ${name}`;
+    } else {
+      line = `${quantity} ${unit} of ${name}`;
+    }
     $('#recipe-details').append(`
         <li id="ing-line-container${idx}">
             <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
@@ -129,7 +134,7 @@ function successOnAjaxOfRecipe(recipe) {
     // Populate the ingredient`s input fields with the current values from currentRec and then show
     // the input fields; also hide the "line".
     $(`#quantity${idx}`).val(ing.quantity);
-    $(`#unit${idx}`).val(ing.unit);
+    $(`#dropdown${idx}`).text(ing.unit);
     $(`#name${idx}`).val(ing.name);
     $('button.edit-recipes').prop('disabled', true);
     $(`#ing-edit${idx}`).show();
@@ -203,7 +208,7 @@ $(document).ready(() => {
       $('button.unit').click(function () {
         curAnchor = $(this);
         const text = $(this).data('text');
-//        alert(`a text: ${text}`);
+        //        alert(`a text: ${text}`);
         $('#dropdown').text(text);
       });
     },
