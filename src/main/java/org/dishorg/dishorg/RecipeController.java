@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 public class RecipeController {
     public enum Unit {
+        none(""),
         cups,
         fluidOz("fluid oz"),
         gallons,
@@ -90,6 +92,7 @@ public class RecipeController {
         for (Unit unit : Unit.values()) {
             units.add(unit.toString());
         }
+        Collections.sort(units);
         return units;
     }
 }
