@@ -1,7 +1,7 @@
 let currentRec = null;
 let currentIdx = null;
 let unitList = null;
-
+const noUnit = '[No Unit]';
 /*
   getIngDiv
 
@@ -14,20 +14,20 @@ let unitList = null;
 function getIngDiv(idx) {
   const ingDiv = `
     <div id="ing-div${idx}">
-       <input id="quantity${idx}" placeholder="Quantity" type="text" class="inputIngInfo" data-idx="${idx}">
-       <div class="btn-group"id="unit${idx}">
-         <button class="btn dropdown-toggle" type="button" id="dropdown${idx}" data-toggle="dropdown"
-         aria-haspopup="true" aria-expanded="false">Unit</button>
-         </button>
-         <div class="dropdown-menu" id="unit-dropdown${idx}"></div>
-       </div>
-       <input id="name${idx}" placeholder="Name" type="text" data-idx="${idx}" class="inputIngInfo">
-       <button class="btn btn-dark apply" id="add-ing${idx}" data-idx="${idx}" type="button">
-         <img src="images/apply.png"style="width:30px;height:30px;">
-       </button>
-       <button class="btn btn-light cancel" id="cancel-ing${idx}" data-idx="${idx}" type="button">
-         <img src="images/cancel.jpg"style="width:30px;height:30px;">
-       </button>
+      <form class="form-inline">
+        <label class="sr-only" for="quantity${idx}">Quantity</label>
+        <input type="text" class="form-control mb-2 mr-sm-2 inputIngInfo" id="quantity${idx}" placeholder="Quantity" data-idx="${idx}">
+        <label class="sr-only" for="unit-dropdown${idx}">Unit</label>
+        <select class="form-control mb-2 mr-sm-2" id="unit-dropdown${idx}"></select>
+        <label class="sr-only" for="name${idx}">Name</label>
+        <input type="text" class="form-control mb-2 mr-sm-2 inputIngInfo" id="name${idx}" placeholder="Name" data-idx="${idx}">
+        <button class="btn btn-dark apply" id="add-ing${idx}" data-idx="${idx}" type="button">
+          <img src="images/apply.png"style="width:30px;height:30px;">
+        </button>
+        <button class="btn btn-light cancel" id="cancel-ing${idx}" data-idx="${idx}" type="button">
+          <img src="images/cancel.jpg"style="width:30px;height:30px;">
+        </button>
+      </form>
     </div>
   `;
   return ingDiv;
@@ -63,11 +63,11 @@ function ingCancel(idx) {
 function ingApply(idx) {
   const quantity = $(`#quantity${idx}`).val();
   const name = $(`#name${idx}`).val();
-  const unit = $(`#dropdown${idx}`).text();
+  const unit = $(`#unit-dropdown${idx}`).val();
   if (idx === '') {
     // Idx is empty, so we are adding, not editing.
     currentRec.ingredients.push({ quantity, name, unit });
-    $('#dropdown').text('Unit');
+    $('#unit-dropdown').val(noUnit);
     $('#name').val('');
     $('#quantity').val('');
   } else {
@@ -105,7 +105,7 @@ function successOnAjaxOfRecipe(recipe) {
     const { name } = ingredient;
     const { unit } = ingredient;
     let line = '';
-    if (unit === '') {
+    if (unit === noUnit) {
       line = `${quantity} ${name}`;
     } else {
       line = `${quantity} ${unit} of ${name}`;
@@ -122,8 +122,8 @@ function successOnAjaxOfRecipe(recipe) {
             ${line}
         </li>`);
     $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
-    unitList.forEach((unit, subIdx) => {
-      $(`#unit-dropdown${idx}`).append(`<button class="dropdown-item unit" data-sub-idx="${subIdx}">${unit}</button>`);
+    unitList.forEach((text, subIdx) => {
+      $(`#unit-dropdown${idx}`).append(`<option>${text}</option>`);
     });
     $(`#ing-edit${idx}`).hide();
   });
@@ -134,17 +134,17 @@ function successOnAjaxOfRecipe(recipe) {
     // Populate the ingredient`s input fields with the current values from currentRec and then show
     // the input fields; also hide the "line".
     $(`#quantity${idx}`).val(ing.quantity);
-    $(`#dropdown${idx}`).text(ing.unit);
+    $(`#unit-dropdown${idx}`).val(ing.unit);
     $(`#name${idx}`).val(ing.name);
     $('button.edit-recipes').prop('disabled', true);
     $(`#ing-edit${idx}`).show();
     $(`#ing-line-container${idx}`).hide();
   });
-  $('li > div > button.cancel').click(function () {
+  $('li > div > form > button.cancel').click(function () {
     $('button.edit-recipes').prop('disabled', false);
     ingCancel($(this).data('idx'));
   });
-  $('li > div > button.apply').click(function () {
+  $('li > div > form > button.apply').click(function () {
     ingApply($(this).data('idx'));
   });
   $('button.openModal').click(function () {
@@ -184,7 +184,7 @@ function reset() {
     $('#recipe-list').empty();
     recipeList.forEach((recipe) => {
       $('#recipe-list').append(
-        `<button class="recipe-list list-group-item list-group-item-action " type="button"
+        `<button class="recipe-list list-group-item list-group-item-action btn" type="button"
                  data-id="${recipe.id}">${recipe.name}
          </button>`,
       );
@@ -195,7 +195,6 @@ function reset() {
   currentIdx = null;
 }
 
-let curAnchor = null;
 $(document).ready(() => {
   reset();
   $.get('/units').done(
@@ -203,13 +202,13 @@ $(document).ready(() => {
       unitList = units;
       $('#recipe-details-container').append(getIngDiv(''));
       unitList.forEach((unit, subIdx) => {
-        $('#unit-dropdown').append(`<button class="dropdown-item unit" id="unit${subIdx}" data-sub-idx="${subIdx}" data-text="${unit}">${unit}</button>`);
+        $('#unit-dropdown').append(`<option>${unit}</option>`);
       });
-      $('button.unit').click(function () {
-        curAnchor = $(this);
-        const text = $(this).data('text');
-        //        alert(`a text: ${text}`);
-        $('#dropdown').text(text);
+      $('#add-ing').click(() => {
+        ingApply('');
+      });
+      $('#cancel-ing').click(() => {
+        ingCancel('');
       });
     },
   ).fail(
@@ -221,12 +220,6 @@ $(document).ready(() => {
   $('#renamed-recipe-name').hide();
   $('#add-rec-div').hide();
   $('#ing-div').hide();
-  $('#add-ing').click(() => {
-    ingApply('');
-  });
-  $('#cancel-ing').click(() => {
-    ingCancel('');
-  });
   $('#new-recipe-name').keypress((event) => {
     if (event.keyCode === 13) {
       $('#add-rec').click();
@@ -275,7 +268,7 @@ $(document).ready(() => {
       dataType: 'json',
       success: (recipe) => {
         $('#recipe-list').append(
-          `<button class="recipe-list list-group-item list-group-item-action " type="button"
+          `<button class="recipe-list list-group-item list-group-item-action btn" type="button"
                    data-id="${recipe.id}">${recipe.name}
            </button>`,
         );
@@ -286,7 +279,7 @@ $(document).ready(() => {
     });
   });
   $('#plus-ing').click(() => {
-    $('#unit').val('');
+    $('#unit-dropdown').val(noUnit);
     $('#name').val('');
     $('#quantity').val('');
     $('#ing-div').show();

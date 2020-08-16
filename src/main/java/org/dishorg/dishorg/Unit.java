@@ -1,7 +1,7 @@
 package org.dishorg.dishorg;
 
 public enum Unit {
-    none(""),
+    none("[No Unit]"),
     cups,
     fluidOz("fluid oz"),
     gallons,
