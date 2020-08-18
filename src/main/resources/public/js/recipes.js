@@ -21,7 +21,7 @@ function getIngDiv(idx) {
         <select class="form-control mb-2 mr-sm-2" id="unit-dropdown${idx}"></select>
         <label class="sr-only" for="name${idx}">Name</label>
         <input type="text" class="form-control mb-2 mr-sm-2 inputIngInfo" id="name${idx}" placeholder="Name" data-idx="${idx}">
-        <button class="btn btn-dark apply" id="add-ing${idx}" data-idx="${idx}" type="button">
+        <button class="btn btn-light apply" id="add-ing${idx}" data-idx="${idx}" type="button">
           <img src="images/apply.png"style="width:30px;height:30px;">
         </button>
         <button class="btn btn-light cancel" id="cancel-ing${idx}" data-idx="${idx}" type="button">
@@ -303,8 +303,11 @@ $(document).ready(() => {
     });
   });
   $('#edit-rec-name').click(() => {
-    $('#rec-title-container').hide();
+    $('#rec-title').hide();
+    $('#edit-rec-name').hide();
+    $('#del-rec').hide();
     $('#renamed-recipe-name').show();
+    $('#rename-rec-input').val($('#rec-title').text());
   });
   $('#apply-rec-rename').click(() => {
     currentRec.name = $('#rename-rec-input').val();
@@ -317,12 +320,16 @@ $(document).ready(() => {
         $('button.recipe-list.active').text(data.name);
       },
     });
-    $('#rec-title-container').show();
+    $('#rec-title').show();
+    $('#edit-rec-name').show();
+    $('#del-rec').show();
     $('#renamed-recipe-name').hide();
-    $('#rec-title').text(currentRec.name);
+    $('#rec-title').text($('#rename-rec-input').val());
   });
   $('#cancel-rec-rename').click(() => {
-    $('#rec-title-container').show();
+    $('#rec-title').show();
+    $('#edit-rec-name').show();
+    $('#del-rec').show();
     $('#renamed-recipe-name').hide();
     $('#rec-title').text(currentRec.name);
   });
