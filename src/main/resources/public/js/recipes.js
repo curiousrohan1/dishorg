@@ -150,6 +150,14 @@ function successOnAjaxOfRecipe(recipe) {
   $('button.openModal').click(function () {
     currentIdx = $(this).data('idx');
   });
+  $('input.inputIngInfo').keypress(function (event) {
+    const idx = $(this).data('idx');
+    if ($(`#quantity${idx}`).val() !== ''
+    && $(`#name${idx}`).val() !== ''
+    && event.keyCode === 13) {
+      $(`#add-ing${idx}`).click();
+    }
+  });
 }
 
 /*
@@ -244,14 +252,14 @@ $(document).ready(() => {
       alert(`${textStatus}, ${jqXHR}`);
     });
   });
-  $('input.inputIngInfo').keypress(function (event) {
-    const idx = $(this).data('idx');
-    if ($(`#quantity${idx}`).val() !== ''
-    && $(`#name${idx}`).val() !== ''
-    && event.keyCode === 13) {
-      $(`#addIng${idx}`).click();
-    }
-  });
+//  $('input.inputIngInfo').keypress(function (event) {
+//    const idx = $(this).data('idx');
+//    if ($(`#quantity${idx}`).val() !== ''
+//    && $(`#name${idx}`).val() !== ''
+//    && event.keyCode === 13) {
+//      $(`#addIng${idx}`).click();
+//    }
+//  });
 
   $('#plus-rec').click(() => {
     $('#new-recipe-name').val('');
