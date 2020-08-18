@@ -281,7 +281,10 @@ $(document).ready(() => {
   });
   $('#edit-rec-name').click(() => {
     $('#rec-title').hide();
+    $('#edit-rec-name').hide();
+    $('#del-rec').hide();
     $('#renamed-recipe-name').show();
+    $('#renamed-recipe-name').val($('#rec-title').text());
   });
   $('#apply-rec-rename').click(() => {
     currentRec.name = $('#rename-rec-input').val();
@@ -295,13 +298,16 @@ $(document).ready(() => {
       },
     });
     $('#rec-title').show();
+    $('#edit-rec-name').show();
+    $('#del-rec').show();
     $('#renamed-recipe-name').hide();
-    $('#rename-rec-input').val($('#rec-title').text());
-    $('#rec-title').text(currentRec.name);
+    $('#rec-title').text($('#renamed-recipe-name').val());
   });
   $('#cancel-rec-rename').click(() => {
-    $('#rec-Title').show();
+    $('#rec-title').show();
+    $('#edit-rec-name').show();
+    $('#del-rec').show();
     $('#renamed-recipe-name').hide();
-    $('#rename-rec-input').val($('#rec-title').text());
+    $('#rec-title').text($('#renamed-recipe-name').val());
   });
 });
