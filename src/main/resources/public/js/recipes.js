@@ -1,79 +1,9 @@
 let currentRec = null;
 let currentIdx = null;
-
+let unitList = null;
+const noUnit = '[No Unit]';
 /*
-  successOnAjaxOfRecipe
-
-  Clear recipe details and then for each ingredient, append it to recipe details, along with an
-  edit and delete button. Then, it appends an ingDiv for editing purposes in the future.
-
-  Parameters:
-  recipe - The recipe object obtained in an ajax (PUT, GET, POST) response
-  status - string status; should be "success"
-*/
-function successOnAjaxOfRecipe(recipe) {
-  $('#recipe-details').empty();
-  currentRec = recipe;
-  $('#rec-title').text(currentRec.name);
-  $('#rec-title').show();
-  currentRec.ingredients.forEach((ingredient, idx) => {
-    const { quantity } = ingredient;
-    const { name } = ingredient;
-    const { unit } = ingredient;
-    let line = '';
-    if (unit === '') {
-      line = `${quantity} ${name}`;
-    } else {
-      line = `${quantity} ${unit} of ${name}`;
-    }
-    $('#recipe-details').append(`
-        <li id="ing-line-container${idx}">
-            <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
-                <img src="images/edit.jpg"style="width:30px;height:30px;">
-            </button>
-            <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
-                    id="open-modal${idx}" data-target="#cont-del-modal">
-                <img src="images/del.png"style="width:30px;height:30px;">
-            </button>
-            ${line}
-        </li>`);
-    $('#recipe-details').append(`<li id="ing-edit${idx}">${createIngDiv(idx)}</li>`);
-    $(`#ing-edit${idx}`).hide();
-    $('button.edit-recipes').prop('disabled', false);
-    $(`#quantity${idx}, #unit${idx}, #name${idx}`).keypress((event) => {
-      if ($(`#quantity${idx}`).val() !== '' && $(`#name${idx}`).val() !== ''
-          && event.keyCode === 13) {
-        $(`#add-ing${idx}`).click();
-      }
-    });
-  });
-  $('button.edit-recipes').click(function () {
-    const idx = $(this).data('idx');
-    const ing = currentRec.ingredients[idx];
-    // Populate the ingredient's input fields with the current values from currentRec and then show
-    // the input fields; also hide the "line".
-    $(`#quantity${idx}`).val(ing.quantity);
-    $(`#unit${idx}`).val(ing.unit);
-    $(`#name${idx}`).val(ing.name);
-    $('button.edit-recipes').prop('disabled', true);
-    $(`#ing-edit${idx}`).show();
-    $(`#ing-line-container${idx}`).hide();
-    $(`#quantity${idx}`).focus();
-  });
-  $('li > div > button.cancel').click(function () {
-    $('button.edit-recipes').prop('disabled', false);
-    ingCancel($(this).data('idx'));
-  });
-  $('li > div > button.apply').click(function () {
-    ingApply($(this).data('idx'));
-  });
-  $('button.openModal').click(function () {
-    currentIdx = $(this).data('idx');
-  });
-}
-
-/*
-  createIngDiv
+  getIngDiv
 
   Returns an ingDiv, which consists of 3 inputs(denoting quantity, name, and unit) and two buttons
   (one is a cancel button, the other is an apply/add button).
@@ -81,20 +11,26 @@ function successOnAjaxOfRecipe(recipe) {
   Parameters:
   idx - The index of the ingDiv created
 */
-function createIngDiv(idx) {
-  return `
-   <div id="ing-div${idx}">
-      <input id="quantity${idx}" placeholder="Quantity" type="text" class="inputIngInfo"
-             data-idx="${idx}">
-      <input id="unit${idx}" placeholder="Unit" type="text" class="inputIngInfo" data-idx="${idx}">
-      <input id="name${idx}" placeholder="Name" type="text" data-idx="${idx}" class="inputIngInfo">
-      <button class="btn btn-dark apply" id="add-ing${idx}" data-idx="${idx}" type="button">
-        <img src="images/apply.png"style="width:30px;height:30px;">
-      </button>
-      <button class="btn btn-light cancel" id="cancel-ing${idx}" data-idx="${idx}" type="button">
-        <img src="images/cancel.jpg"style="width:30px;height:30px;">
-      </button>
-    </div>`;
+function getIngDiv(idx) {
+  const ingDiv = `
+    <div id="ing-div${idx}">
+      <form class="form-inline">
+        <label class="sr-only" for="quantity${idx}">Quantity</label>
+        <input type="text" class="form-control mb-2 mr-sm-2 inputIngInfo" id="quantity${idx}" placeholder="Quantity" data-idx="${idx}">
+        <label class="sr-only" for="unit-dropdown${idx}">Unit</label>
+        <select class="form-control mb-2 mr-sm-2" id="unit-dropdown${idx}"></select>
+        <label class="sr-only" for="name${idx}">Name</label>
+        <input type="text" class="form-control mb-2 mr-sm-2 inputIngInfo" id="name${idx}" placeholder="Name" data-idx="${idx}">
+        <button class="btn btn-light apply" id="add-ing${idx}" data-idx="${idx}" type="button">
+          <img src="images/apply.png"style="width:30px;height:30px;">
+        </button>
+        <button class="btn btn-light cancel" id="cancel-ing${idx}" data-idx="${idx}" type="button">
+          <img src="images/cancel.jpg"style="width:30px;height:30px;">
+        </button>
+      </form>
+    </div>
+  `;
+  return ingDiv;
 }
 
 /*
@@ -127,17 +63,11 @@ function ingCancel(idx) {
 function ingApply(idx) {
   const quantity = $(`#quantity${idx}`).val();
   const name = $(`#name${idx}`).val();
-  const unit = $(`#unit${idx}`).val();
-  let line = '';
-  if (unit === '') {
-    line = `${quantity} ${name}`;
-  } else {
-    line = `${quantity} ${unit} of ${name}`;
-  }
+  const unit = $(`#unit-dropdown${idx}`).val();
   if (idx === '') {
     // Idx is empty, so we are adding, not editing.
     currentRec.ingredients.push({ quantity, name, unit });
-    $('#unit').val('');
+    $('#unit-dropdown').val(noUnit);
     $('#name').val('');
     $('#quantity').val('');
   } else {
@@ -162,27 +92,94 @@ function ingApply(idx) {
 }
 
 /*
-  recipeButtonCallback
+  successOnAjaxOfRecipe
 
-  The callback of the recipe buttons.
+  Clear recipe details and then for each ingredient, append it to recipe details, along with an
+  edit and delete button. Then, it appends an ingDiv for editing purposes in the future.
 
-  Parameters: none.
+  Parameters:
+  recipe - The recipe object obtained in an ajax (PUT, GET, POST) response
 */
-function recipeButtonCallback() {
-  $('#recipe-details-container').show();
-  $('button.active.recipe-list').removeClass('active');
-  $(this).addClass('active');
-  $.get(`/recipes/${$(this).data('id')}`)
-  .fail(
-      (jqXHR, status, errorThrown) => {
-        console.log("jqXHR:");
-        console.log(jqXHR);
-        console.log("status: " + status);
-        console.log("errorThrown: " + errorThrown);
-      }
-    )
-  .done(successOnAjaxOfRecipe);
-  $('#ing-div').hide();
+function successOnAjaxOfRecipe(recipe) {
+  $('#recipe-details').empty();
+  currentRec = recipe;
+  $('#rec-title').text(currentRec.name);
+  $('#rec-title').show();
+  currentRec.ingredients.forEach((ingredient, idx) => {
+    const { quantity } = ingredient;
+    const { name } = ingredient;
+    const { unit } = ingredient;
+    let line = '';
+    if (unit === noUnit) {
+      line = `${quantity} ${name}`;
+    } else {
+      line = `${quantity} ${unit} of ${name}`;
+    }
+    $('#recipe-details').append(`
+        <li id="ing-line-container${idx}">
+            <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
+                <img src="images/edit.jpg"style="width:30px;height:30px;">
+            </button>
+            <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
+                    id="open-modal${idx}" data-target="#cont-del-modal">
+                <img src="images/del.png"style="width:30px;height:30px;">
+            </button>
+            ${line}
+        </li>`);
+    $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
+    unitList.forEach((text, subIdx) => {
+      $(`#unit-dropdown${idx}`).append(`<option>${text}</option>`);
+    });
+    $(`#ing-edit${idx}`).hide();
+  });
+  $('button.edit-recipes').prop('disabled', false);
+  $('button.edit-recipes').click(function () {
+    const idx = $(this).data('idx');
+    const ing = currentRec.ingredients[idx];
+    // Populate the ingredient`s input fields with the current values from currentRec and then show
+    // the input fields; also hide the "line".
+    $(`#quantity${idx}`).val(ing.quantity);
+    $(`#unit-dropdown${idx}`).val(ing.unit);
+    $(`#name${idx}`).val(ing.name);
+    $('button.edit-recipes').prop('disabled', true);
+    $(`#ing-edit${idx}`).show();
+    $(`#ing-line-container${idx}`).hide();
+  });
+  $('li > div > form > button.cancel').click(function () {
+    $('button.edit-recipes').prop('disabled', false);
+    ingCancel($(this).data('idx'));
+  });
+  $('li > div > form > button.apply').click(function () {
+    ingApply($(this).data('idx'));
+  });
+  $('button.openModal').click(function () {
+    currentIdx = $(this).data('idx');
+  });
+  $('input.inputIngInfo').keypress(function (event) {
+    const idx = $(this).data('idx');
+    if ($(`#quantity${idx}`).val() !== ''
+    && $(`#name${idx}`).val() !== ''
+    && event.keyCode === 13) {
+      $(`#add-ing${idx}`).click();
+    }
+  });
+}
+
+/*
+  addRecHandler
+
+  Adds a click handler to the buttons of the recipeList.
+
+  Parameters:
+  matchingButtons - The button being referenced
+*/
+function addRecHandler(matchingButtons) {
+  matchingButtons.click(function () {
+    $('#recipe-details-container').show();
+    $('button.active.recipe-list').removeClass('active');
+    $(this).addClass('active');
+    $.get(`/recipes/${$(this).data('id')}`, successOnAjaxOfRecipe);
+  });
 }
 
 /*
@@ -202,12 +199,12 @@ function reset() {
     $('#recipe-list').empty();
     recipeList.forEach((recipe) => {
       $('#recipe-list').append(
-        `<button class="recipe-list list-group-item list-group-item-action " type="button"
+        `<button class="recipe-list list-group-item list-group-item-action btn" type="button"
                  data-id="${recipe.id}">${recipe.name}
          </button>`,
       );
     });
-    $('button.recipe-list').click(recipeButtonCallback);
+    addRecHandler($('button.recipe-list'));
   }).fail(
       (jqXHR, status, errorThrown) => {
         console.log("jqXHR:");
@@ -216,22 +213,36 @@ function reset() {
         console.log("errorThrown: " + errorThrown);
       }
     );
+
   currentRec = null;
   currentIdx = null;
 }
 
 $(document).ready(() => {
   reset();
+  $.get('/units').done(
+    (units) => {
+      unitList = units;
+      $('#recipe-details-container').append(getIngDiv(''));
+      unitList.forEach((unit, subIdx) => {
+        $('#unit-dropdown').append(`<option>${unit}</option>`);
+      });
+      $('#add-ing').click(() => {
+        ingApply('');
+      });
+      $('#cancel-ing').click(() => {
+        ingCancel('');
+      });
+    },
+  ).fail(
+    (jqXHR, textStatus) => {
+      alert(jqXHR);
+      alert(textStatus);
+    },
+  );
   $('#renamed-recipe-name').hide();
   $('#add-rec-div').hide();
   $('#ing-div').hide();
-  $('#recipe-details-container').append(createIngDiv(''));
-  $('#add-ing').click(() => {
-    ingApply('');
-  });
-  $('#cancel-ing').click(() => {
-    ingCancel('');
-  });
   $('#new-recipe-name').keypress((event) => {
     if (event.keyCode === 13) {
       $('#add-rec').click();
@@ -261,13 +272,6 @@ $(document).ready(() => {
     )
     .done(successOnAjaxOfRecipe);
   });
-  $('input.inputIngInfo').keypress(function (event) {
-    const idx = $(this).data('idx');
-    if ($(`#quantity${idx}`).val() !== '' && $(`#name${idx}`).val() !== '' && event.keyCode === 13) {
-      $(`#add-ing${idx}`).click();
-    }
-  });
-
   $('#plus-rec').click(() => {
     $('#new-recipe-name').val('');
     $('#add-rec-div').show();
@@ -275,23 +279,23 @@ $(document).ready(() => {
   });
   $('#add-rec').click(() => {
     $('#add-rec-div').hide();
-    currentRec = { name: $('#new-recipe-name').val(), ingredients: [] };
+    const firstRecipe = { name: $('#new-recipe-name').val(), ingredients: [] };
     $.post({
       url: 'recipes',
-      data: JSON.stringify(currentRec),
+      data: JSON.stringify(firstRecipe),
       contentType: 'application/json',
       dataType: 'json',
     }).done(
       (recipe) => {
       currentRec = recipe;
-      $('#recipe-list').append(
-        `<button class="recipe-list list-group-item list-group-item-action " type="button"
-                 data-id="${recipe.id}">${recipe.name}
-         </button>`,
-      );
-      const lastButton = $('button.recipe-list.list-group-item-action:last-child');
-      lastButton.click(recipeButtonCallback);
-      lastButton.trigger('click');
+     $('#recipe-list').append(
+       `<button class="recipe-list list-group-item list-group-item-action btn" type="button"
+                data-id="${recipe.id}">${recipe.name}
+        </button>`,
+     );
+     const lastButton = $('button.recipe-list.list-group-item-action:last-child');
+     addRecHandler(lastButton);
+     lastButton.trigger('click');
       $('#plus-ing').click();
     }).fail(
       (jqXHR, status, errorThrown) => {
@@ -303,11 +307,10 @@ $(document).ready(() => {
     );
   });
   $('#plus-ing').click(() => {
-    $('#unit').val('');
+    $('#unit-dropdown').val(noUnit);
     $('#name').val('');
     $('#quantity').val('');
     $('#ing-div').show();
-    $('#quantity').focus();
   });
   $('#del-rec').click(() => {
     $.ajax({
@@ -328,7 +331,9 @@ $(document).ready(() => {
   $('#edit-rec-name').click(() => {
     $('#rec-title').hide();
     $('#edit-rec-name').hide();
+    $('#del-rec').hide();
     $('#renamed-recipe-name').show();
+    $('#rename-rec-input').val($('#rec-title').text());
   });
   $('#apply-rec-rename').click(() => {
     currentRec.name = $('#rename-rec-input').val();
@@ -351,14 +356,16 @@ $(document).ready(() => {
       }
     );
     $('#rec-title').show();
-    $('#renamed-recipe-name').hide();
-    $('#rec-title').text(currentRec.name);
     $('#edit-rec-name').show();
+    $('#del-rec').show();
+    $('#renamed-recipe-name').hide();
+    $('#rec-title').text($('#rename-rec-input').val());
   });
   $('#cancel-rec-rename').click(() => {
     $('#rec-title').show();
-    $('#edit-rec-name').hide();
+    $('#edit-rec-name').show();
+    $('#del-rec').show();
     $('#renamed-recipe-name').hide();
-    $('#rename-rec-input').val($('#rec-title').text());
+    $('#rec-title').text(currentRec.name);
   });
 });

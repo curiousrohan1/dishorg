@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Recipes</title>
+    <title>Cook It Best</title>
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -12,13 +12,13 @@
     <script src="js/recipes.js"></script>
 </head>
 
-<body>
+<body style="padding-left:1.5rem;padding-right:1.5rem">
 <div aria-hidden="true" class="modal fade" id="cont-del-modal" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="cont-del-ing">Are you sure?</h5>
-                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                <button aria-label="Close" class="close btn" data-dismiss="modal" type="button">
                     <span aria-hidden="true">&times</span>
                 </button>
             </div>
@@ -35,9 +35,9 @@
     </div>
 </div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"><img src="images/logo.svg" style="width:100px;height:50px;"></a>
+    <a class="navbar-brand" href="#"><img src="images/logo.svg" style="width:100px;height:100px;"></a>
     <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+            class="navbar-toggler btn" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -57,30 +57,38 @@
      </form>-->
     </div>
 </nav>
-
-<div style="position:relative;width:49%;float:left">
+<div style="position:relative;width:49%;float:left;padding-left:1rem;">
     <h3><strong>Recipes:</strong>
-        <button id="plus-rec" style="float:right">+</button>
+        <button class="btn" data-placement="right" data-toggle="tooltip" id="plus-rec"
+                style="float:right;width:3rem;height:3rem;"
+                title="Add recipe">+
+        </button>
     </h3>
     <hr>
+    <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
     <ul class="list-group" id="recipe-list">
     </ul>
+    <!--    </div>-->
     <div id="add-rec-div">
         <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
-        <p class="alert-danger"style="display:none;">Error</p>
-        <button id="add-rec">Add</button>
+        <p class="alert-danger" style="display:none;">Error</p>
+        <button class="btn" id="add-rec">Add</button>
     </div>
 </div>
-<div id="recipe-details-container" style="position:relative;width:49%;float:right;">
+<div id="recipe-details-container" style="position:relative;width:49%;float:right;padding-right:1.5rem">
     <h3><strong id="rec-title"></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div id="renamed-recipe-name">
             <input id="rename-rec-input" placeholder="New Name..." type="text">
-            <button id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;"></button>
-            <button id="cancel-rec-rename"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
+            <button class="btn" id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;">
+            </button>
+            <button class="btn" id="cancel-rec-rename"><img src="images/cancel.jpg" style="width:30px;height:30px;">
+            </button>
         </div>
-        <button id="edit-rec-name"><img src="images/edit.jpg" style="width:30px;height:30px;"></button>
-        <button id="del-rec"><img src="images/del.png" style="width:30px;height:30px;"></button>
-        <button id="plus-ing" style="float:right">+</button>
+        <button class="btn" id="edit-rec-name"><img src="images/edit.jpg" style="width:30px;height:30px;"></button>
+        <button class="btn" id="del-rec"><img src="images/del.png" style="width:30px;height:30px;"></button>
+        <button class="btn" data-placement="left" data-toggle="tooltip" id="plus-ing"
+                style="float:right;width:3rem;height:3rem;" title="Add ingredient">+
+        </button>
     </h3>
     <hr>
     <ul id="recipe-details">
