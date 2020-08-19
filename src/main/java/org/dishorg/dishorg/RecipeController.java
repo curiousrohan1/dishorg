@@ -8,24 +8,27 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 public class RecipeController {
-    private RecipeRepository repo;
+
+    private final RecipeRepository repo;
 
     public RecipeController(RecipeRepository repo) {
         this.repo = repo;
     }
 
-    @GetMapping("/recipes")
-    List<Recipe> all() {
-        return repo.findAll();
-    }
-
     @PostMapping("/recipes")
     Recipe newRecipe(@RequestBody Recipe newRecipe) {
         return repo.save(newRecipe);
+    }
+
+    @GetMapping("/recipes")
+    List<Recipe> all() {
+        return repo.findAll();
     }
 
     @GetMapping("/recipes/{id}")
@@ -52,5 +55,15 @@ public class RecipeController {
     String deleteRecipe(@PathVariable Long id) {
         repo.deleteById(id);
         return "{status: \"Success\"}";
+    }
+
+    @GetMapping("/units")
+    List<String> getUnits() {
+        List<String> units = new ArrayList<>();
+        for (Unit unit : Unit.values()) {
+            units.add(unit.toString());
+        }
+        Collections.sort(units);
+        return units;
     }
 }

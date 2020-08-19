@@ -18,7 +18,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="cont-del-ing">Are you sure?</h5>
-                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                <button aria-label="Close" class="close btn" data-dismiss="modal" type="button">
                     <span aria-hidden="true">&times</span>
                 </button>
             </div>
@@ -37,7 +37,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#"><img src="images/logo.svg" style="width:100px;height:100px;"></a>
     <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+            class="navbar-toggler btn" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -65,8 +65,10 @@
         </button>
     </h3>
     <hr>
-    <ul class="list-group" id="recipe-list">
-    </ul>
+<!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
+        <ul class="list-group" id="recipe-list">
+        </ul>
+<!--    </div>-->
     <div id="add-rec-div">
         <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
         <button class="btn" id="add-rec">Add</button>
