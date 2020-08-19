@@ -252,15 +252,6 @@ $(document).ready(() => {
       alert(`${textStatus}, ${jqXHR}`);
     });
   });
-//  $('input.inputIngInfo').keypress(function (event) {
-//    const idx = $(this).data('idx');
-//    if ($(`#quantity${idx}`).val() !== ''
-//    && $(`#name${idx}`).val() !== ''
-//    && event.keyCode === 13) {
-//      $(`#addIng${idx}`).click();
-//    }
-//  });
-
   $('#plus-rec').click(() => {
     $('#new-recipe-name').val('');
     $('#add-rec-div').show();
