@@ -181,11 +181,13 @@ function successOnAjaxOfRecipe(recipe) {
   jqXHR - The error object
 */
 function failureOnAjaxOfRecipe(jqXHR) {
-  if(jqXHR.readyState===0){
-    $('#error-message').text("Failed to contact server.");
-    return;
+  let message = null;
+  if (jqXHR.readyState === 0) {
+    message = 'Failed to contact server.';
+  } else {
+    message = jqXHR.responseJSON.message;
   }
-  $('#error-message').text(jqXHR.responseJSON.message);
+  $('#error-message').text(message);
   $('#error-message').show();
 }
 
@@ -200,7 +202,7 @@ function failureOnAjaxOfRecipe(jqXHR) {
 function addRecHandler(matchingButtons) {
   matchingButtons.click(function () {
     $('#error-message').hide();
-  $('#recipe-details-container').show();
+    $('#recipe-details-container').show();
     $('button.active.recipe-list').removeClass('active');
     $(this).addClass('active');
     $.get(`/recipes/${$(this).data('id')}`).done(successOnAjaxOfRecipe).fail(failureOnAjaxOfRecipe);
@@ -326,14 +328,7 @@ $(document).ready(() => {
       url: `/recipes/${currentRec.id}`,
       dataType: 'json',
     })
-      .fail(
-        (jqXHR, status, errorThrown) => {
-          alert('jqXHR:');
-          alert(jqXHR);
-          alert(`status: ${status}`);
-          alert(`errorThrown: ${errorThrown}`);
-        },
-      )
+      .fail(failureOnAjaxOfRecipe)
       .done(reset);
   });
   $('#edit-rec-name').click(() => {
