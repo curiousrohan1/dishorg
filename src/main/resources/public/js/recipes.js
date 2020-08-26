@@ -344,16 +344,18 @@ $(document).ready(() => {
       return;
     }
     $('#error-message').hide();
-    currentRec.name = $('#rename-rec-input').val();
+    let otherRec = JSON.parse(JSON.stringify(currentRec))
+    otherRec.name = $('#rename-rec-input').val();
     $.post({
       url: 'recipes',
-      data: JSON.stringify(currentRec),
+      data: JSON.stringify(otherRec),
       contentType: 'application/json',
       dataType: 'json',
     })
       .done(
         (data) => {
           $('button.recipe-list.active').text(data.name);
+          currentRec=otherRec;
         },
       )
       .fail(
