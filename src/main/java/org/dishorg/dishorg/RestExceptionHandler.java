@@ -1,5 +1,6 @@
 package org.dishorg.dishorg;
 
+import lombok.Getter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,28 +17,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    @Getter
     private static class ApiError {
         private final int statusCode;
         private final HttpStatus status;
         private final String message;
 
         public ApiError(HttpStatus status, String message) {
-            super();
             this.statusCode = status.value();
             this.status = status;
             this.message = message;
-        }
-
-        public int getStatusCode() {
-            return statusCode;
-        }
-
-        public HttpStatus getStatus() {
-            return status;
-        }
-
-        public String getMessage() {
-            return message;
         }
     }
 }

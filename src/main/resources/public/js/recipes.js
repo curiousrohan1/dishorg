@@ -12,6 +12,7 @@ const noUnit = '[No Unit]';
   idx - The index of the ingDiv created
 */
 function getIngDiv(idx) {
+  $('error-message').hide();
   const ingDiv = `
     <div id="ing-div${idx}">
     <form class="form-inline">
@@ -43,6 +44,8 @@ function getIngDiv(idx) {
   idx - The index of the ing referenced
 */
 function ingCancel(idx) {
+  $('error-message').hide();
+
   if (idx === '') {
     $('#ing-div').hide();
   } else {
@@ -61,6 +64,8 @@ function ingCancel(idx) {
   idx - The index of the ing denoted
 */
 function ingApply(idx) {
+  $('error-message').hide();
+
   const quantity = $(`#quantity${idx}`).val();
   const name = $(`#name${idx}`).val();
   const unit = $(`#unit-dropdown${idx}`).val();
@@ -80,12 +85,8 @@ function ingApply(idx) {
     data: JSON.stringify(currentRec),
     contentType: 'application/json',
     dataType: 'json',
-  }).fail(
-    (jqXHR) => {
-      $('#error-message-dialogue').text(jqXHR.responseJSON.message);
-      $('#error-message').show();
-    },
-  ).done(successOnAjaxOfRecipe);
+  }).fail(failureOnAjaxOfRecipe)
+    .done(successOnAjaxOfRecipe);
   $('#quantity').focus();
 }
 
@@ -99,6 +100,8 @@ function ingApply(idx) {
   recipe - The recipe object obtained in an ajax (PUT, GET, POST) response
 */
 function successOnAjaxOfRecipe(recipe) {
+  $('error-message').hide();
+
   $('#recipe-details').empty();
   currentRec = recipe;
   $('#rec-title').text(currentRec.name);
@@ -161,6 +164,29 @@ function successOnAjaxOfRecipe(recipe) {
       $(`#add-ing${idx}`).click();
     }
   });
+  $('*').click(() => {
+    $('#error-message').hide();
+  });
+  $('input.inputIngInfo').focus(() => {
+    $('#error-message').hide();
+  });
+}
+
+/*
+  failureOnAjaxOfRecipe
+
+  Shows the error message and specifies the error.
+
+  Parameters:
+  jqXHR - The error object
+*/
+function failureOnAjaxOfRecipe(jqXHR) {
+  if(jqXHR.readyState===0){
+    $('#error-message').text("Failed to contact server.");
+    return;
+  }
+  $('#error-message').text(jqXHR.responseJSON.message);
+  $('#error-message').show();
 }
 
 /*
@@ -173,10 +199,11 @@ function successOnAjaxOfRecipe(recipe) {
 */
 function addRecHandler(matchingButtons) {
   matchingButtons.click(function () {
-    $('#recipe-details-container').show();
+    $('#error-message').hide();
+  $('#recipe-details-container').show();
     $('button.active.recipe-list').removeClass('active');
     $(this).addClass('active');
-    $.get(`/recipes/${$(this).data('id')}`, successOnAjaxOfRecipe);
+    $.get(`/recipes/${$(this).data('id')}`).done(successOnAjaxOfRecipe).fail(failureOnAjaxOfRecipe);
   });
 }
 
@@ -204,15 +231,11 @@ function reset() {
         });
         addRecHandler($('button.recipe-list'));
       },
-    ).fail(
-      (jqXHR) => {
-        $('#error-message-dialogue').text(jqXHR.responseJSON.message);
-        $('#error-message').show();
-      },
-    );
+    ).fail(failureOnAjaxOfRecipe);
 
   currentRec = null;
   currentIdx = null;
+  $('error-message').hide();
 }
 
 $(document).ready(() => {
@@ -231,12 +254,7 @@ $(document).ready(() => {
         ingCancel('');
       });
     },
-  ).fail(
-    (jqXHR) => {
-      $('#error-message-dialogue').text(jqXHR.responseJSON.message);
-      $('#error-message').show();
-    },
-  );
+  ).fail(failureOnAjaxOfRecipe);
   $('#renamed-recipe-name').hide();
   $('#add-rec-div').hide();
   $('#ing-div').hide();
@@ -259,12 +277,7 @@ $(document).ready(() => {
       contentType: 'application/json',
       dataType: 'json',
     })
-      .fail(
-        (jqXHR) => {
-          $('#error-message-dialogue').text(jqXHR.responseJSON.message);
-          $('#error-message').show();
-        },
-      )
+      .fail(failureOnAjaxOfRecipe)
       .done(successOnAjaxOfRecipe);
   });
   $('#plus-rec').click(() => {
@@ -297,13 +310,7 @@ $(document).ready(() => {
     ).fail(
       (jqXHR) => {
         $('#add-rec-div').show();
-        $('#error-message-dialogue').text(jqXHR.responseJSON.message);
-        $('#error-message').show();
-        //         jqXHRg=jqXHR;
-        //  alert('jqXHR:');
-        //  alert(jqXHR);
-        //  alert(`status: ${status}`);
-        //          alert(`errorThrown: ${errorThrown}`);
+        failureOnAjaxOfRecipe(jqXHR);
       },
     );
   });
@@ -357,12 +364,7 @@ $(document).ready(() => {
       .fail(
         (jqXHR) => {
           $('#renamed-recipe-name').show();
-          $('#error-message-dialogue').text(jqXHR.responseJSON.message);
-          $('#error-message').show();
-          // alert('jqXHR:');
-          // alert(jqXHR);
-          // alert(`status: ${status}`);
-          // alert(`errorThrown: ${errorThrown}`);
+          failureOnAjaxOfRecipe(jqXHR);
         },
       );
     $('#rec-title').show();

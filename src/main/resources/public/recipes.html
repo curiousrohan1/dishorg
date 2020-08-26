@@ -57,10 +57,7 @@
      </form>-->
     </div>
 </nav>
-<div class="alert-danger" id="error-message" style="display:none;text-align:center;">
-    <h3>Error</h3>
-    <p id="error-message-dialogue"></p>
-</div>
+<p class="alert-danger" id="error-message" style="display:none;text-align:center;"></p>
 <div>
     <div style="position:relative;width:49%;float:left;padding-left:1rem;">
         <h3>
@@ -80,7 +77,7 @@
         </div>
     </div>
     <div id="recipe-details-container" style="position:relative;width:49%;float:right;padding-right:1.5rem">
-        <h3><strong id="rec-title"></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div><strong id="rec-title"></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name">
                 <input id="rename-rec-input" placeholder="New Name..." type="text">
                 <button class="btn" id="apply-rec-rename"><img src="images/apply.png"
@@ -96,7 +93,7 @@
             <button class="btn" data-placement="left" data-toggle="tooltip" id="plus-ing"
                     style="float:right;width:3rem;height:3rem;" title="Add ingredient">+
             </button>
-        </h3>
+        </div>
         <hr>
         <ul id="recipe-details">
         </ul>
