@@ -358,6 +358,10 @@ $(document).ready(() => {
       )
       .fail(
         (jqXHR) => {
+          $('#rec-title').text(currentRec.name)
+          $('#rec-title').hide();
+          $('#edit-rec-name').hide();
+          $('#del-rec').hide();
           $('#renamed-recipe-name').show();
           failureOnAjaxOfRecipe(jqXHR);
         },
