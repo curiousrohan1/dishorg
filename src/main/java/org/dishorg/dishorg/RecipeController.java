@@ -1,5 +1,6 @@
 package org.dishorg.dishorg;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,6 @@ import java.util.List;
 
 @RestController
 public class RecipeController {
-
     private final RecipeRepository repo;
 
     public RecipeController(RecipeRepository repo) {
@@ -23,8 +23,13 @@ public class RecipeController {
 
     @PostMapping("/recipes")
     Recipe newRecipe(@RequestBody Recipe newRecipe) {
-        return repo.save(newRecipe);
+        try {
+            return repo.save(newRecipe);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateRecipeException(newRecipe);
+        }
     }
+
 
     @GetMapping("/recipes")
     List<Recipe> all() {
@@ -54,7 +59,7 @@ public class RecipeController {
     @DeleteMapping("/recipes/{id}")
     String deleteRecipe(@PathVariable Long id) {
         repo.deleteById(id);
-        return "{status: \"Success\"}";
+        return "{\"status\": \"Success\"}";
     }
 
     @GetMapping("/units")
