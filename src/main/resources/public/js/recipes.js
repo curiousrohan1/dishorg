@@ -316,6 +316,10 @@ $(document).ready(() => {
       },
     );
   });
+  $('#cancel-add-rec').click(() => {
+    $('#add-rec-div').hide();
+    $('#error-message').hide();
+  });
   $('#plus-ing').click(() => {
     $('#unit-dropdown').val(noUnit);
     $('#name').val('');
@@ -344,7 +348,7 @@ $(document).ready(() => {
       return;
     }
     $('#error-message').hide();
-    let otherRec = JSON.parse(JSON.stringify(currentRec))
+    const otherRec = JSON.parse(JSON.stringify(currentRec));
     otherRec.name = $('#rename-rec-input').val();
     $.post({
       url: 'recipes',
@@ -355,12 +359,12 @@ $(document).ready(() => {
       .done(
         (data) => {
           $('button.recipe-list.active').text(data.name);
-          currentRec=otherRec;
+          currentRec = otherRec;
         },
       )
       .fail(
         (jqXHR) => {
-          $('#rec-title').text(currentRec.name)
+          $('#rec-title').text(currentRec.name);
           $('#rec-title').hide();
           $('#edit-rec-name').hide();
           $('#del-rec').hide();
