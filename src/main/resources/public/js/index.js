@@ -3,19 +3,24 @@ const App = Vue.createApp({
     return {
     };
   },
-  methods: {},
+//  methods: {},
 });
 App.component('parent', {
+  data(){
+    return{
+      display:true
+    };
+  },
   template: `
     <div>
-      <p :class={"alert-danger"} id="error-message" :style="display:none;text-align:center;"/>
+      <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="display">Test</p>
       <div>
         <titles/>
         <hr>
         <bod/>
       </div>
     </div>
-  `,
+  `
 });
 App.component('titles', {
   template: `
@@ -42,6 +47,7 @@ App.component('titles', {
         </button>
     </div>
   </div>`,
+  props: {},
 });
 App.component('bod', {
   template: `
@@ -64,5 +70,6 @@ App.component('bod', {
       </div>
     </div>
   `,
+  props: {},
 });
 App.mount('#dishorg');
