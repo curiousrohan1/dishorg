@@ -5,34 +5,46 @@ const App = Vue.createApp({
   },
 //  methods: {},
 });
-App.component('parent', {
-  data(){
-    return{
-      display:true
+App.component('Parent', {
+  data() {
+    return {
+      displayWarn: false,
     };
   },
   template: `
     <div>
-      <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="display">Test</p>
+      <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="display">WARNING</p>
       <div>
         <titles/>
         <hr>
         <bod/>
       </div>
     </div>
-  `
+  `,
 });
-App.component('titles', {
+App.component('Titles', {
+  props: {},
+  emits: { yo: null },
+  data() {
+    return {
+      showRename: false,
+    };
+  },
+  methods: {
+    showAddDiv() {
+      this.$emit('show-rec');
+    },
+  },
   template: `
   <div>
     <div style="position:relative;width:49%;float:left;padding-left:1rem;">
         <strong>Recipes:</strong>
         <button class="btn" data-placement="right" data-toggle="tooltip" id="plus-rec"
-                style="float:right;width:3rem;height:3rem;" title="Add recipe">+
+                style="float:right;width:3rem;height:3rem;" title="Add recipe" v-on:click="showAddDiv">+
         </button>
     </div>
     <div><strong id="rec-title"></strong>
-        <div id="renamed-recipe-name">
+        <div id="renamed-recipe-name" v-show="showRename">
             <input id="rename-rec-input" placeholder="New Name..." type="text">
             <button class="btn" id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;">
             </button>
@@ -47,9 +59,14 @@ App.component('titles', {
         </button>
     </div>
   </div>`,
-  props: {},
 });
-App.component('bod', {
+App.component('Bod', {
+  props: {},
+  data() {
+    return {
+      showAddRec: false,
+    };
+  },
   template: `
     <div>
       <div style="position:relative;width:49%;float:left;padding-left:1rem;">
@@ -57,7 +74,7 @@ App.component('bod', {
         <ul class="list-group" id="recipe-list">
         </ul>
         <!--    </div>-->
-        <div id="add-rec-div">
+        <div id="add-rec-div"v-show="showAddRec">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
           <button class="btn" id="add-rec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
           <button class="btn" id="cancel-add-rec"><img src="images/cancel.jpg" style="width:30px;height:30px;">
@@ -70,6 +87,5 @@ App.component('bod', {
       </div>
     </div>
   `,
-  props: {},
 });
 App.mount('#dishorg');
