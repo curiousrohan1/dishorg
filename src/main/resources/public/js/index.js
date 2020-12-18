@@ -5,26 +5,32 @@ const App = Vue.createApp({
   },
 //  methods: {},
 });
-App.component('Parent', {
+const parent = App.component('Parent', {
   data() {
     return {
       displayWarn: false,
+      displayBod: false,
     };
+  },
+  methods: {
+    showBod() {
+      this.displayBod = true;
+    },
   },
   template: `
     <div>
-      <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="display">WARNING</p>
+      <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="displayWarn">WARNING</p>
       <div>
-        <titles/>
+        <titles @show-rec="showBod"/>
         <hr>
-        <bod/>
+        <bod id="receiver" v-show="displayBod"/>
       </div>
     </div>
   `,
 });
-App.component('Titles', {
+const titles = App.component('Titles', {
   props: {},
-  emits: { yo: null },
+  emits: { 'show-rec': null },
   data() {
     return {
       showRename: false,
@@ -60,7 +66,7 @@ App.component('Titles', {
     </div>
   </div>`,
 });
-App.component('Bod', {
+const bod = App.component('Bod', {
   props: {},
   data() {
     return {
@@ -74,7 +80,7 @@ App.component('Bod', {
         <ul class="list-group" id="recipe-list">
         </ul>
         <!--    </div>-->
-        <div id="add-rec-div"v-show="showAddRec">
+        <div id="add-rec-div" v-show="showAddRec">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
           <button class="btn" id="add-rec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
           <button class="btn" id="cancel-add-rec"><img src="images/cancel.jpg" style="width:30px;height:30px;">
