@@ -23,7 +23,7 @@ const parent = App.component('Parent', {
       <div>
         <titles @show-rec="showBod"/>
         <hr>
-        <bod id="receiver" v-show="displayBod"/>
+        <bod :showAddRec="displayBod" id="receiver"/>
       </div>
     </div>
   `,
@@ -67,12 +67,7 @@ const titles = App.component('Titles', {
   </div>`,
 });
 const bod = App.component('Bod', {
-  props: {},
-  data() {
-    return {
-      showAddRec: false,
-    };
-  },
+  props: ['showAddRec'],
   template: `
     <div>
       <div style="position:relative;width:49%;float:left;padding-left:1rem;">
