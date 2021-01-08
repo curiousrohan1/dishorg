@@ -21,7 +21,7 @@ const parent = App.component('Parent', {
     <div>
       <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="displayWarn">WARNING</p>
       <div>
-        <titles @show-rec="showBod"/>
+        <titles @show-add-rec-div="showBod"/>
         <hr>
         <bod :showAddRec="displayBod" id="receiver"/>
       </div>
@@ -30,7 +30,7 @@ const parent = App.component('Parent', {
 });
 const titles = App.component('Titles', {
   props: {},
-  emits: { 'show-rec': null },
+  emits: { 'show-add-rec-div': null },
   data() {
     return {
       showRename: false,
@@ -38,7 +38,7 @@ const titles = App.component('Titles', {
   },
   methods: {
     showAddDiv() {
-      this.$emit('show-rec');
+      this.$emit('show-add-rec-div');
     },
   },
   template: `
@@ -68,6 +68,17 @@ const titles = App.component('Titles', {
 });
 const bod = App.component('Bod', {
   props: ['showAddRec'],
+  methods: {
+    hide(hider) {
+      document.getElementById(hider).display = 'none';
+    },
+    show(shower) {
+      document.getElementById(shower).display = 'block';
+    },
+    cancelAddRec() {
+      hide("add-rec-div");
+    },
+  },
   template: `
     <div>
       <div style="position:relative;width:49%;float:left;padding-left:1rem;">
@@ -78,7 +89,7 @@ const bod = App.component('Bod', {
         <div id="add-rec-div" v-show="showAddRec">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
           <button class="btn" id="add-rec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
-          <button class="btn" id="cancel-add-rec"><img src="images/cancel.jpg" style="width:30px;height:30px;">
+          <button class="btn" id="cancel-add-rec" :click="cancelAddRec"><img src="images/cancel.jpg" style="width:30px;height:30px;">
           </button>
         </div>
       </div>
