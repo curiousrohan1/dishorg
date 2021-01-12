@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Cook It Best</title>
@@ -8,34 +9,46 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
 </head>
-<body>
-<div id="dishorg">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#"><img src="images/logo.svg" style="width:100px;height:100px;"></a>
-        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-                class="navbar-toggle btn" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
-            <span class="navbar-toggle-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbar-supported-content">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Recipes <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sign out</a>
-                </li>
-            </ul>
-            <!-- <form class="form-inline my-2 my-lg-0">
+<body>
+    <!--    Remember to use {{var}} syntax-->
+    <div id="dishorg">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#"><img src="images/logo.svg" style="width:100px;height:100px;"></a>
+            <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggle btn" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+                <span class="navbar-toggle-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar-supported-content">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Recipes <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sign out</a>
+                    </li>
+                </ul>
+                <!-- <form class="form-inline my-2 my-lg-0">
              <input aria-label="Search" class="form-control mr-sm-2" placeholder="Search" type="search">
              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
          </form>-->
-        </div>
-    </nav>
-    <parent/>
-</div>
-<script src="https://unpkg.com/vue@next"></script>
-<script src="js/index.js"></script>
+            </div>
+        </nav>
+        <parent />
+    </div>
+    <!-- Import App -->
+    <script src="js/index.js"></script>
+    <!-- Import Components -->
+    <script src="js/components/parent.js"></script>
+    <script src="js/components/titles.js"></script>
+    <script src="js/components/bod.js"></script>
+    <!-- Mount App -->
+    <script>
+        const mountedApp = app.mount('#dishorg')
+    </script>
 </body>
+
 </html>
