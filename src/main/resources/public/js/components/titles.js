@@ -1,6 +1,6 @@
 const titles = app.component('Titles', {
     props: {},
-    emits: { 'show-add-rec-div': null, 'cancel-rec-rename': null },
+    emits: { 'show-add-rec-div': null, 'plus-ing': null },
     data() {
         return {
             showRename: false,
@@ -11,7 +11,13 @@ const titles = app.component('Titles', {
             this.$emit('show-add-rec-div');
         },
         cancelRecRename() {
-            this.$emit('cancel-rec-rename')
+            this.showRename = false;
+        },
+        editRecName() {
+            this.showRename = true;
+        },
+        plusIng() {
+            this.$emit('plus-ing');
         }
     },
     template:
@@ -25,11 +31,11 @@ const titles = app.component('Titles', {
             <button class="btn" id="cancel-rec-rename" v-on:click = "cancelRecRename"><img src="images/cancel.jpg" style="width:30px;height:30px;">
             </button>
         </div>
-        <button class="btn" id="edit-rec-name"><img src="images/edit.jpg" style="width:30px;height:30px;">
+        <button class="btn" id="edit-rec-name" v-on:click="editRecName" v-show="!showRename"><img src="images/edit.jpg" style="width:30px;height:30px;">
         </button>
-        <button class="btn" id="del-rec"><img src="images/del.png" style="width:30px;height:30px;"></button>
+        <button class="btn" id="del-rec"><img src="images/del.png"  v-show="!showRename"style="width:30px;height:30px;"></button>
         <button class="btn" data-placement="left" data-toggle="tooltip" id="plus-ing"
-                style="float:right;width:3rem;height:3rem;" title="Add ingredient">+
+                style="float:right;width:3rem;height:3rem;" title="Add ingredient" v-on:click="plusIng">+
         </button>
     </div>
   </div>`,
