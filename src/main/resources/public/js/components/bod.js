@@ -9,7 +9,10 @@ const bod = app.component('Bod', {
   },
   methods: {
     cancelAddRec() {
-      this.$emit('cancel-add-rec')
+      this.$emit('cancel-add-rec');
+      this.unit = 'Unit';
+      document.getElementById('name').value = '';
+      document.getElementById('quantity').value = '';
     },
     dropButtonOne() {
       this.showDropOne = true;
@@ -20,6 +23,10 @@ const bod = app.component('Bod', {
     },
     cancelAddIng() {
       this.$emit('cancel-add-ing')
+    },
+    addRec() {
+      this.cancelAddRec();
+
     }
   },
   /*html*/
@@ -28,13 +35,14 @@ const bod = app.component('Bod', {
       <div style="position:relative;width:49%;float:left;padding-left:1rem;">
         <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
         <ul class="list-group" id="recipe-list">
+          <button type="button" class="list-group-item list-group-item-action"></button>
         </ul>
         <!--    </div>-->
         <div id="add-rec-div" v-show="showAddRec">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn" id="add-rec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
-            <button class="btn" id="cancel-add-rec" v-on:click="cancelAddRec"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
+            <button class="btn btn-success" id="add-rec" v:on-click="addRec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
+            <button class="btn btn-danger" id="cancel-add-rec" v-on:click="cancelAddRec"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
           </div>
         </div>
       </div>
@@ -46,18 +54,18 @@ const bod = app.component('Bod', {
           <div style="display: inline-block;">
             <button v-on:click="dropButtonOne" class="btn">{{this.unit}}</button>
             <ul v-show="showDropOne">
-              <li><button class="btn"v-on:click="clickUnit('Cups')">Cups</button></li>
-              <li><button class="btn"v-on:click="clickUnit('Ounces')">Ounces</button></li>
-              <li><button class="btn"v-on:click="clickUnit('Fluid Ounces')">Fluid Ounces</button></li>
-              <li><button class="btn"v-on:click="clickUnit('Teaspoons')">Teaspoons</button></li>
-              <li><button class="btn"v-on:click="clickUnit('Tablespoons')">Tablespoons</button></li>
-              <li><button class="btn"v-on:click="clickUnit('Pinch')">Pinch</button></li>
+              <li><button class="btn text-info btn-dark"v-on:click="clickUnit('Cups')">Cups</button></li>
+              <li><button class="btn text-info btn-dark"v-on:click="clickUnit('Ounces')">Ounces</button></li>
+              <li><button class="btn text-info btn-dark"v-on:click="clickUnit('Fluid Ounces')">Fluid Ounces</button></li>
+              <li><button class="btn text-info btn-dark"v-on:click="clickUnit('Teaspoons')">Teaspoons</button></li>
+              <li><button class="btn text-info btn-dark"v-on:click="clickUnit('Tablespoons')">Tablespoons</button></li>
+              <li><button class="btn text-info btn-dark"v-on:click="clickUnit('Pinch')">Pinch</button></li>
             </ul>
           </div>
           <input placeholder="The Food's Name" id="name"style="display: inline-block;"> 
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn"style="display: inline-block;"><img  src="images/apply.png" style="width:30px;height:30px;"></button>
-            <button class="btn"style="display: inline-block;" v-on:click="cancelAddIng"><img  src="images/cancel.jpg" style="width:30px;height:30px;"></button>
+            <button class="btn-success"style="display: inline-block;"><img  src="images/apply.png" style="width:30px;height:30px;"></button>
+            <button class="btn btn-danger"style="display: inline-block;" v-on:click="cancelAddIng"><img  src="images/cancel.jpg" style="width:30px;height:30px;"></button>
           </div>
         </div>
       </div>
