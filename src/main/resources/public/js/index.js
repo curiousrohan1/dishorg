@@ -4,12 +4,7 @@ const app = Vue.createApp({
       currentRec: {
         ingredients: [],
         name: ""
-      },
-      recipeList: [
-        {
-          name: 'HII'
-        }
-      ]
+      }
     };
   } //
   //  Remember to use whatchamacallit, {{var}} syntax bro

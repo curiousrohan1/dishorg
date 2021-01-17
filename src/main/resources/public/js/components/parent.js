@@ -31,7 +31,7 @@ const parent = app.component('Parent', {
       <div>
         <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv"/>
         <hr>
-        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv"@cancel-add-rec="hideAddDiv" @cancel-add-ing="hideIngDiv"/>
+        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv" @cancel-add-ing="hideIngDiv"/>
       </div>
     </div>
   `,
