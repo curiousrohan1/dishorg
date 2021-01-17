@@ -1,5 +1,5 @@
 const titles = app.component('Titles', {
-    props: { 'disabled': Boolean },
+    props: { 'abled': Boolean },
     emits: { 'show-add-rec-div': null, 'plus-ing': null },
     data() {
         return {
@@ -36,8 +36,8 @@ const titles = app.component('Titles', {
                 <button class="btn" id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;"></button>
                 <button class="btn" id="cancel-rec-rename" v-on:click = "cancelRecRename"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
             </div>
-            <button class="btn" id="edit-rec-name" v-on:click="editRecName" disabled="this.disabled" v-show="!showRename" style="cursor: not-allowed;background-color: #d8d8d8;"><img src="images/edit.jpg" style="width:30px;height:30px;"></button>
-            <button class="btn" id="del-rec" style="cursor: not-allowed; background-color: #d8d8d8;" disabled="true"><img src="images/del.png"  v-show="!showRename" style="width:30px;height:30px;"></button>
+            <button class="btn" id="edit-rec-name" v-on:click="editRecName" disabled="this.abled" v-show="!showRename" style="cursor: not-allowed;background-color: #d8d8d8;"><img src="images/edit.jpg" style="width:30px;height:30px;"></button>
+            <button class="btn" id="del-rec" style="cursor: not-allowed; background-color: #d8d8d8;" disabled="this.abled"><img src="images/del.png"  v-show="!showRename" style="width:30px;height:30px;"></button>
             <button class="btn text-info" data-placement="left" data-toggle="tooltip" id="plus-ing"
                 style="float:right;width:3rem;height:3rem;" title="Add ingredient" v-on:click="plusIng">+</button>
     </div>

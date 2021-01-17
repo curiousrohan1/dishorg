@@ -1,14 +1,12 @@
 const bod = app.component('Bod', {
-  emits: { 'cancel-add-rec': null, 'cancel-add-ing': null },
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'adding'],
+  // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': }, TODO
   props: ['showAddRec', 'showAddIng'],
   data() {
     return {
       showDropOne: false,
       unit: "Unit",
       recipeList: [
-        {
-          name: 'HII'
-        }
       ]
     }
   },
@@ -23,8 +21,22 @@ const bod = app.component('Bod', {
       this.$emit('cancel-add-ing')
     },
     addRec() {
+      this.$emit('adding', this.recipeList.length);
+      const rec = {
+        name: document.getElementById('new-recipe-name').value,
+        ingredients: [],
+        id: this.recipeList.length,
+        active: false
+      }
+      this.recipeList.push(rec);
       this.cancelAddRec();
-
+    },
+    clickRec(idx) {
+      rec = this.recipeList[idx];
+      for (i = 0; i < this.recipeList.length; i++) {
+        this.recipeList[i].active = false;
+      }
+      rec.active = true;
     }
   },
   /*html*/
@@ -33,13 +45,14 @@ const bod = app.component('Bod', {
       <div style="position:relative;width:49%;float:left;padding-left:1rem;">
         <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
         <ul class="list-group" id="recipe-list">
-          <button type="button" class="list-group-item list-group-item-action" v-for="rec in recipeList">{{rec.name}}</button>
+          <button type="button" v-on:click="clickRec(rec.id)" class="list-group-item list-group-item-action" :class="{active:rec.active}" v-for="rec in recipeList">{{rec.name}}</button>
         </ul>
+         <!-- id="{{rec.id}}"--> 
         <!--    </div>-->
         <div id="add-rec-div" v-show="showAddRec">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn" id="add-rec" v:on-click="addRec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
+            <button class="btn" id="add-rec" v-on:click="addRec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
             <button class="btn" id="cancel-add-rec" v-on:click="cancelAddRec"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
           </div>
         </div>

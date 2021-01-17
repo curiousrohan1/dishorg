@@ -3,7 +3,8 @@ const parent = app.component('Parent', {
         return {
             displayWarn: false,
             displayBod: false,
-            displayIngDiv: false
+            displayIngDiv: false,
+            disabled: true
         };
     },
     methods: {
@@ -21,6 +22,9 @@ const parent = app.component('Parent', {
         },
         hideIngDiv() {
             this.displayIngDiv = false;
+        },
+        enableEdit(size) {
+            this.disabled = size == 0;
         }
     },
     template:
@@ -29,9 +33,9 @@ const parent = app.component('Parent', {
     <div>
       <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="displayWarn">WARNING</p>
       <div>
-        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv"/>
+        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :abled="this.disabled"/>
         <hr>
-        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv" @cancel-add-ing="hideIngDiv"/>
+        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv" @cancel-add-ing="hideIngDiv" @adding="enableEdit($event)"/>
       </div>
     </div>
   `,
