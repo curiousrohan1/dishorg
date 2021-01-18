@@ -25,8 +25,8 @@ const titles = app.component('Titles', {
         `
     <div>
         <div style="position:relative;width:49%;float:left;padding-left:1rem;">
-            <strong class="text-info" style="display: inline-block;"><h2>Recipes:</h2></strong>
-            <button class="btn text-info" data-placement="right" data-toggle="tooltip" id="plus-rec"
+            <strong class="text-primary" style="display: inline-block;"><h2>Recipes:</h2></strong>
+            <button class="btn text-primary" data-placement="right" data-toggle="tooltip" id="plus-rec"
                 style="float:right;width:3rem;height:3rem;display: inline-block;" title="Add recipe" v-on:click="showAddRecDiv">+</button>
         </div>
         <div>
@@ -38,7 +38,7 @@ const titles = app.component('Titles', {
             </div>
             <button class="btn" id="edit-rec-name" v-on:click="editRecName" disabled="this.abled" v-show="!showRename" style="cursor: not-allowed;background-color: #d8d8d8;"><img src="images/edit.jpg" style="width:30px;height:30px;"></button>
             <button class="btn" id="del-rec" style="cursor: not-allowed; background-color: #d8d8d8;" disabled="this.abled"><img src="images/del.png"  v-show="!showRename" style="width:30px;height:30px;"></button>
-            <button class="btn text-info" data-placement="left" data-toggle="tooltip" id="plus-ing"
+            <button class="btn text-primary" data-placement="left" data-toggle="tooltip" id="plus-ing"
                 style="float:right;width:3rem;height:3rem;" title="Add ingredient" v-on:click="plusIng">+</button>
     </div>
   </div>`,

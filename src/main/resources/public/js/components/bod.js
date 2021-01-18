@@ -7,23 +7,26 @@ const bod = app.component('Bod', {
       showDropOne: false,
       unit: "Unit",
       recipeList: [
-      ]
+      ],
+      ingName: '',
+      quantity: '',
+      recName: ''
     }
   },
   methods: {
     cancelAddRec() {
       this.$emit('cancel-add-rec');
-      this.unit = 'Unit';
-      document.getElementById('name').value = '';
-      document.getElementById('quantity').value = '';
     },
     cancelAddIng() {
       this.$emit('cancel-add-ing')
+      this.unit = 'Unit';
+      this.ingName = ''
+      this.quantity = ''
     },
     addRec() {
       this.$emit('adding', this.recipeList.length);
       const rec = {
-        name: document.getElementById('new-recipe-name').value,
+        name: this.recName,
         ingredients: [],
         id: this.recipeList.length,
         active: false
@@ -50,7 +53,7 @@ const bod = app.component('Bod', {
          <!-- id="{{rec.id}}"--> 
         <!--    </div>-->
         <div id="add-rec-div" v-show="showAddRec">
-          <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
+          <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName">
           <div class="btn-group" role="group" aria-label="Basic example">
             <button class="btn" id="add-rec" v-on:click="addRec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
             <button class="btn" id="cancel-add-rec" v-on:click="cancelAddRec"><img src="images/cancel.jpg" style="width:30px;height:30px;"></button>
@@ -61,9 +64,9 @@ const bod = app.component('Bod', {
         <ul id="recipe-details">
         </ul>
         <div v-show="showAddIng" style="width:100%;display:inline-block;">  
-          <input placeholder="Quantity" id="quantity" style="display: inline-block;"> 
-          <select class="form-control mb-2 mr-sm-2" id="unit-dropdown" style="display: inline-block; width:5rem">{{this.unit}}</select>
-          <input placeholder="The Food's Name" id="name" style="display: inline-block;"> 
+          <input v-model="quantity" placeholder="Quantity" id="quantity" style="display: inline-block;"/>
+          <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown" style="display: inline-block; width:5rem">{{this.unit}}</select>
+          <input placeholder="The Food's Name" id="name" style="display: inline-block;" v-model="name" > 
           <div class="btn-group" role="group" aria-label="Basic example">
             <button class="btn" style="display: inline-block;"><img  src="images/apply.png" style="width:30px;height:30px;"></button>
             <button class="btn" style="display: inline-block;" v-on:click="cancelAddIng"><img  src="images/cancel.jpg" style="width:30px;height:30px;"></button>
