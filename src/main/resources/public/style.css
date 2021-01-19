@@ -34,3 +34,56 @@ header li a {
     color: black;
     text-decoration: none;
 }
+
+#left-pane{
+    position:relative;
+    width:49%;
+    float:left;
+    padding-left:1rem;
+}
+#recipe-details-container{
+    position:relative;
+    width:49%;
+    float:right;
+    padding-right:1.5rem;
+}
+#make-ing{
+    width:100%;
+    display:inline-block;
+}
+#make-ing *{
+    display: inline-block;
+}
+img{
+    width:30px;
+    height:30px;
+}
+#unit-dropdown{
+    width:5rem;
+}
+#left-titles{
+    position:relative;
+    width:49%;
+    float:left;
+    padding-left:1rem;
+}
+#left-titles *{
+    display: inline-block;
+}
+#plus-rec{
+    float:right;
+    width:3rem;
+    height:3rem;
+}
+.disabled{
+    cursor: not-allowed;
+}
+#plus-ing{
+    float:right;
+}
+#error-message{
+    text-align: center;
+}
+#logo{
+    width:max-content
+}

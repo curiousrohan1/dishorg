@@ -35,7 +35,7 @@ const parent = app.component('Parent', {
         /*html*/
         `
     <div>
-      <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="displayWarn">WARNING</p>
+      <p class = "alert-danger" id="error-message" v-show="displayWarn">WARNING</p>
       <div>
         <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :abled="this.disabled" :recName="this.nameRec"/>
         <hr>
