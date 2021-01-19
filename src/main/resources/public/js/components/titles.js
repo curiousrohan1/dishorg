@@ -1,5 +1,5 @@
 const titles = app.component('Titles', {
-    props: { 'abled': Boolean },
+    props: { 'abled': Boolean, 'recName': String },
     emits: { 'show-add-rec-div': null, 'plus-ing': null },
     data() {
         return {
@@ -30,7 +30,7 @@ const titles = app.component('Titles', {
                 style="float:right;width:3rem;height:3rem;display: inline-block;" title="Add recipe" v-on:click="showAddRecDiv">+</button>
         </div>
         <div>
-            <strong id="rec-title"></strong>
+            <strong id="rec-title">{{this.recName}}</strong>&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name" v-show="showRename">
                 <input id="rename-rec-input" placeholder="New Name..." type="text">
                 <button class="btn" id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;"></button>

@@ -4,7 +4,8 @@ const parent = app.component('Parent', {
             displayWarn: false,
             displayBod: false,
             displayIngDiv: false,
-            disabled: true
+            disabled: true,
+            nameRec: ""
         };
     },
     methods: {
@@ -25,6 +26,9 @@ const parent = app.component('Parent', {
         },
         enableEdit(size) {
             this.disabled = size == 0;
+        },
+        updateRecName(name) {
+            this.nameRec = name;
         }
     },
     template:
@@ -33,9 +37,9 @@ const parent = app.component('Parent', {
     <div>
       <p style="text-align: center;" class = "alert-danger" id="error-message" v-show="displayWarn">WARNING</p>
       <div>
-        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :abled="this.disabled"/>
+        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :abled="this.disabled" :recName="this.nameRec"/>
         <hr>
-        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv" @cancel-add-ing="hideIngDiv" @adding="enableEdit($event)"/>
+        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv" @cancel-add-ing="hideIngDiv" @adding="enableEdit($event)" @update-rec-name="updateRecName($event)"/>
       </div>
     </div>
   `,

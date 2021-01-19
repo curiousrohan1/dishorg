@@ -10,7 +10,23 @@ const bod = app.component('Bod', {
       ],
       ingName: '',
       quantity: '',
-      recName: ''
+      recName: '',
+      currentRec: {
+        ingredients: [
+          {
+            unit: "cup",
+            name: "yum",
+            quantity: 5
+          }, {
+            unit: "oz",
+            name: "yummmmies",
+            quantity: 10
+          }
+
+        ],
+        name: "YUMMMMMMMMMMMMMMUY"
+      },
+      name: ""
     }
   },
   methods: {
@@ -27,7 +43,9 @@ const bod = app.component('Bod', {
       this.$emit('adding', this.recipeList.length);
       const rec = {
         name: this.recName,
-        ingredients: [],
+        ingredients: [
+
+        ],
         id: this.recipeList.length,
         active: false
       }
@@ -40,6 +58,8 @@ const bod = app.component('Bod', {
         this.recipeList[i].active = false;
       }
       rec.active = true;
+      this.currentRec = rec;
+      this.$emit('updateRecName', this.currentRec.name);
     }
   },
   /*html*/
@@ -62,6 +82,7 @@ const bod = app.component('Bod', {
       </div>
       <div id="recipe-details-container" style="position:relative;width:49%;float:right;padding-right:1.5rem">
         <ul id="recipe-details">
+          <li v-for="ing in currentRec.ingredients">{{ing.name}}</li>
         </ul>
         <div v-show="showAddIng" style="width:100%;display:inline-block;">  
           <input v-model="quantity" placeholder="Quantity" id="quantity" style="display: inline-block;"/>
