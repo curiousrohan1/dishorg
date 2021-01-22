@@ -1,5 +1,5 @@
 const bod = app.component('Bod', {
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'adding'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'adding', 'updateRecName'],
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': }, TODO
   props: ['showAddRec', 'showAddIng'],
   data() {

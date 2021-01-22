@@ -16,7 +16,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 100px;
     display: flex;
     align-items: center;
     box-shadow: 0 0 25px 0 black;
@@ -49,13 +49,12 @@ header li a {
 }
 #make-ing{
     width:100%;
-    display:inline-block;
+    display:inline;
 }
 #make-ing *{
-    display: inline-block;
+    display: inline;
 }
 img{
-    width:30px;
     height:30px;
 }
 #unit-dropdown{
@@ -68,7 +67,7 @@ img{
     padding-left:1rem;
 }
 #left-titles *{
-    display: inline-block;
+    display: inline;
 }
 #plus-rec{
     float:right;
@@ -86,4 +85,20 @@ img{
 }
 #logo{
     width:max-content
+}
+#account-dropdown{
+    float:right;
+    position: relative;
+    padding-right: 0.5rem;
+}
+#account-dropdown *{
+    display: inline;
+}
+
+#account-img{
+    width: 50px;
+    height: 50px;
+}
+#nav{
+    float:left;
 }

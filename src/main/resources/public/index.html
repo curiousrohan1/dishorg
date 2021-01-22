@@ -14,25 +14,31 @@
 </head>
 
 <body>
-    <header>
-        <img src="images/logo.svg" id="logo">
-        <nav>
-            <ul>
-                <li><a href="#">Make A Grocery List</a></li>
-                <li><a href="#">My Account</a></li>
-                <li><a href="#">Sign Out</a></li>
-                <li><a href="#">Help</a></li>
-                <li><a href="#">Plans</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
+    <div id="dishorg">
+        <header>
+            <img src="images/logo.svg" id="logo">
+            <nav>
+                <ul id="nav">
+                    <li><a href="#">Make A Grocery List</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Plans</a></li>
+                </ul>
+                <div id="account-dropdown">
+                    <select>
+                        <option selected disabled>
+                            My Account
+                        </option>
+                        <option v-for="opt in accountOpts"> {{opt}}</option>
+                    </select><img id="account-img"
+                        src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
+                </div>
+            </nav>
+            <img id="account-img" style="float: right;position: relative;"
+                src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
+        </header>
         <!--    Remember to use {{var}} syntax-->
-        <div id="dishorg">
-            <hr>
-            <parent />
-        </div>
-    </main>
+        <parent />
+    </div>
     <!-- Import App -->
     <script src="js/index.js"></script>
     <!-- Import Components -->
