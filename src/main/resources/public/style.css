@@ -89,7 +89,6 @@ img{
 #account-dropdown{
     float:right;
     position: relative;
-    padding-right: 0.5rem;
 }
 #account-dropdown *{
     display: inline;
@@ -101,4 +100,5 @@ img{
 }
 #nav{
     float:left;
+    position:relative;
 }

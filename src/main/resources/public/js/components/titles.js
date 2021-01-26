@@ -1,27 +1,27 @@
 const titles = app.component('Titles', {
-    props: { 'abled': Boolean, 'recName': String },
-    emits: { 'show-add-rec-div': null, 'plus-ing': null },
-    data() {
-        return {
-            showRename: false,
-        };
+  props: { abled: Boolean, recName: String },
+  emits: { 'show-add-rec-div': null, 'plus-ing': null },
+  data() {
+    return {
+      showRename: false,
+    };
+  },
+  methods: {
+    showAddRecDiv() {
+      this.$emit('show-add-rec-div');
     },
-    methods: {
-        showAddRecDiv() {
-            this.$emit('show-add-rec-div');
-        },
-        cancelRecRename() {
-            this.showRename = false;
-        },
-        editRecName() {
-            this.showRename = true;
-        },
-        plusIng() {
-            this.$emit('plus-ing');
-        }
+    cancelRecRename() {
+      this.showRename = false;
     },
-    template:
-        /*html*/
+    editRecName() {
+      this.showRename = true;
+    },
+    plusIng() {
+      this.$emit('plus-ing');
+    },
+  },
+  template:
+        /* html */
         `
     <div>
         <div id="left-titles">
@@ -36,8 +36,8 @@ const titles = app.component('Titles', {
                 <button class="btn" id="apply-rec-rename"><img src="images/apply.png"></button>
                 <button class="btn" id="cancel-rec-rename" v-on:click = "cancelRecRename"><img src="images/cancel.jpg"></button>
             </div>
-            <button class="btn disabled" id="edit-rec-name" v-on:click="editRecName" disabled="this.abled" v-show="!showRename"><img src="images/edit.jpg"></button>
-            <button class="btn disabled" id="del-rec" disabled="this.abled"><img src="images/del.png"  v-show="!showRename"></button>
+            <button :class="{disabled:!this.abled}" class="btn disabled" id="edit-rec-name" v-on:click="editRecName" disabled="this.abled" v-show="!showRename"><img src="images/edit.jpg"></button>
+            <button :class="{disabled:!this.abled}" class="btn disabled" id="del-rec" disabled="this.abled"><img src="images/del.png"  v-show="!showRename"></button>
             <button class="btn text-primary" data-placement="left" data-toggle="tooltip" id="plus-ing"
              title="Add ingredient" v-on:click="plusIng">+</button>
     </div>

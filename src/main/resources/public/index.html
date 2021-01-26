@@ -10,45 +10,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/vue@next"></script>
-    <link rel="stylesheet" href="style.css">
+    <link href="style.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="dishorg">
-        <header>
-            <img src="images/logo.svg" id="logo">
-            <nav>
-                <ul id="nav">
-                    <li><a href="#">Make A Grocery List</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Plans</a></li>
-                </ul>
-                <div id="account-dropdown">
-                    <select>
-                        <option selected disabled>
-                            My Account
-                        </option>
-                        <option v-for="opt in accountOpts"> {{opt}}</option>
-                    </select><img id="account-img"
-                        src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
-                </div>
-            </nav>
-            <img id="account-img" style="float: right;position: relative;"
-                src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
-        </header>
-        <!--    Remember to use {{var}} syntax-->
-        <parent />
-    </div>
-    <!-- Import App -->
-    <script src="js/index.js"></script>
-    <!-- Import Components -->
-    <script src="js/components/parent.js"></script>
-    <script src="js/components/titles.js"></script>
-    <script src="js/components/bod.js"></script>
-    <!-- Mount App -->
-    <script>
+<div id="dishorg">
+    <header>
+        <img id="logo" src="images/logo.svg">
+        <nav>
+            <ul id="nav">
+                <li><a href="#">Make A Grocery List</a></li>
+                <li><a href="#">Help</a></li>
+                <li><a href="#">Plans</a></li>
+            </ul>
+        </nav>
+        <div id="account-dropdown">
+            <select>
+                <option disabled selected>
+                    My Account
+                </option>
+                <option v-for="opt in accountOpts"> {{opt}}</option>
+            </select><img id="account-img"
+                          src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
+        </div>
+    </header>
+    <!--    Remember to use {{var}} syntax-->
+    <parent/>
+</div>
+<!-- Import App -->
+<script src="js/index.js"></script>
+<!-- Import Components -->
+<script src="js/components/parent.js"></script>
+<script src="js/components/titles.js"></script>
+<script src="js/components/bod.js"></script>
+<!-- Mount App -->
+<script>
         const mountedApp = app.mount('#dishorg')
-    </script>
+
+
+
+
+</script>
 </body>
 
 </html>

@@ -1,11 +1,11 @@
 const bod = app.component('Bod', {
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'adding', 'updateRecName'],
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': }, TODO
   props: ['showAddRec', 'showAddIng'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'adding', 'updateRecName', 'error'],
   data() {
     return {
       showDropOne: false,
-      unit: "Unit",
+      unit: 'Unit',
       recipeList: [
       ],
       ingName: '',
@@ -14,30 +14,39 @@ const bod = app.component('Bod', {
       currentRec: {
         ingredients: [
           {
-            unit: "cup",
-            name: "yum",
-            quantity: 5
+            unit: 'cup',
+            name: 'yum',
+            quantity: 5,
           }, {
-            unit: "oz",
-            name: "yummmmies",
-            quantity: 10
-          }
+            unit: 'oz',
+            name: 'yummmmies',
+            quantity: 10,
+          },
 
         ],
-        name: "YUMMMMMMMMMMMMMMUY"
+        name: 'YUMMMMMMMMMMMMMMUY',
       },
-      name: ""
-    }
+      name: '',
+    };
+  },
+  mounted() {
+    console.log('got to mounted.');
+    $.get('/recipes', 'json')
+      .done(
+        (recipeList) => {
+          this.recipeList = recipeList;
+        },
+      ).fail(this.failureOnAjaxOfRecipe);
   },
   methods: {
     cancelAddRec() {
       this.$emit('cancel-add-rec');
     },
     cancelAddIng() {
-      this.$emit('cancel-add-ing')
+      this.$emit('cancel-add-ing');
       this.unit = 'Unit';
-      this.ingName = ''
-      this.quantity = ''
+      this.ingName = '';
+      this.quantity = '';
     },
     addRec() {
       this.$emit('adding', this.recipeList.length);
@@ -47,9 +56,23 @@ const bod = app.component('Bod', {
 
         ],
         id: this.recipeList.length,
-        active: false
-      }
-      this.recipeList.push(rec);
+        active: false,
+      };
+      $.post({
+        url: 'recipes',
+        data: JSON.stringify(rec),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).done(
+        (recipe) => {
+          currentRec = recipe;
+          location.reload();
+        },
+      ).fail(
+        (jqXHR) => {
+          failureOnAjaxOfRecipe(jqXHR);
+        },
+      );
       this.cancelAddRec();
     },
     clickRec(idx) {
@@ -60,18 +83,26 @@ const bod = app.component('Bod', {
       rec.active = true;
       this.currentRec = rec;
       this.$emit('updateRecName', this.currentRec.name);
-    }
+    },
+    failureOnAjaxOfRecipe(jqXHR) {
+      let message = null;
+      if (jqXHR.readyState === 0) {
+        message = 'Failed to contact server.';
+      } else {
+        message = jqXHR.responseJSON.message;
+      }
+      this.$emit('error', message);
+      $('#error-message').show();
+    },
   },
-  /*html*/
+  /* html */
   template: `
     <div>
       <div id="left-pane">
         <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
         <ul class="list-group" id="recipe-list">
-          <button type="button" v-on:click="clickRec(rec.id)" class="list-group-item list-group-item-action" :class="{active:rec.active}" v-for="rec in recipeList">{{rec.name}}</button>
+          <button type="button" v-on:click="clickRec(idx)" class="list-group-item list-group-item-action" :class="{active:rec.active}" v-for="(rec,idx) in recipeList">{{rec.name}}</button>
         </ul>
-         <!-- id="{{rec.id}}"--> 
-        <!--    </div>-->
         <div id="add-rec-div" v-show="showAddRec">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName">
           <div class="btn-group" role="group" aria-label="Basic example">
