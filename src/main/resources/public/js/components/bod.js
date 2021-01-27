@@ -1,7 +1,7 @@
 const bod = app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': }, TODO
   props: ['showAddRec', 'showAddIng'],
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'error'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'error','hideErr','updateRecName'],
   data() {
     return {
       showDropOne: false,
@@ -69,12 +69,13 @@ const bod = app.component('Bod', {
       this.cancelAddRec();
     },
     clickRec(idx) {
+      this.$emit('hideErr')
       rec = this.recipeList[idx];
       for (i = 0; i < this.recipeList.length; i++) {
         this.recipeList[i].active = false;
       }
       rec.active = true;
-      this.currentRec = rec;
+      $.get(`/recipes/${rec.id}`).done(this.successOnAjaxOfRecipe).fail(this.failureOnAjaxOfRecipe);
     },
     failureOnAjaxOfRecipe(jqXHR) {
       let message = null;
@@ -86,6 +87,76 @@ const bod = app.component('Bod', {
       this.$emit('error', message);
       $('#error-message').show();
     },
+     successOnAjaxOfRecipe(recipe) {
+      this.$emit('hideErr')
+      this.currentRec = recipe;
+      this.$emit('updateRecName',this.currentRec.name);
+//      currentRec.ingredients.forEach((ingredient, idx) => {
+//        const { quantity } = ingredient;
+//        const { name } = ingredient;
+//        const { unit } = ingredient;
+//        let line = '';
+//        if (unit === noUnit) {
+//          line = `${quantity} ${name}`;
+//        } else {
+//          line = `${quantity} ${unit} of ${name}`;
+//        }
+//        $('#recipe-details').append(`
+//          <li id="ing-line-container${idx}">
+//          <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
+//          <img src="images/edit.jpg"style="width:30px;height:30px;">
+//          </button>
+//          <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
+//          id="open-modal${idx}" data-target="#cont-del-modal">
+//          <img src="images/del.png"style="width:30px;height:30px;">
+//          </button>
+//          ${line}
+//          </li>`);
+//        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
+//        unitList.forEach((text) => {
+//          $(`#unit-dropdown${idx}`).append(`<option>${text}</option>`);
+//        });
+//        $(`#ing-edit${idx}`).hide();
+//      });
+//      $('button.edit-recipes').prop('disabled', false);
+//      $('button.edit-recipes').click(function () {
+//        const idx = $(this).data('idx');
+//        const ing = currentRec.ingredients[idx];
+//        // Populate the ingredient`s input fields with the current values from currentRec and then show
+//        // the input fields; also hide the "line".
+//        $(`#quantity${idx}`).val(ing.quantity);
+//        $(`#unit-dropdown${idx}`).val(ing.unit);
+//        $(`#name${idx}`).val(ing.name);
+//        $('button.edit-recipes').prop('disabled', true);
+//        $(`#ing-edit${idx}`).show();
+//        $(`#ing-line-container${idx}`).hide();
+//      });
+//      $('li > div > form > button.cancel').click(function () {
+//        $('button.edit-recipes').prop('disabled', false);
+//        ingCancel($(this).data('idx'));
+//      });
+//      $('li > div > form > button.apply').click(function () {
+//        ingApply($(this).data('idx'));
+//      });
+//      $('button.openModal').click(function () {
+//        currentIdx = $(this).data('idx');
+//      });
+//      $('input.inputIngInfo').keypress(function (event) {
+//        const idx = $(this).data('idx');
+//        if ($(`#quantity${idx}`).val() !== ''
+//          && $(`#name${idx}`).val() !== ''
+//          && event.keyCode === 13) {
+//          $(`#add-ing${idx}`).click();
+//        }
+//      });
+//      $('*').click(() => {
+//        $('#error-message').hide();
+//      });
+//      $('input.inputIngInfo').focus(() => {
+//        $('#error-message').hide();
+//      });
+//    }
+  }
   },
   /* html */
   template: `
