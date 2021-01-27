@@ -1,7 +1,7 @@
 const bod = app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': }, TODO
   props: ['showAddRec', 'showAddIng'],
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'adding', 'updateRecName', 'error'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'error'],
   data() {
     return {
       showDropOne: false,
@@ -14,15 +14,10 @@ const bod = app.component('Bod', {
       currentRec: {
         ingredients: [
           {
-            unit: 'cup',
-            name: 'yum',
-            quantity: 5,
-          }, {
-            unit: 'oz',
-            name: 'yummmmies',
-            quantity: 10,
+            unit: ' ',
+            name: ' ',
+            quantity: 0,
           },
-
         ],
         name: 'YUMMMMMMMMMMMMMMUY',
       },
@@ -30,7 +25,6 @@ const bod = app.component('Bod', {
     };
   },
   mounted() {
-    console.log('got to mounted.');
     $.get('/recipes', 'json')
       .done(
         (recipeList) => {
@@ -49,7 +43,6 @@ const bod = app.component('Bod', {
       this.quantity = '';
     },
     addRec() {
-      this.$emit('adding', this.recipeList.length);
       const rec = {
         name: this.recName,
         ingredients: [
@@ -82,7 +75,6 @@ const bod = app.component('Bod', {
       }
       rec.active = true;
       this.currentRec = rec;
-      this.$emit('updateRecName', this.currentRec.name);
     },
     failureOnAjaxOfRecipe(jqXHR) {
       let message = null;

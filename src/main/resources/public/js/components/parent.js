@@ -5,7 +5,6 @@ const parent = app.component('Parent', {
       displayBod: false,
       displayIngDiv: false,
       disabled: true,
-      nameRec: '',
       error: '',
     };
   },
@@ -25,12 +24,6 @@ const parent = app.component('Parent', {
     hideIngDiv() {
       this.displayIngDiv = false;
     },
-    enableEdit(size) {
-      this.disabled = size == 0;
-    },
-    updateRecName(name) {
-      this.nameRec = name;
-    },
     renderErr(error) {
       this.error = error;
       this.displayWarn = true;
@@ -42,9 +35,10 @@ const parent = app.component('Parent', {
     <div>
       <p class = "alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
       <div>
-        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :abled="this.disabled" :recName="this.nameRec"/>
+        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv"/>
         <hr>
-        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv" @cancel-add-ing="hideIngDiv" @adding="enableEdit($event)" @update-rec-name="updateRecName($event)" @error="renderErr($event)" @able="ablify"/>
+        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv"
+        @cancel-add-ing="hideIngDiv" @error="renderErr($event)"/>
       </div>
     </div>
   `,
