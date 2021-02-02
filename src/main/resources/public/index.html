@@ -24,15 +24,7 @@
                 <li><a href="#">Plans</a></li>
             </ul>
         </nav>
-        <div id="account-dropdown">
-            <select>
-                <option disabled selected>
-                    My Account
-                </option>
-                <option v-for="opt in accountOpts"> {{opt}}</option>
-            </select><img id="account-img"
-                          src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
-        </div>
+        <modal/>
     </header>
     <!--    Remember to use {{var}} syntax-->
     <parent/>
@@ -43,9 +35,15 @@
 <script src="js/components/parent.js"></script>
 <script src="js/components/titles.js"></script>
 <script src="js/components/bod.js"></script>
+<script src="js/components/modal.js"></script>
 <!-- Mount App -->
 <script>
         const mountedApp = app.mount('#dishorg')
+
+
+
+
+
 
 
 

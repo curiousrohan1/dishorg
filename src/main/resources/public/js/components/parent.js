@@ -7,6 +7,7 @@ const parent = app.component('Parent', {
       disabled: true,
       error: '',
       recName: '',
+      curRec: null,
     };
   },
   methods: {
@@ -35,6 +36,9 @@ const parent = app.component('Parent', {
     updateRecName(name) {
       this.recName = name;
     },
+    updateCurRec(rec) {
+      this.curRec = rec;
+    },
   },
   template:
         /* html */
@@ -42,10 +46,10 @@ const parent = app.component('Parent', {
     <div>
       <p class = "alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
       <div>
-        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :recName="recName"/>
+        <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :recName="recName" :curRec="curRec"/>
         <hr>
         <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv"
-        @cancel-add-ing="hideIngDiv" @error="renderErr($event)" @hideErr="hideErr" @updateRecName="updateRecName($event)"/>
+        @cancel-add-ing="hideIngDiv" @error="renderErr($event)" @hideErr="hideErr" @updateRecName="updateRecName($event)" @updateCurRec="updateCurRec($event)"/>
       </div>
     </div>
   `,

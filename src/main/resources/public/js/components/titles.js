@@ -1,5 +1,5 @@
 const titles = app.component('Titles', {
-  props: { recName: String },
+  props: ['recName','curRec'],
   emits: { 'show-add-rec-div': null, 'plus-ing': null },
   data() {
     return {
@@ -22,6 +22,25 @@ const titles = app.component('Titles', {
     plusIng() {
       this.$emit('plus-ing');
     },
+    delRec() {
+      $.ajax({
+        type: 'DELETE',
+        url: `/recipes/${curRec.id}`,
+        dataType: 'json',
+      })
+        .fail(fail)
+        .done(reset);
+    },
+    fail(jqXHR) {
+      let message = null;
+      if (jqXHR.readyState === 0) {
+        message = 'Failed to contact server.';
+      } else {
+        message = jqXHR.responseJSON.message;
+      }
+      this.$emit('error', message);
+      $('#error-message').show();
+    },
   },
   template:
         /* html */
@@ -40,7 +59,7 @@ const titles = app.component('Titles', {
                 <button class="btn" id="cancel-rec-rename" v-on:click = "cancelRecRename"><img src="images/cancel.jpg"></button>
             </div>
             <button  class="btn disabled" id="edit-rec-name" v-on:click="editRecName"  v-show="!showRename"><img src="images/edit.jpg"></button>
-            <button class="btn disabled" id="del-rec"  v-show="!showRename" ><img src="images/del.png"></button>
+            <button class="btn disabled" id="del-rec"  v-show="!showRename" v-on:click="delRec"><img src="images/del.png"></button>
             <button class="btn text-primary" data-placement="left" data-toggle="tooltip" id="plus-ing"
              title="Add ingredient" v-on:click="plusIng">+</button>
     </div>
