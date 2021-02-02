@@ -109,33 +109,31 @@ app.component('Bod', {
       this.$emit('hideErr');
       this.currentRec = recipe;
       this.$emit('updateRecName', this.currentRec.name);
-      //      currentRec.ingredients.forEach((ingredient, idx) => {
-      //        const { quantity } = ingredient;
-      //        const { name } = ingredient;
-      //        const { unit } = ingredient;
-      //        let line = '';
-      //        if (unit === noUnit) {
-      //          line = `${quantity} ${name}`;
-      //        } else {
-      //          line = `${quantity} ${unit} of ${name}`;
-      //        }
-      //        $('#recipe-details').append(`
-      //          <li id="ing-line-container${idx}">
-      //          <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
-      //          <img src="images/edit.jpg"style="width:30px;height:30px;">
-      //          </button>
-      //          <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
-      //          id="open-modal${idx}" data-target="#cont-del-modal">
-      //          <img src="images/del.png"style="width:30px;height:30px;">
-      //          </button>
-      //          ${line}
-      //          </li>`);
-      //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
-      //        unitList.forEach((text) => {
-      //          $(`#unit-dropdown${idx}`).append(`<option>${text}</option>`);
-      //        });
-      //        $(`#ing-edit${idx}`).hide();
-      //      });
+            currentRec.ingredients.forEach((ingredient, idx) => {
+              const quantity = ingredient.quantity;
+              const name = ingredient.name;
+              const unit = ingredient.unit;
+              let line = '';
+              if (unit === ''||unit===' ') {
+                line = quantity+' '+name;
+              } else {
+                line = quantity+' '+unit+" of "+name;
+              }
+              $('#recipe-details').append(`
+                <li id="ing-line-container${idx}">
+                <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
+                <img src="images/edit.jpg"style="width:30px;height:30px;">
+                </button>
+                <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
+                id="open-modal${idx}" data-target="#cont-del-modal">
+                <img src="images/del.png"style="width:30px;height:30px;">
+                </button>
+                ${line}
+                </li>`);
+              $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
+
+              $(`#ing-edit${idx}`).hide();
+            });
       //      $('button.edit-recipes').prop('disabled', false);
       //      $('button.edit-recipes').click(function () {
       //        const idx = $(this).data('idx');
@@ -209,7 +207,7 @@ app.component('Bod', {
       </div>
       <div id="recipe-details-container">
         <ul id="recipe-details">
-          <li v-for="ing in currentRec.ingredients">{{ing.name}}</li>
+          <li v-for="ing in currentRec.ingredients" class="ingItem">{{ing.name}}</li>
         </ul>
         <form class="form-inline" v-show="showAddIng" id="make-ing">
           <label class="sr-only" for="quantity">Quantity</label>
