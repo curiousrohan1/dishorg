@@ -22,6 +22,8 @@ app.component('Bod', {
         name: 'YUMMMMMMMMMMMMMMUY',
       },
       name: '',
+      unitList: [
+      ],
     };
   },
   mounted() {
@@ -31,6 +33,21 @@ app.component('Bod', {
           this.recipeList = recipeList;
         },
       ).fail(this.failureOnAjaxOfRecipe);
+    $.get('/units').done(
+      (units) => {
+        this.unitList = units;
+        //            $('#recipe-details-container').append(getIngDiv(''));
+        //            unitList.forEach((unit) => {
+        //              $('#unit-dropdown').append(`<option>${unit}</option>`);
+        //            });
+        //            $('#add-ing').click(() => {
+        //              ingApply('');
+        //            });
+        //            $('#cancel-ing').click(() => {
+        //              ingCancel('');
+        //            });
+      },
+    ).fail(this.failureOnAjaxOfRecipe);
   },
   methods: {
     cancelAddRec() {
@@ -158,6 +175,21 @@ app.component('Bod', {
       //      });
       //    }
     },
+    applyAddIng() {
+      this.$emit('hideErr');
+      this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
+      this.unit = 'Unit';
+      this.name = '';
+      this.quantity = '';
+      $.ajax({
+        type: 'PUT',
+        url: `/recipes/${currentRec.id}`,
+        data: JSON.stringify(this.currentRec),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).fail(this.failureOnAjaxOfRecipe)
+        .done(this.successOnAjaxOfRecipe);
+    },
   },
   /* html */
   template: `
@@ -179,15 +211,21 @@ app.component('Bod', {
         <ul id="recipe-details">
           <li v-for="ing in currentRec.ingredients">{{ing.name}}</li>
         </ul>
-        <div v-show="showAddIng" id="make-ing">  
-          <input v-model="quantity" placeholder="Quantity" id="quantity"/>
-          <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown">{{this.unit}}</select>
-          <input placeholder="The Food's Name" id="name"  v-model="name" > 
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn"><img  src="images/apply.png"></button>
+        <form class="form-inline" v-show="showAddIng" id="make-ing">
+          <label class="sr-only" for="quantity">Quantity</label>
+          <input type="text" v-model="quantity" class="form-control mb-2 mr-sm-2 inputIngInfo" placeholder="Quantity" id="quantity"/>
+          <label class="sr-only" for="unit-dropdown">Unit</label>
+          <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown">
+            <option selected>{{this.unit}}</option>
+            <option v-for="unit in unitList">{{unit}}</option>
+          </select>
+          <label class="sr-only" for="name">Name</label>
+          <input type="text" v-model="name" class="form-control mb-2 mr-sm-2 inputIngInfo" placeholder="The Food's Name" id="name"/>
+          <div class="btn-group" role="group">
+            <button class="btn" v-on:click="applyAddIng"><img  src="images/apply.png"></button>
             <button class="btn" v-on:click="cancelAddIng"><img  src="images/cancel.jpg"></button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   `,

@@ -1,5 +1,5 @@
 const titles = app.component('Titles', {
-  props: ['recName','curRec'],
+  props: ['recName', 'curRec'],
   emits: { 'show-add-rec-div': null, 'plus-ing': null },
   data() {
     return {

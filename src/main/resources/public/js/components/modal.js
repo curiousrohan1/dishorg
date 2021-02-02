@@ -1,8 +1,16 @@
 app.component('Modal', {
-  data(){
-    return{
+  data() {
+    return {
       showModal: false,
-    }
+    };
+  },
+  methods: {
+    openModal() {
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
   },
   /* html */
   template: `
@@ -24,12 +32,4 @@ app.component('Modal', {
       </div>
     </div>
   `,
-     methods: {
-       openModal() {
-         this.showModal = true;
-       },
-       closeModal(){
-        this.showModal=false;
-       }
-     },
 });
