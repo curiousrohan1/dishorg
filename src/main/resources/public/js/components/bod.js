@@ -109,70 +109,71 @@ app.component('Bod', {
       this.$emit('hideErr');
       this.currentRec = recipe;
       this.$emit('updateRecName', this.currentRec.name);
-            currentRec.ingredients.forEach((ingredient, idx) => {
-              const quantity = ingredient.quantity;
-              const name = ingredient.name;
-              const unit = ingredient.unit;
-              let line = '';
-              if (unit === ''||unit===' ') {
-                line = quantity+' '+name;
-              } else {
-                line = quantity+' '+unit+" of "+name;
-              }
-              $('#recipe-details').append(`
-                <li id="ing-line-container${idx}">
-                <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
-                <img src="images/edit.jpg"style="width:30px;height:30px;">
-                </button>
-                <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
-                id="open-modal${idx}" data-target="#cont-del-modal">
-                <img src="images/del.png"style="width:30px;height:30px;">
-                </button>
-                ${line}
-                </li>`);
-              $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
+      this.currentRec.ingredients.forEach((ingredient, idx) => {
+        const { quantity } = ingredient;
+        const { name } = ingredient;
+        const { unit } = ingredient;
+        let line = '';
+        if (unit === '' || unit === ' ') {
+          line = `${quantity} ${name}`;
+        } else {
+          line = `${quantity} ${unit} of ${name}`;
+        }
+        $('#recipe-details').append(`
+          <li id="ing-line-container${idx}">
+            <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}" v-on:click="editIng(this.data-idx)">
+              <img src="images/edit.jpg"style="width:30px;height:30px;">
+            </button>
+            <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
+            id="open-modal${idx}" data-target="#cont-del-modal">
+              <img src="images/del.png"style="width:30px;height:30px;">
+            </button>
+            ${line}
+          </li>`
+        );
+        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
 
-              $(`#ing-edit${idx}`).hide();
-            });
-      //      $('button.edit-recipes').prop('disabled', false);
-      //      $('button.edit-recipes').click(function () {
-      //        const idx = $(this).data('idx');
-      //        const ing = currentRec.ingredients[idx];
-      //        // Populate the ingredient`s input fields with the current values from currentRec and then show
-      //        // the input fields; also hide the "line".
-      //        $(`#quantity${idx}`).val(ing.quantity);
-      //        $(`#unit-dropdown${idx}`).val(ing.unit);
-      //        $(`#name${idx}`).val(ing.name);
-      //        $('button.edit-recipes').prop('disabled', true);
-      //        $(`#ing-edit${idx}`).show();
-      //        $(`#ing-line-container${idx}`).hide();
-      //      });
-      //      $('li > div > form > button.cancel').click(function () {
-      //        $('button.edit-recipes').prop('disabled', false);
-      //        ingCancel($(this).data('idx'));
-      //      });
-      //      $('li > div > form > button.apply').click(function () {
-      //        ingApply($(this).data('idx'));
-      //      });
-      //      $('button.openModal').click(function () {
-      //        currentIdx = $(this).data('idx');
-      //      });
-      //      $('input.inputIngInfo').keypress(function (event) {
-      //        const idx = $(this).data('idx');
-      //        if ($(`#quantity${idx}`).val() !== ''
-      //          && $(`#name${idx}`).val() !== ''
-      //          && event.keyCode === 13) {
-      //          $(`#add-ing${idx}`).click();
-      //        }
-      //      });
-      //      $('*').click(() => {
-      //        $('#error-message').hide();
-      //      });
-      //      $('input.inputIngInfo').focus(() => {
-      //        $('#error-message').hide();
-      //      });
-      //    }
+        $(`#ing-edit${idx}`).hide();
+      });
+//            $('button.edit-recipes').prop('disabled', false);
+//            $('li > div > form > button.cancel').click(function () {
+//              $('button.edit-recipes').prop('disabled', false);
+//              ingCancel($(this).data('idx'));
+//            });
+//            $('li > div > form > button.apply').click(function () {
+//              ingApply($(this).data('idx'));
+//            });
+//            $('button.openModal').click(function () {
+//              currentIdx = $(this).data('idx');
+//            });
+//            $('input.inputIngInfo').keypress(function (event) {
+//              const idx = $(this).data('idx');
+//              if ($(`#quantity${idx}`).val() !== ''
+//                && $(`#name${idx}`).val() !== ''
+//                && event.keyCode === 13) {
+//                $(`#add-ing${idx}`).click();
+//              }
+//            });
+//            $('*').click(() => {
+//              $('#error-message').hide();
+//            });
+//            $('input.inputIngInfo').focus(() => {
+//              $('#error-message').hide();
+//            });
+
     },
+    editIng(idx){
+      console.log(idx);
+      const ing = this.currentRec.ingredients[idx];
+      // Populate the ingredient's input fields with the current values from this.currentRec and then show
+      // the input fields; also hide the "line".
+      $(`#quantity${idx}`).val(ing.quantity);
+      $(`#unit-dropdown${idx}`).val(ing.unit);
+      $(`#name${idx}`).val(ing.name);
+      $('button.edit-recipes').prop('disabled', true);
+      $(`#ing-edit${idx}`).show();
+      $(`#ing-line-container${idx}`).hide();
+    }
     applyAddIng() {
       this.$emit('hideErr');
       this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
@@ -181,7 +182,7 @@ app.component('Bod', {
       this.quantity = '';
       $.ajax({
         type: 'PUT',
-        url: `/recipes/${currentRec.id}`,
+        url: `/recipes/${this.currentRec.id}`,
         data: JSON.stringify(this.currentRec),
         contentType: 'application/json',
         dataType: 'json',
@@ -207,7 +208,7 @@ app.component('Bod', {
       </div>
       <div id="recipe-details-container">
         <ul id="recipe-details">
-          <li v-for="ing in currentRec.ingredients" class="ingItem">{{ing.name}}</li>
+          <li v-for="ing in this.currentRec.ingredients" class="ingItem">{{ing.name}}</li>
         </ul>
         <form class="form-inline" v-show="showAddIng" id="make-ing">
           <label class="sr-only" for="quantity">Quantity</label>
