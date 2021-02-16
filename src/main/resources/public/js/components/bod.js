@@ -119,50 +119,49 @@ app.component('Bod', {
         } else {
           line = `${quantity} ${unit} of ${name}`;
         }
-        $('#recipe-details').append(`
-          <li id="ing-line-container${idx}">
-            <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}" v-on:click="editIng(this.data-idx)">
-              <img src="images/edit.jpg"style="width:30px;height:30px;">
-            </button>
-            <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
-            id="open-modal${idx}" data-target="#cont-del-modal">
-              <img src="images/del.png"style="width:30px;height:30px;">
-            </button>
-            ${line}
-          </li>`
-        );
-        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
+        //        $('#recipe-details').append(`
+        //          <li id="ing-line-container${idx}">
+        //            <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}" v-on:click="editIng(this.data-idx)">
+        //              <img src="images/edit.jpg"style="width:30px;height:30px;">
+        //            </button>
+        //            <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
+        //            id="open-modal${idx}" data-target="#cont-del-modal">
+        //              <img src="images/del.png"style="width:30px;height:30px;">
+        //            </button>
+        //            ${line}
+        //          </li>`
+        //        );
+        //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
 
-        $(`#ing-edit${idx}`).hide();
+        //        $(`#ing-edit${idx}`).hide();
       });
-//            $('button.edit-recipes').prop('disabled', false);
-//            $('li > div > form > button.cancel').click(function () {
-//              $('button.edit-recipes').prop('disabled', false);
-//              ingCancel($(this).data('idx'));
-//            });
-//            $('li > div > form > button.apply').click(function () {
-//              ingApply($(this).data('idx'));
-//            });
-//            $('button.openModal').click(function () {
-//              currentIdx = $(this).data('idx');
-//            });
-//            $('input.inputIngInfo').keypress(function (event) {
-//              const idx = $(this).data('idx');
-//              if ($(`#quantity${idx}`).val() !== ''
-//                && $(`#name${idx}`).val() !== ''
-//                && event.keyCode === 13) {
-//                $(`#add-ing${idx}`).click();
-//              }
-//            });
-//            $('*').click(() => {
-//              $('#error-message').hide();
-//            });
-//            $('input.inputIngInfo').focus(() => {
-//              $('#error-message').hide();
-//            });
-
+      //            $('button.edit-recipes').prop('disabled', false);
+      //            $('li > div > form > button.cancel').click(function () {
+      //              $('button.edit-recipes').prop('disabled', false);
+      //              ingCancel($(this).data('idx'));
+      //            });
+      //            $('li > div > form > button.apply').click(function () {
+      //              ingApply($(this).data('idx'));
+      //            });
+      //            $('button.openModal').click(function () {
+      //              currentIdx = $(this).data('idx');
+      //            });
+      //            $('input.inputIngInfo').keypress(function (event) {
+      //              const idx = $(this).data('idx');
+      //              if ($(`#quantity${idx}`).val() !== ''
+      //                && $(`#name${idx}`).val() !== ''
+      //                && event.keyCode === 13) {
+      //                $(`#add-ing${idx}`).click();
+      //              }
+      //            });
+      //            $('*').click(() => {
+      //              $('#error-message').hide();
+      //            });
+      //            $('input.inputIngInfo').focus(() => {
+      //              $('#error-message').hide();
+      //            });
     },
-    editIng(idx){
+    editIng(idx) {
       console.log(idx);
       const ing = this.currentRec.ingredients[idx];
       // Populate the ingredient's input fields with the current values from this.currentRec and then show
@@ -173,7 +172,7 @@ app.component('Bod', {
       $('button.edit-recipes').prop('disabled', true);
       $(`#ing-edit${idx}`).show();
       $(`#ing-line-container${idx}`).hide();
-    }
+    },
     applyAddIng() {
       this.$emit('hideErr');
       this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
@@ -188,6 +187,10 @@ app.component('Bod', {
         dataType: 'json',
       }).fail(this.failureOnAjaxOfRecipe)
         .done(this.successOnAjaxOfRecipe);
+    },
+    line(ing) {
+      console.log(ing);
+      return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
     },
   },
   /* html */
@@ -208,7 +211,15 @@ app.component('Bod', {
       </div>
       <div id="recipe-details-container">
         <ul id="recipe-details">
-          <li v-for="ing in this.currentRec.ingredients" class="ingItem">{{ing.name}}</li>
+           <li v-for="(ing,idx) in this.currentRec.ingredients" class="ingItem">
+            <button class="edit-recipes btn" v-on:click="editIng(idx)">
+              <img src="images/edit.jpg">
+            </button>
+            <button type="button" class="btn openModal" data-toggle="modal" data-target="#cont-del-modal">
+              <img src="images/del.png" style="width:30px;height:30px;">
+            </button>
+            {{this.line(ing)}}
+          </li>
         </ul>
         <form class="form-inline" v-show="showAddIng" id="make-ing">
           <label class="sr-only" for="quantity">Quantity</label>
