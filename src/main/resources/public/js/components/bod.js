@@ -14,12 +14,12 @@ app.component('Bod', {
       currentRec: {
         ingredients: [
           {
-            unit: ' ',
-            name: ' ',
+            unit: 'Lorem',
+            name: 'Ipsum Dolor',
             quantity: 0,
           },
         ],
-        name: 'YUMMMMMMMMMMMMMMUY',
+        name: 'Example Recipe',
       },
       name: '',
       unitList: [
@@ -103,12 +103,12 @@ app.component('Bod', {
         message = jqXHR.responseJSON.message;
       }
       this.$emit('error', message);
-      $('#error-message').show();
     },
     successOnAjaxOfRecipe(recipe) {
       this.$emit('hideErr');
       this.currentRec = recipe;
       this.$emit('updateRecName', this.currentRec.name);
+      this.$emit('updateCurRec', this.currentRec);
       this.currentRec.ingredients.forEach((ingredient, idx) => {
         const { quantity } = ingredient;
         const { name } = ingredient;
@@ -176,7 +176,8 @@ app.component('Bod', {
     applyAddIng() {
       this.$emit('hideErr');
       this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
-      this.unit = 'Unit';
+      this.$emit('updateCurRec', this.currentRec);
+      this.unit = '';
       this.name = '';
       this.quantity = '';
       $.ajax({
@@ -225,8 +226,8 @@ app.component('Bod', {
           <label class="sr-only" for="quantity">Quantity</label>
           <input type="text" v-model="quantity" class="form-control mb-2 mr-sm-2 inputIngInfo" placeholder="Quantity" id="quantity"/>
           <label class="sr-only" for="unit-dropdown">Unit</label>
-          <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown">
-            <option selected>{{this.unit}}</option>
+          <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown" v-model="unit">
+            <option selected>Unit</option>
             <option v-for="unit in unitList">{{unit}}</option>
           </select>
           <label class="sr-only" for="name">Name</label>

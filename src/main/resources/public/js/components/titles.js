@@ -1,10 +1,13 @@
 const titles = app.component('Titles', {
-  props: ['recName', 'curRec'],
-  emits: { 'show-add-rec-div': null, 'plus-ing': null },
+  props: ['recName', 'curRec','updateProps'],
+  emits: ['show-add-rec-div', 'plus-ing', 'hideErr', 'updateCurRec'],
   data() {
     return {
       showRename: false,
       showRecTitle: true,
+      rename: '',
+      datRecName: '',
+      datCurRec:{}
     };
   },
   methods: {
@@ -41,6 +44,36 @@ const titles = app.component('Titles', {
       this.$emit('error', message);
       $('#error-message').show();
     },
+    applyRecRename() {
+      if (this.rename === this.curRec.name) {
+        this.cancelRecRename();
+        return;
+      }
+      this.$emit('hideErr');
+      const otherRec = JSON.parse(JSON.stringify(this.curRec));
+      otherRec.name = this.rename;
+      $.post({
+        url: 'recipes',
+        data: JSON.stringify(otherRec),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).done(
+        (data) => {
+          this.datCurRec = data;
+          this.$emit('updateCurRec', this.curRec);
+        },
+      )
+        .fail(
+          (jqXHR) => {
+            this.datRecName = this.curRec.name;
+            this.showRecTitle = false;
+            this.showRename = true;
+            this.fail(jqXHR);
+          },
+        );
+      this.showRecTitle = true;
+      this.datRecName = this.rename;
+    },
   },
   template:
         /* html */
@@ -52,10 +85,10 @@ const titles = app.component('Titles', {
                 title="Add recipe" v-on:click="showAddRecDiv">+</button>
         </div>
         <div>
-            <strong id="rec-title" v-show="showRecTitle">{{this.recName}}</strong>&nbsp;&nbsp;&nbsp;
+            <strong id="rec-title" v-show="showRecTitle">{{this.datRecName}}</strong>&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name" v-show="showRename">
-                <input id="rename-rec-input" placeholder="New Name..." type="text">
-                <button class="btn" id="apply-rec-rename"><img src="images/apply.png"></button>
+                <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename">
+                <button class="btn" id="apply-rec-rename" v-on:click = "applyRecRename"><img src="images/apply.png"></button>
                 <button class="btn" id="cancel-rec-rename" v-on:click = "cancelRecRename"><img src="images/cancel.jpg"></button>
             </div>
             <button  class="btn disabled" id="edit-rec-name" v-on:click="editRecName"  v-show="!showRename"><img src="images/edit.jpg"></button>
