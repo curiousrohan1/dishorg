@@ -1,21 +1,12 @@
 const titles = app.component('Titles', {
-  props: ['recName', 'curRec', 'updateProps'],
-  emits: ['show-add-rec-div', 'plus-ing', 'hideErr', 'updateCurRec', 'resetUpdate'],
+  props: ['recName', 'curRec'],
+  emits: ['show-add-rec-div', 'plus-ing', 'hideErr', 'updateCurRec', 'resetUpdate', 'updateRecName'],
   data() {
     return {
       showRename: false,
       showRecTitle: true,
       rename: '',
-      datRecName: '',
-      datCurRec: {},
     };
-  },
-  mounted() {
-    if (this.updateProps === true) {
-      this.datRecName = this.recName;
-      this.datCurRec = this.curRec;
-      this.$emit('resetUpdate');
-    }
   },
   methods: {
     showAddRecDiv() {
@@ -35,7 +26,7 @@ const titles = app.component('Titles', {
     delRec() {
       $.ajax({
         type: 'DELETE',
-        url: `/recipes/${datCurRec.id}`,
+        url: `/recipes/${curRec.id}`,
         dataType: 'json',
       })
         .fail(fail)
@@ -53,12 +44,12 @@ const titles = app.component('Titles', {
       $('#error-message').show();
     },
     applyRecRename() {
-      if (this.rename === this.datCurRec.name) {
+      if (this.rename === this.curRec.name) {
         this.cancelRecRename();
         return;
       }
       this.$emit('hideErr');
-      const otherRec = JSON.parse(JSON.stringify(this.datCurRec));
+      const otherRec = JSON.parse(JSON.stringify(this.curRec));
       otherRec.name = this.rename;
       $.post({
         url: 'recipes',
@@ -67,20 +58,19 @@ const titles = app.component('Titles', {
         dataType: 'json',
       }).done(
         (data) => {
-          this.datCurRec = data;
-          this.$emit('updateCurRec', this.datCurRec);
+          this.$emit('updateCurRec', data);
         },
       )
         .fail(
           (jqXHR) => {
-            this.datRecName = this.datCurRec.name;
+            this.$emit('updateRecName', this.curRec.name);
             this.showRecTitle = false;
             this.showRename = true;
             this.fail(jqXHR);
           },
         );
       this.showRecTitle = true;
-      this.datRecName = this.rename;
+      this.$emit('updateRecName', this.rename);
     },
   },
   template:
@@ -101,7 +91,7 @@ const titles = app.component('Titles', {
             title="Add recipe" v-on:click="showAddRecDiv">+</button>
         </div>
         <div>
-            <strong id="rec-title" v-show="showRecTitle">{{this.datRecName}}</strong>&nbsp;&nbsp;&nbsp;
+            <strong id="rec-title" v-show="showRecTitle">{{this.recName}}</strong>&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name" v-show="showRename">
                 <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename">
                 <button class="btn" id="apply-rec-rename" v-on:click = "applyRecRename"><img src="images/apply.png"></button>

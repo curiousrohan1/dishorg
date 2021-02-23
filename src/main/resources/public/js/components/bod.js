@@ -1,6 +1,6 @@
 app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': }, props:{showAddRec:type, etc}TODO
-  props: ['showAddRec', 'showAddIng'],
+  props: ['showAddRec', 'showAddIng', 'recName'],
   emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hideErr', 'updateRecName', 'updateCurRec'],
   data() {
     return {
@@ -99,7 +99,7 @@ app.component('Bod', {
       $.get(`/recipes/${rec.id}`).done(this.successOnAjaxOfRecipe).fail(this.failureOnAjaxOfRecipe);
     },
     failureOnAjaxOfRecipe(jqXHR) {
-      document.getElementById('fail').play();
+      //      document.getElementById('fail').play();
       let message = null;
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
@@ -107,10 +107,12 @@ app.component('Bod', {
         message = jqXHR.responseJSON.message;
       }
       this.$emit('error', message);
+      console.log('failure;'+message);
     },
     successOnAjaxOfRecipe(recipe) {
-      document.getElementById('success').play();
+      //      document.getElementById('success').play();
       this.$emit('hideErr');
+      console.log('succcess!');
       this.currentRec = recipe;
       this.$emit('updateRecName', this.currentRec.name);
       this.$emit('updateCurRec', this.currentRec);
@@ -181,9 +183,9 @@ app.component('Bod', {
       this.$emit('hideErr');
       this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
       this.$emit('updateCurRec', this.currentRec);
-      this.unit = '';
-      this.name = '';
-      this.quantity = '';
+      //      this.unit = '';
+      //      this.name = '';
+      //      this.quantity = '';
       $.ajax({
         type: 'PUT',
         url: `/recipes/${this.currentRec.id}`,
@@ -192,6 +194,7 @@ app.component('Bod', {
         dataType: 'json',
       }).fail(this.failureOnAjaxOfRecipe)
         .done(this.successOnAjaxOfRecipe);
+              console.log('calling...');
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
