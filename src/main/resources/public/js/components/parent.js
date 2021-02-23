@@ -1,4 +1,4 @@
-const parent = app.component('Parent', {
+app.component('Parent', {
   data() {
     return {
       displayWarn: false,

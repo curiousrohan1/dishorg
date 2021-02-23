@@ -1,5 +1,5 @@
-const titles = app.component('Titles', {
-  props: ['recName', 'curRec'],
+app.component('Titles', {
+  props: { recName: String, curRec: Object },
   emits: ['show-add-rec-div', 'plus-ing', 'hideErr', 'updateCurRec', 'resetUpdate', 'updateRecName'],
   data() {
     return {
@@ -26,11 +26,11 @@ const titles = app.component('Titles', {
     delRec() {
       $.ajax({
         type: 'DELETE',
-        url: `/recipes/${curRec.id}`,
+        url: `/recipes/${this.curRec.id}`,
         dataType: 'json',
       })
-        .fail(fail)
-        .done(reset);
+        .fail(this.fail)
+        .done(this.reset);
     },
     fail(jqXHR) {
       document.getElementById('fail').play();
@@ -48,7 +48,7 @@ const titles = app.component('Titles', {
         this.cancelRecRename();
         return;
       }
-      this.$emit('hideErr');
+      this.$emit('hide-err');
       const otherRec = JSON.parse(JSON.stringify(this.curRec));
       otherRec.name = this.rename;
       $.post({
@@ -58,19 +58,19 @@ const titles = app.component('Titles', {
         dataType: 'json',
       }).done(
         (data) => {
-          this.$emit('updateCurRec', data);
+          this.$emit('update-cur-rec', data);
         },
       )
         .fail(
           (jqXHR) => {
-            this.$emit('updateRecName', this.curRec.name);
+            this.$emit('update-rec-name', this.curRec.name);
             this.showRecTitle = false;
             this.showRename = true;
             this.fail(jqXHR);
           },
         );
       this.showRecTitle = true;
-      this.$emit('updateRecName', this.rename);
+      this.$emit('update-rec-name', this.rename);
     },
   },
   template:

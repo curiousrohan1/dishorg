@@ -1,6 +1,7 @@
 app.component('Bod', {
-  // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': }, props:{showAddRec:type, etc}TODO
-  props: ['showAddRec', 'showAddIng', 'recName'],
+  // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': },TODO
+//   props:{showAddRec:type,etc}TODO
+  props: { showAddRec: Boolean, showAddIng: Boolean, recName: String },
   emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hideErr', 'updateRecName', 'updateCurRec'],
   data() {
     return {
@@ -10,7 +11,6 @@ app.component('Bod', {
       ],
       ingName: '',
       quantity: '',
-      recName: '',
       currentRec: {
         ingredients: [
           {
@@ -80,19 +80,19 @@ app.component('Bod', {
           document.getElementById('success').play();
           this.currentRec = recipe;
           location.reload();
-          this.$emit('updateCurRec', this.currentRec);
+          this.$emit('update-cur-rec', this.currentRec);
         },
       ).fail(
         (jqXHR) => {
-          failureOnAjaxOfRecipe(jqXHR);
+          this.failureOnAjaxOfRecipe(jqXHR);
         },
       );
       this.$emit('cancel-add-rec');
     },
     clickRec(idx) {
-      this.$emit('hideErr');
-      rec = this.recipeList[idx];
-      for (i = 0; i < this.recipeList.length; i++) {
+      this.$emit('hide-err');
+      const rec = this.recipeList[idx];
+      for (let i = 0; i < this.recipeList.length; i += 1) {
         this.recipeList[i].active = false;
       }
       rec.active = true;
@@ -107,37 +107,21 @@ app.component('Bod', {
         message = jqXHR.responseJSON.message;
       }
       this.$emit('error', message);
-      console.log('failure;'+message);
+      alert(`failure;${message}`);
     },
     successOnAjaxOfRecipe(recipe) {
       //      document.getElementById('success').play();
-      this.$emit('hideErr');
-      console.log('succcess!');
+      this.$emit('hide-err');
+      alert('success!');
       this.currentRec = recipe;
-      this.$emit('updateRecName', this.currentRec.name);
-      this.$emit('updateCurRec', this.currentRec);
+      this.$emit('update-rec-name', this.currentRec.name);
+      this.$emit('update-cur-rec', this.currentRec);
       this.currentRec.ingredients.forEach((ingredient, idx) => {
         const { quantity } = ingredient;
         const { name } = ingredient;
         const { unit } = ingredient;
-        let line = '';
-        if (unit === '' || unit === ' ') {
-          line = `${quantity} ${name}`;
-        } else {
-          line = `${quantity} ${unit} of ${name}`;
-        }
-        //        $('#recipe-details').append(`
-        //          <li id="ing-line-container${idx}">
-        //            <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}" v-on:click="editIng(this.data-idx)">
-        //              <img src="images/edit.jpg"style="width:30px;height:30px;">
-        //            </button>
-        //            <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
-        //            id="open-modal${idx}" data-target="#cont-del-modal">
-        //              <img src="images/del.png"style="width:30px;height:30px;">
-        //            </button>
-        //            ${line}
-        //          </li>`
-        //        );
+        const line = this.line(ingredient);
+        /// /
         //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
 
         //        $(`#ing-edit${idx}`).hide();
@@ -180,9 +164,9 @@ app.component('Bod', {
       $(`#ing-line-container${idx}`).hide();
     },
     applyAddIng() {
-      this.$emit('hideErr');
+      this.$emit('hide-err');
       this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
-      this.$emit('updateCurRec', this.currentRec);
+      this.$emit('update-cur-rec', this.currentRec);
       //      this.unit = '';
       //      this.name = '';
       //      this.quantity = '';
@@ -194,7 +178,7 @@ app.component('Bod', {
         dataType: 'json',
       }).fail(this.failureOnAjaxOfRecipe)
         .done(this.successOnAjaxOfRecipe);
-              console.log('calling...');
+      alert('calling...');
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
