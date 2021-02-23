@@ -1,20 +1,20 @@
 const titles = app.component('Titles', {
-  props: ['recName', 'curRec','updateProps'],
-  emits: ['show-add-rec-div', 'plus-ing', 'hideErr', 'updateCurRec','resetUpdate'],
+  props: ['recName', 'curRec', 'updateProps'],
+  emits: ['show-add-rec-div', 'plus-ing', 'hideErr', 'updateCurRec', 'resetUpdate'],
   data() {
     return {
       showRename: false,
       showRecTitle: true,
       rename: '',
       datRecName: '',
-      datCurRec:{}
+      datCurRec: {},
     };
   },
-  mounted(){
-    if(this.updateProps === true){
+  mounted() {
+    if (this.updateProps === true) {
       this.datRecName = this.recName;
       this.datCurRec = this.curRec;
-      this.$emit('resetUpdate')
+      this.$emit('resetUpdate');
     }
   },
   methods: {
@@ -42,6 +42,7 @@ const titles = app.component('Titles', {
         .done(reset);
     },
     fail(jqXHR) {
+      document.getElementById('fail').play();
       let message = null;
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
@@ -86,10 +87,18 @@ const titles = app.component('Titles', {
         /* html */
         `
     <div>
+      <audio id="success">
+        <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
+        <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
+       </audio>
+       <audio id="fail">
+        <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
+        <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
+       </audio>
         <div id="left-titles">
             <strong class="text-primary"><h2>Recipes:</h2></strong>
             <button class="btn text-primary" data-placement="right" data-toggle="tooltip" id="plus-rec"
-                title="Add recipe" v-on:click="showAddRecDiv">+</button>
+            title="Add recipe" v-on:click="showAddRecDiv">+</button>
         </div>
         <div>
             <strong id="rec-title" v-show="showRecTitle">{{this.datRecName}}</strong>&nbsp;&nbsp;&nbsp;

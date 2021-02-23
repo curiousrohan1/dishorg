@@ -51,9 +51,11 @@ app.component('Bod', {
   },
   methods: {
     cancelAddRec() {
+      document.getElementById('fail').play();
       this.$emit('cancel-add-rec');
     },
     cancelAddIng() {
+      document.getElementById('fail').play();
       this.$emit('cancel-add-ing');
       this.unit = 'Unit';
       this.ingName = '';
@@ -75,6 +77,7 @@ app.component('Bod', {
         dataType: 'json',
       }).done(
         (recipe) => {
+          document.getElementById('success').play();
           this.currentRec = recipe;
           location.reload();
           this.$emit('updateCurRec', this.currentRec);
@@ -84,7 +87,7 @@ app.component('Bod', {
           failureOnAjaxOfRecipe(jqXHR);
         },
       );
-      this.cancelAddRec();
+      this.$emit('cancel-add-rec');
     },
     clickRec(idx) {
       this.$emit('hideErr');
@@ -96,6 +99,7 @@ app.component('Bod', {
       $.get(`/recipes/${rec.id}`).done(this.successOnAjaxOfRecipe).fail(this.failureOnAjaxOfRecipe);
     },
     failureOnAjaxOfRecipe(jqXHR) {
+      document.getElementById('fail').play();
       let message = null;
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
@@ -105,6 +109,7 @@ app.component('Bod', {
       this.$emit('error', message);
     },
     successOnAjaxOfRecipe(recipe) {
+      document.getElementById('success').play();
       this.$emit('hideErr');
       this.currentRec = recipe;
       this.$emit('updateRecName', this.currentRec.name);
@@ -162,7 +167,6 @@ app.component('Bod', {
       //            });
     },
     editIng(idx) {
-      console.log(idx);
       const ing = this.currentRec.ingredients[idx];
       // Populate the ingredient's input fields with the current values from this.currentRec and then show
       // the input fields; also hide the "line".
@@ -190,13 +194,20 @@ app.component('Bod', {
         .done(this.successOnAjaxOfRecipe);
     },
     line(ing) {
-      console.log(ing);
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
     },
   },
   /* html */
   template: `
     <div>
+        <audio id="success">
+          <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
+          <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
+        </audio>
+        <audio id="fail">
+         <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
+         <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
+        </audio>
       <div id="left-pane">
         <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
         <ul class="list-group" id="recipe-list">
