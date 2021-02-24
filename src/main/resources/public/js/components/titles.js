@@ -1,6 +1,6 @@
 app.component('Titles', {
   props: { recName: String, curRec: Object },
-  emits: ['show-add-rec-div', 'plus-ing', 'hideErr', 'updateCurRec', 'resetUpdate', 'updateRecName'],
+  emits: ['show-add-rec-div', 'plus-ing', 'hide-err', 'update-cur-rec', 'reset-update', 'update-rec-name'],
   data() {
     return {
       showRename: false,

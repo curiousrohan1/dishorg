@@ -27,17 +27,25 @@ app.component('Parent', {
       this.displayIngDiv = false;
     },
     renderErr(error) {
+      console.log('displaying warn...');
       this.error = error;
       this.displayWarn = true;
+      console.log('displayed warn...');
     },
     hideErr() {
+      console.log('hiding warn...');
       this.displayWarn = false;
+      console.log('hid warn...');
     },
     updateRecName(name) {
+      console.log('updating rec name...');
       this.recName = name;
+      console.log('updated rec name...');
     },
     updateCurRec(rec) {
+      console.log('updating current rec...');
       this.curRec = rec;
+      console.log('updated current rec...');
     },
   },
   template:

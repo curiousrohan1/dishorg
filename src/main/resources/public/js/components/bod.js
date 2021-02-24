@@ -2,7 +2,7 @@ app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': },TODO
 //   props:{showAddRec:type,etc}TODO
   props: { showAddRec: Boolean, showAddIng: Boolean, recName: String },
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hideErr', 'updateRecName', 'updateCurRec'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hide-err', 'update-rec-name', 'update-cur-rec'],
   data() {
     return {
       showDropOne: false,
@@ -79,7 +79,8 @@ app.component('Bod', {
         (recipe) => {
           document.getElementById('success').play();
           this.currentRec = recipe;
-          location.reload();
+          //          location.reload();
+          console.log('RELOADING...');
           this.$emit('update-cur-rec', this.currentRec);
         },
       ).fail(
@@ -100,6 +101,7 @@ app.component('Bod', {
     },
     failureOnAjaxOfRecipe(jqXHR) {
       //      document.getElementById('fail').play();
+      console.log('Failure :(')
       let message = null;
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
@@ -107,24 +109,21 @@ app.component('Bod', {
         message = jqXHR.responseJSON.message;
       }
       this.$emit('error', message);
-      alert(`failure;${message}`);
+      console.log(`failure;${message}`);
     },
     successOnAjaxOfRecipe(recipe) {
       //      document.getElementById('success').play();
+      console.log('success!');
       this.$emit('hide-err');
-      alert('success!');
       this.currentRec = recipe;
-      this.$emit('update-rec-name', this.currentRec.name);
-      this.$emit('update-cur-rec', this.currentRec);
-      this.currentRec.ingredients.forEach((ingredient, idx) => {
-        const { quantity } = ingredient;
-        const { name } = ingredient;
-        const { unit } = ingredient;
+      this.$emit('update-rec-name', recipe.name);
+      this.$emit('update-cur-rec', recipe);
+      recipe.ingredients.forEach((ingredient, idx) => {
         const line = this.line(ingredient);
-        /// /
-        //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
-
-        //        $(`#ing-edit${idx}`).hide();
+      //        /// /
+      //        //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
+      //
+      //        //        $(`#ing-edit${idx}`).hide();
       });
       //            $('button.edit-recipes').prop('disabled', false);
       //            $('li > div > form > button.cancel').click(function () {
@@ -151,6 +150,7 @@ app.component('Bod', {
       //            $('input.inputIngInfo').focus(() => {
       //              $('#error-message').hide();
       //            });
+      console.log('all done! with the success!');
     },
     editIng(idx) {
       const ing = this.currentRec.ingredients[idx];
@@ -178,7 +178,7 @@ app.component('Bod', {
         dataType: 'json',
       }).fail(this.failureOnAjaxOfRecipe)
         .done(this.successOnAjaxOfRecipe);
-      alert('calling...');
+      console.log('calling...');
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
