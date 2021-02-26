@@ -101,7 +101,7 @@ app.component('Bod', {
     },
     failureOnAjaxOfRecipe(jqXHR) {
       //      document.getElementById('fail').play();
-      console.log('Failure :(')
+      console.log('Failure :(');
       let message = null;
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
@@ -177,11 +177,14 @@ app.component('Bod', {
         contentType: 'application/json',
         dataType: 'json',
       }).fail(this.failureOnAjaxOfRecipe)
-        .done(this.successOnAjaxOfRecipe);
+        .done(this.successOnAjaxOfRecipeI);
       console.log('calling...');
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
+    },
+    successOnAjaxOfRecipeI(recipe) {
+      this.currentRec = recipe;
     },
   },
   /* html */
