@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link href="style.css" rel="stylesheet">
 </head>
 
@@ -41,6 +42,7 @@
 <!-- Mount App -->
 <script>
         const mountedApp = app.mount('#dishorg')
+        $('form').submit(false);
 </script>
 </body>
 

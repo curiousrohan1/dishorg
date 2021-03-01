@@ -41,7 +41,6 @@ app.component('Titles', {
         message = jqXHR.responseJSON.message;
       }
       this.$emit('error', message);
-      $('#error-message').show();
     },
     applyRecRename() {
       if (this.rename === this.curRec.name) {

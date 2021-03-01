@@ -113,7 +113,7 @@ app.component('Bod', {
     },
     successOnAjaxOfRecipe(recipe) {
       //      document.getElementById('success').play();
-      console.log('success!');
+      console.log('success!;'+recipe);
       this.$emit('hide-err');
       this.currentRec = recipe;
       this.$emit('update-rec-name', recipe.name);
@@ -156,36 +156,43 @@ app.component('Bod', {
       const ing = this.currentRec.ingredients[idx];
       // Populate the ingredient's input fields with the current values from this.currentRec and then show
       // the input fields; also hide the "line".
-      $(`#quantity${idx}`).val(ing.quantity);
-      $(`#unit-dropdown${idx}`).val(ing.unit);
-      $(`#name${idx}`).val(ing.name);
-      $('button.edit-recipes').prop('disabled', true);
-      $(`#ing-edit${idx}`).show();
-      $(`#ing-line-container${idx}`).hide();
+      //      $(`#quantity${idx}`).val(ing.quantity);
+      //      $(`#unit-dropdown${idx}`).val(ing.unit);
+      //      $(`#name${idx}`).val(ing.name);
+      //      $('button.edit-recipes').prop('disabled', true);
+      //      $(`#ing-edit${idx}`).show();
+      //      $(`#ing-line-container${idx}`).hide();
     },
     applyAddIng() {
       this.$emit('hide-err');
       this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
       this.$emit('update-cur-rec', this.currentRec);
-      //      this.unit = '';
-      //      this.name = '';
-      //      this.quantity = '';
-      $.ajax({
-        type: 'PUT',
-        url: `/recipes/${this.currentRec.id}`,
-        data: JSON.stringify(this.currentRec),
-        contentType: 'application/json',
-        dataType: 'json',
-      }).fail(this.failureOnAjaxOfRecipe)
-        .done(this.successOnAjaxOfRecipeI);
-      console.log('calling...');
+            $.ajax({
+              type: 'PUT',
+              url: `/recipes/${this.currentRec.id}`,
+              data: JSON.stringify(this.currentRec),
+              contentType: 'application/json',
+              dataType: 'json',
+            }).fail(this.failureOnAjaxOfRecipe)
+              .done(this.successOnAjaxOfRecipe);
+//      axios.put(`/recipes/${this.currentRec.id}`, this.currentRec)
+//        .then(this.successOnAjaxOfRecipe)
+//        .catch((error) => {
+//          console.log(error);
+//        });
+      console.log('calling:');
+      console.log(`/recipes/${this.currentRec.id}`);
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
     },
-    successOnAjaxOfRecipeI(recipe) {
-      this.currentRec = recipe;
+    applyAddIngI() {
+      console.log('applying add-ing...');
     },
+    //    successOnAjaxOfRecipeI(recipe) {
+    //      this.currentRec = recipe;
+    //      console.log('Got in Here!')
+    //    },
   },
   /* html */
   template: `
