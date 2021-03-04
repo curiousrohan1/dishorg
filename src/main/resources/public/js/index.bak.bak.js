@@ -227,22 +227,22 @@ app.component('Titles', {
       <div style="position:relative;width:49%;float:left;padding-left:1rem;">
         <strong>Recipes:</strong>
         <button class="btn" data-placement="right" id="plus-rec"
-                style="float:right;width:3rem;height:3rem;" title="Add recipe" v-on:click="plusRec">+
+                style="float:right;width:3rem;height:3rem;" title="Add recipe" @click="plusRec">+
         </button>
       </div>
       <div><strong id="rec-title">Ingredients</strong>
         <div id="renamed-recipe-name" style="display:none;">
             <input id="rename-rec-input" placeholder="New Name..." type="text">
-            <button class="btn" id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;" v-on:click="applyRecRename">
+            <button class="btn" id="apply-rec-rename"><img src="images/apply.png" style="width:30px;height:30px;" @click="applyRecRename">
             </button>
-            <button class="btn" id="cancel-rec-rename"><img src="images/cancel.jpg" style="width:30px;height:30px;" v-on:click="cancelRecRename">
+            <button class="btn" id="cancel-rec-rename"><img src="images/cancel.jpg" style="width:30px;height:30px;" @click="cancelRecRename">
             </button>
         </div>
-        <button class="btn" id="edit-rec-name"><img src="images/edit.jpg" style="width:30px;height:30px;" v-on:click="editRecName">
+        <button class="btn" id="edit-rec-name"><img src="images/edit.jpg" style="width:30px;height:30px;" @click="editRecName">
         </button>
-        <button class="btn" id="del-rec"><img src="images/del.png" style="width:30px;height:30px;" v-on:click="delRec"></button>
+        <button class="btn" id="del-rec"><img src="images/del.png" style="width:30px;height:30px;" @click="delRec"></button>
         <button class="btn" data-placement="left" data-toggle="tooltip" id="plus-ing"
-                style="float:right;width:3rem;height:3rem;" title="Add ingredient" v-on:click="plusIng">+
+                style="float:right;width:3rem;height:3rem;" title="Add ingredient" @click="plusIng">+
         </button>
       </div>
       <hr>
@@ -260,7 +260,7 @@ app.component('LeftPane', {
       $('#error-message').hide();
       const firstRecipe = { name: $('#new-recipe-name').val(), ingredients: [] };
       currentRec = firstRecipe;
-      $('#recipe-list').append(`<button class="recipe-list list-group-item list-group-item-action btn" type="button" data-id="${firstRecipe.id}" v-on:click="recHandler">${firstRecipe.name}</button>`);
+      $('#recipe-list').append(`<button class="recipe-list list-group-item list-group-item-action btn" type="button" data-id="${firstRecipe.id}" @click="recHandler">${firstRecipe.name}</button>`);
       const lastButton = $('button.recipe-list.list-group-item-action:last-child');
       lastButton.trigger('click');
       $('#plus-ing').click();
@@ -285,8 +285,8 @@ app.component('LeftPane', {
       <!--    </div>-->
       <div id="add-rec-div" style="display:none">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text">
-          <button class="btn" id="add-rec" v-on:click="addRec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
-          <button class="btn" id="cancel-add-rec" v-on:click="cancelAddRec"><img src="images/cancel.jpg" style="width:30px;height:30px;">
+          <button class="btn" id="add-rec" @click="addRec"><img src="images/apply.png" style="width:30px;height:30px;"></button>
+          <button class="btn" id="cancel-add-rec" @click="cancelAddRec"><img src="images/cancel.jpg" style="width:30px;height:30px;">
           </button>
       </div>
     </div>

@@ -65,7 +65,6 @@ app.component('Bod', {
       const rec = {
         name: this.recName,
         ingredients: [
-
         ],
         id: this.recipeList.length,
         active: false,
@@ -79,9 +78,9 @@ app.component('Bod', {
         (recipe) => {
           document.getElementById('success').play();
           this.currentRec = recipe;
-          //          location.reload();
-          console.log('RELOADING...');
           this.$emit('update-cur-rec', this.currentRec);
+          console.log(recipe+' ')
+//          this.clickRec(recipe.idx);
         },
       ).fail(
         (jqXHR) => {
@@ -113,7 +112,7 @@ app.component('Bod', {
     },
     successOnAjaxOfRecipe(recipe) {
       //      document.getElementById('success').play();
-      console.log('success!;'+recipe);
+      console.log(`success!;${recipe}`);
       this.$emit('hide-err');
       this.currentRec = recipe;
       this.$emit('update-rec-name', recipe.name);
@@ -167,19 +166,19 @@ app.component('Bod', {
       this.$emit('hide-err');
       this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
       this.$emit('update-cur-rec', this.currentRec);
-            $.ajax({
-              type: 'PUT',
-              url: `/recipes/${this.currentRec.id}`,
-              data: JSON.stringify(this.currentRec),
-              contentType: 'application/json',
-              dataType: 'json',
-            }).fail(this.failureOnAjaxOfRecipe)
-              .done(this.successOnAjaxOfRecipe);
-//      axios.put(`/recipes/${this.currentRec.id}`, this.currentRec)
-//        .then(this.successOnAjaxOfRecipe)
-//        .catch((error) => {
-//          console.log(error);
-//        });
+      $.ajax({
+        type: 'PUT',
+        url: `/recipes/${this.currentRec.id}`,
+        data: JSON.stringify(this.currentRec),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).fail(this.failureOnAjaxOfRecipe)
+        .done(this.successOnAjaxOfRecipe);
+      //      axios.put(`/recipes/${this.currentRec.id}`, this.currentRec)
+      //        .then(this.successOnAjaxOfRecipe)
+      //        .catch((error) => {
+      //          console.log(error);
+      //        });
       console.log('calling:');
       console.log(`/recipes/${this.currentRec.id}`);
     },
@@ -208,20 +207,20 @@ app.component('Bod', {
       <div id="left-pane">
         <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
         <ul class="list-group" id="recipe-list">
-          <button type="button" v-on:click="clickRec(idx)" class="list-group-item list-group-item-action" :class="{active:rec.active}" v-for="(rec,idx) in recipeList">{{rec.name}}</button>
+          <button type="button" @click="clickRec(idx)" class="list-group-item list-group-item-action" :class="{active:rec.active}" v-for="(rec,idx) in recipeList">{{rec.name}}</button>
         </ul>
         <div id="add-rec-div" v-show="showAddRec">
           <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn" id="add-rec" v-on:click="addRec"><img src="images/apply.png"></button>
-            <button class="btn" id="cancel-add-rec" v-on:click="cancelAddRec"><img src="images/cancel.jpg"></button>
+            <button class="btn" id="add-rec" @click="addRec"><img src="images/apply.png"></button>
+            <button class="btn" id="cancel-add-rec" @click="cancelAddRec"><img src="images/cancel.jpg"></button>
           </div>
         </div>
       </div>
       <div id="recipe-details-container">
         <ul id="recipe-details">
            <li v-for="(ing,idx) in this.currentRec.ingredients" class="ingItem">
-            <button class="edit-recipes btn" v-on:click="editIng(idx)">
+            <button class="edit-recipes btn" @click="editIng(idx)">
               <img src="images/edit.jpg">
             </button>
             <button type="button" class="btn openModal" data-toggle="modal" data-target="#cont-del-modal">
@@ -241,8 +240,8 @@ app.component('Bod', {
           <label class="sr-only" for="name">Name</label>
           <input type="text" v-model="name" class="form-control mb-2 mr-sm-2 inputIngInfo" placeholder="The Food's Name" id="name"/>
           <div class="btn-group" role="group">
-            <button class="btn" v-on:click="applyAddIng"><img  src="images/apply.png"></button>
-            <button class="btn" v-on:click="cancelAddIng"><img  src="images/cancel.jpg"></button>
+            <button class="btn" @click="applyAddIng"><img  src="images/apply.png"></button>
+            <button class="btn" @click="cancelAddIng"><img  src="images/cancel.jpg"></button>
           </div>
         </form>
       </div>

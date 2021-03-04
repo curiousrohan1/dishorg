@@ -15,12 +15,12 @@ app.component('Modal', {
   /* html */
   template: `
     <div>
-      <button id="modal-btn" v-on:click="openModal"><img
+      <button id="modal-btn" @click="openModal"><img
         src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
       </button>
       <div class="modal" id="account-dropdown">
         <div class="modal-header" v-show="showModal">
-          <span class="close-btn" v-on:click="closeModal">&times;</span>
+          <span class="close-btn" @click="closeModal">&times;</span>
           <h1>Experimental Name</h1>
         </div>
         <div class="modal-content">

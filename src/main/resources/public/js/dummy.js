@@ -13,7 +13,7 @@ Dummy.component('Caller', {
     },
   },
   template: `
-        <button v-on:click="broadcast('wElL, hElLo ThErE!')">Broadcast</button>
+        <button @click="broadcast('wElL, hElLo ThErE!')">Broadcast</button>
     `,
 });
 Dummy.component('Receiver', {
