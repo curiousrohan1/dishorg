@@ -70,7 +70,6 @@ app.component('Titles', {
         );
       this.showRecTitle = true;
       this.$emit('update-rec-name', this.rename);
-      location.reload();
     },
   },
   template:

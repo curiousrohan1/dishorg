@@ -1,7 +1,9 @@
 app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': },TODO
 //   props:{showAddRec:type,etc}TODO
-  props: { showAddRec: Boolean, showAddIng: Boolean, recName: String },
+  props: {
+    showAddRec: Boolean, showAddIng: Boolean, updateRecList: Boolean,
+  },
   emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hide-err', 'update-rec-name', 'update-cur-rec'],
   data() {
     return {
@@ -24,7 +26,8 @@ app.component('Bod', {
       name: '',
       unitList: [
       ],
-    };
+      recName:''
+    }
   },
   mounted() {
     $.get('/recipes', 'json')
@@ -62,7 +65,7 @@ app.component('Bod', {
       this.quantity = '';
     },
     addRec() {
-      const rec = {
+      var rec = {
         name: this.recName,
         ingredients: [
         ],
@@ -79,8 +82,17 @@ app.component('Bod', {
           document.getElementById('success').play();
           this.currentRec = recipe;
           this.$emit('update-cur-rec', this.currentRec);
-          console.log(recipe+' ')
-//          this.clickRec(recipe.idx);
+          let i = 0;
+          while(i < this.recipeList.length){
+            if(this.recipeList[i].name>recipe.name){
+              this.recipeList.push(recipe,i);
+              break;
+            }
+            else{
+              i+=1;
+            }
+          }
+          this.clickRec(recipe.idx);
         },
       ).fail(
         (jqXHR) => {
@@ -91,7 +103,7 @@ app.component('Bod', {
     },
     clickRec(idx) {
       this.$emit('hide-err');
-      const rec = this.recipeList[idx];
+      var rec = this.recipeList[idx];
       for (let i = 0; i < this.recipeList.length; i += 1) {
         this.recipeList[i].active = false;
       }
@@ -111,13 +123,24 @@ app.component('Bod', {
       console.log(`failure;${message}`);
     },
     successOnAjaxOfRecipe(recipe) {
-      //      document.getElementById('success').play();
+      document.getElementById('success').play();
       console.log(`success!;${recipe}`);
-      this.$emit('hide-err');
       this.currentRec = recipe;
-      this.$emit('update-rec-name', recipe.name);
-      this.$emit('update-cur-rec', recipe);
-      recipe.ingredients.forEach((ingredient, idx) => {
+      if (this.updateRecList) {
+        var i = 0;
+        while (i < this.recipeList.length) {
+          if (this.recipeList[i] === this.currentRec) {
+            this.recipeList.splice(i, 1);
+            break;
+          }
+          i += 1;
+        }
+        this.recipeList.push(this.currentRec);
+      }
+      this.$emit('hide-err');
+      this.$emit('update-rec-name', this.currentRec.name);
+      this.$emit('update-cur-rec', this.currentRec);
+      this.currentRec.ingredients.forEach((ingredient, idx) => {
         const line = this.line(ingredient);
       //        /// /
       //        //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);

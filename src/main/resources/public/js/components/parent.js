@@ -8,6 +8,7 @@ app.component('Parent', {
       error: '',
       recName: '',
       curRec: null,
+      updateRecList: false,
     };
   },
   methods: {
@@ -46,6 +47,7 @@ app.component('Parent', {
       console.log('updating current rec...');
       this.curRec = rec;
       console.log('updated current rec...');
+      this.updateRecList = true;
     },
   },
   template:
@@ -56,7 +58,7 @@ app.component('Parent', {
       <div>
         <Titles @show-add-rec-div="showAddDiv" @plus-ing="showAddIngDiv" :recName="recName" :curRec="curRec" @hideErr="hideErr" @updateCurRec="updateCurRec($event)" @updateRecName="updateRecName($event)"/>
         <hr>
-        <Bod :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv"
+        <Bod :updateRecList="updateRecList" :showAddRec="displayBod" id="receiver" :showAddIng="displayIngDiv" @cancel-add-rec="hideAddDiv"
         @cancel-add-ing="hideIngDiv" @error="renderErr($event)" @hideErr="hideErr" @updateRecName="updateRecName($event)" @updateCurRec="updateCurRec($event)" :recName="recName"/>
       </div>
     </div>
