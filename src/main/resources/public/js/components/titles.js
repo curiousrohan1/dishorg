@@ -1,6 +1,6 @@
 app.component('Titles', {
   props: { recName: String, curRec: Object },
-  emits: ['show-add-rec-div', 'plus-ing', 'hide-err', 'update-cur-rec', 'reset-update', 'update-rec-name'],
+  emits: ['show-add-rec-div', 'plus-ing', 'hide-err', 'update-cur-rec', 'reset-update', 'update-rec-name','update-rec-list'],
   data() {
     return {
       showRename: false,
@@ -70,6 +70,8 @@ app.component('Titles', {
         );
       this.showRecTitle = true;
       this.$emit('update-rec-name', this.rename);
+      this.$emit('update-rec-list',true)
+
     },
   },
   template:

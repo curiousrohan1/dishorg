@@ -4,7 +4,7 @@ app.component('Bod', {
   props: {
     showAddRec: Boolean, showAddIng: Boolean, updateRecList: Boolean,
   },
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hide-err', 'update-rec-name', 'update-cur-rec'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hide-err', 'update-rec-name', 'update-cur-rec','update-rec-list'],
   data() {
     return {
       showDropOne: false,
@@ -26,8 +26,8 @@ app.component('Bod', {
       name: '',
       unitList: [
       ],
-      recName:''
-    }
+      recName: '',
+    };
   },
   mounted() {
     $.get('/recipes', 'json')
@@ -65,7 +65,7 @@ app.component('Bod', {
       this.quantity = '';
     },
     addRec() {
-      var rec = {
+      const rec = {
         name: this.recName,
         ingredients: [
         ],
@@ -83,13 +83,12 @@ app.component('Bod', {
           this.currentRec = recipe;
           this.$emit('update-cur-rec', this.currentRec);
           let i = 0;
-          while(i < this.recipeList.length){
-            if(this.recipeList[i].name>recipe.name){
-              this.recipeList.push(recipe,i);
+          while (i < this.recipeList.length) {
+            if (this.recipeList[i].name > recipe.name) {
+              this.recipeList.splice(i, 0, recipe);
               break;
-            }
-            else{
-              i+=1;
+            } else {
+              i += 1;
             }
           }
           this.clickRec(recipe.idx);
@@ -103,7 +102,7 @@ app.component('Bod', {
     },
     clickRec(idx) {
       this.$emit('hide-err');
-      var rec = this.recipeList[idx];
+      const rec = this.recipeList[idx];
       for (let i = 0; i < this.recipeList.length; i += 1) {
         this.recipeList[i].active = false;
       }
@@ -124,10 +123,10 @@ app.component('Bod', {
     },
     successOnAjaxOfRecipe(recipe) {
       document.getElementById('success').play();
-      console.log(`success!;${recipe}`);
+      console.log(`success!`);
       this.currentRec = recipe;
       if (this.updateRecList) {
-        var i = 0;
+        let i = 0;
         while (i < this.recipeList.length) {
           if (this.recipeList[i] === this.currentRec) {
             this.recipeList.splice(i, 1);
