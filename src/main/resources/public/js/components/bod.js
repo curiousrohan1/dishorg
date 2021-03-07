@@ -4,7 +4,7 @@ app.component('Bod', {
   props: {
     showAddRec: Boolean, showAddIng: Boolean, updateRecList: Boolean,
   },
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hide-err', 'update-rec-name', 'update-cur-rec','update-rec-list'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hide-err', 'update-rec-name', 'update-cur-rec', 'update-rec-list'],
   data() {
     return {
       showDropOne: false,
@@ -123,18 +123,19 @@ app.component('Bod', {
     },
     successOnAjaxOfRecipe(recipe) {
       document.getElementById('success').play();
-      console.log(`success!`);
+      console.log('success!');
       this.currentRec = recipe;
       if (this.updateRecList) {
         let i = 0;
         while (i < this.recipeList.length) {
-          if (this.recipeList[i] === this.currentRec) {
+          if (this.recipeList[i] !== this.currentRec) {
             this.recipeList.splice(i, 1);
+            this.recipeList.splice(i, 0, this.currentRec);
+            this.$emit('update-rec-list',false);
             break;
           }
           i += 1;
         }
-        this.recipeList.push(this.currentRec);
       }
       this.$emit('hide-err');
       this.$emit('update-rec-name', this.currentRec.name);

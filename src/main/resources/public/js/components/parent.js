@@ -42,16 +42,15 @@ app.component('Parent', {
       console.log('updating rec name...');
       this.recName = name;
       console.log('updated rec name...');
-
     },
     updateCurRec(rec) {
       console.log('updating current rec...');
       this.curRec = rec;
       console.log('updated current rec...');
     },
-    toggleUpdateRecList(doUpdate){
-      this.updateRecList=doUpdate;
-    }
+    toggleUpdateRecList(doUpdate) {
+      this.updateRecList = doUpdate;
+    },
   },
   template:
         /* html */
