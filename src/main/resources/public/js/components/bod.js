@@ -131,7 +131,7 @@ app.component('Bod', {
           if (this.recipeList[i] !== this.currentRec) {
             this.recipeList.splice(i, 1);
             this.recipeList.splice(i, 0, this.currentRec);
-            this.$emit('update-rec-list',false);
+            this.$emit('update-rec-list', false);
             break;
           }
           i += 1;

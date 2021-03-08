@@ -64,10 +64,11 @@ app.component('Titles', {
           (jqXHR) => {
             this.$emit('update-rec-name', this.curRec.name);
             this.showRecTitle = false;
-            this.showRename = true;
+            this.showRename = false;
             this.fail(jqXHR);
           },
         );
+      this.showRename = false;
       this.showRecTitle = true;
       this.$emit('update-rec-name', this.rename);
       this.$emit('update-rec-list', true);
