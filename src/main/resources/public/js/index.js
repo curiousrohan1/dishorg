@@ -13,8 +13,14 @@ const app = Vue.createApp({
       disabled: true,
       error: '',
       recName: '',
-      curRec: null,
+      curRec: {},
       updateRecList: false,
+      showModal: false,
+      actions: [
+        'Change x',
+        'Log out',
+        'ETC',
+      ],
     };
   },
   methods: {
@@ -24,38 +30,22 @@ const app = Vue.createApp({
     hideAddDiv() {
       this.displayBod = false;
     },
-    get(id) {
-      return Document.getElementById(id);
-    },
     showAddIngDiv() {
       this.displayIngDiv = true;
     },
     hideIngDiv() {
       this.displayIngDiv = false;
     },
-    renderErr(error) {
-      console.log('displaying warn...');
-      this.error = error;
-      this.displayWarn = true;
-      console.log('displayed warn...');
-    },
     hideErr() {
       console.log('hiding warn...');
       this.displayWarn = false;
       console.log('hid warn...');
     },
-    updateRecName(name) {
-      console.log('updating rec name...');
-      this.recName = name;
-      console.log('updated rec name...');
+    openModal() {
+      this.showModal = true;
     },
-    updateCurRec(rec) {
-      console.log('updating current rec...');
-      this.curRec = rec;
-      console.log('updated current rec...');
-    },
-    toggleUpdateRecList(doUpdate) {
-      this.updateRecList = doUpdate;
+    closeModal() {
+      this.showModal = false;
     },
   },
 });

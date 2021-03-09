@@ -25,20 +25,34 @@
                 <li><a href="#">Plans</a></li>
             </ul>
         </nav>
-        <Modal></Modal>
+        <div>
+            <button @click="openModal" id="modal-btn"><img
+                    src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
+            </button>
+            <div class="modal" id="account-dropdown" v-show="showModal">
+                <div class="modal-header">
+                    <span @click="closeModal" class="close-btn">&times;</span>
+                    <h1>Your Account</h1>
+                </div>
+                <div class="modal-content">
+                    <button v-for="action in actions">{{action}}</button>
+                </div>
+                <div class="modal-footer">
+                    <h2>I am the Footer</h2>
+                </div>
+            </div>
+        </div>
     </header>
     <!--    Remember to use {{var}} syntax-->
     <div>
         <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
         <div>
             <Titles :curRec="curRec" :recName="recName" @hideErr="hideErr" @plus-ing="showAddIngDiv"
-                    @show-add-rec-div="showAddDiv" @updateCurRec="updateCurRec($event)" @updateRecList="toggleUpdateRecList($event)"
-                    @updateRecName="updateRecName($event)"></Titles>
+                    @show-add-rec-div="showAddDiv"></Titles>
             <hr>
             <Bod :recName="recName" :showAddIng="displayIngDiv" :showAddRec="displayBod" :updateRecList="updateRecList"
                  @cancel-add-ing="hideIngDiv"
-                 @cancel-add-rec="hideAddDiv" @error="renderErr($event)" @hideErr="hideErr"
-                 @updateCurRec="updateCurRec($event)" @updateRecList="toggleUpdateRecList($event)" @updateRecName="updateRecName($event)"
+                 @cancel-add-rec="hideAddDiv" @hideErr="hideErr"
                  id="receiver"></Bod>
         </div>
     </div>
@@ -48,10 +62,9 @@
 <!-- Import Components -->
 <script src="js/components/titles.js"></script>
 <script src="js/components/bod.js"></script>
-<script src="js/components/modal.js"></script>
 <!-- Mount App -->
 <script>
-        const mountedApp = app.mount('#dishorg')
+        var mountedApp = app.mount('#dishorg')
         $('form').submit(false);
 
 </script>

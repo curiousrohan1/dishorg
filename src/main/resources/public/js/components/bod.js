@@ -13,13 +13,15 @@ app.component('Bod', {
       ],
       ingName: '',
       quantity: '',
-      currentRec: {
-
-      },
       name: '',
       unitList: [
       ],
       recName: '',
+      currentRec:{
+        ingredients:[
+          {quantity:5,unit:'cups',name:'yumyum'},{quantity:6,unit:'stuffs',name:'gumgum'}
+        ]
+      }
     };
   },
   mounted() {
@@ -73,8 +75,7 @@ app.component('Bod', {
       }).done(
         (recipe) => {
           document.getElementById('success').play();
-          this.currentRec = recipe;
-          this.$emit('update-cur-rec', this.currentRec);
+          mountedApp.curRec = recipe;
           let i = 0;
           while (i < this.recipeList.length) {
             if (this.recipeList[i].name > recipe.name) {
@@ -105,35 +106,34 @@ app.component('Bod', {
     failureOnAjaxOfRecipe(jqXHR) {
       //      document.getElementById('fail').play();
       console.log('Failure :(');
-      let message = null;
+      let message = "";
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
       } else {
         message = jqXHR.responseJSON.message;
       }
-      this.$emit('error', message);
+      mountedApp.error = message;
       console.log(`failure;${message}`);
     },
     successOnAjaxOfRecipe(recipe) {
       document.getElementById('success').play();
       console.log('success!');
-      this.currentRec = recipe;
+      mountedApp.curRec = recipe;
       if (this.updateRecList) {
         let i = 0;
         while (i < this.recipeList.length) {
-          if (this.recipeList[i] !== this.currentRec) {
+          if (this.recipeList[i] !== mountedApp.curRec) {
             this.recipeList.splice(i, 1);
-            this.recipeList.splice(i, 0, this.currentRec);
-            this.$emit('update-rec-list', false);
+            this.recipeList.splice(i, 0, mountedApp.curRec);
+            mountedApp.updateRecList = false;
             break;
           }
           i += 1;
         }
       }
       this.$emit('hide-err');
-      this.$emit('update-rec-name', this.currentRec.name);
-      this.$emit('update-cur-rec', this.currentRec);
-      this.currentRec.ingredients.forEach((ingredient, idx) => {
+      mountedApp.recName = mountedApp.curRec.name;
+      mountedApp.curRec.ingredients.forEach((ingredient, idx) => {
         const line = this.line(ingredient);
       //        /// /
       //        //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
@@ -168,8 +168,8 @@ app.component('Bod', {
       console.log('all done! with the success!');
     },
     editIng(idx) {
-      const ing = this.currentRec.ingredients[idx];
-      // Populate the ingredient's input fields with the current values from this.currentRec and then show
+      const ing = mountedApp.curRec.ingredients[idx];
+      // Populate the ingredient's input fields with the current values from mountedApp.curRec and then show
       // the input fields; also hide the "line".
       //      $(`#quantity${idx}`).val(ing.quantity);
       //      $(`#unit-dropdown${idx}`).val(ing.unit);
@@ -180,23 +180,22 @@ app.component('Bod', {
     },
     applyAddIng() {
       this.$emit('hide-err');
-      this.currentRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
-      this.$emit('update-cur-rec', this.currentRec);
+      mountedApp.curRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
       $.ajax({
         type: 'PUT',
-        url: `/recipes/${this.currentRec.id}`,
-        data: JSON.stringify(this.currentRec),
+        url: `/recipes/${mountedApp.curRec.id}`,
+        data: JSON.stringify(mountedApp.curRec),
         contentType: 'application/json',
         dataType: 'json',
       }).fail(this.failureOnAjaxOfRecipe)
         .done(this.successOnAjaxOfRecipe);
-      //      axios.put(`/recipes/${this.currentRec.id}`, this.currentRec)
+      //      axios.put(`/recipes/${mountedApp.curRec.id}`, mountedApp.curRec)
       //        .then(this.successOnAjaxOfRecipe)
       //        .catch((error) => {
       //          console.log(error);
       //        });
       console.log('calling:');
-      console.log(`/recipes/${this.currentRec.id}`);
+      console.log(`/recipes/${mountedApp.curRec.id}`);
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
@@ -204,10 +203,6 @@ app.component('Bod', {
     applyAddIngI() {
       console.log('applying add-ing...');
     },
-    //    successOnAjaxOfRecipeI(recipe) {
-    //      this.currentRec = recipe;
-    //      console.log('Got in Here!')
-    //    },
   },
   /* html */
   template: `
@@ -235,7 +230,7 @@ app.component('Bod', {
       </div>
       <div id="recipe-details-container">
         <ul id="recipe-details">
-           <li v-for="(ing,idx) in this.currentRec.ingredients" class="ingItem">
+           <li v-for="(ing,idx) in currentRec.ingredients" class="ingItem">
             <button class="edit-recipes btn" @click="editIng(idx)">
               <img src="images/edit.jpg">
             </button>

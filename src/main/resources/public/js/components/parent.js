@@ -7,7 +7,7 @@ app.component('Parent', {
       disabled: true,
       error: '',
       recName: '',
-      curRec: null,
+      curRec: {},
       updateRecList: false,
     };
   },

@@ -26,7 +26,7 @@ app.component('Titles', {
     delRec() {
       $.ajax({
         type: 'DELETE',
-        url: `/recipes/${this.curRec.id}`,
+        url: `/recipes/${mountedApp.curRec.id}`,
         dataType: 'json',
       })
         .fail(this.fail)
@@ -34,21 +34,21 @@ app.component('Titles', {
     },
     fail(jqXHR) {
       document.getElementById('fail').play();
-      let message = null;
+      let message = "";
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
       } else {
         message = jqXHR.responseJSON.message;
       }
-      this.$emit('error', message);
+      mountedApp.error = message;
     },
     applyRecRename() {
-      if (this.rename === this.curRec.name) {
+      if (this.rename === mountedApp.curRec.name) {
         this.cancelRecRename();
         return;
       }
       this.$emit('hide-err');
-      const otherRec = JSON.parse(JSON.stringify(this.curRec));
+      const otherRec = JSON.parse(JSON.stringify(mountedApp.curRec));
       otherRec.name = this.rename;
       $.post({
         url: 'recipes',
@@ -57,12 +57,12 @@ app.component('Titles', {
         dataType: 'json',
       }).done(
         (data) => {
-          this.$emit('update-cur-rec', data);
+          mountedApp.curRec = data;
         },
       )
         .fail(
           (jqXHR) => {
-            this.$emit('update-rec-name', this.curRec.name);
+            mountedApp.recName = mountedApp.curRec.name;
             this.showRecTitle = false;
             this.showRename = false;
             this.fail(jqXHR);
@@ -70,8 +70,8 @@ app.component('Titles', {
         );
       this.showRename = false;
       this.showRecTitle = true;
-      this.$emit('update-rec-name', this.rename);
-      this.$emit('update-rec-list', true);
+      mountedApp.recName = this.rename;
+      mountedApp.updateRecList = true;
     },
   },
   template:
