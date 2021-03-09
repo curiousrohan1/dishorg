@@ -14,14 +14,7 @@ app.component('Bod', {
       ingName: '',
       quantity: '',
       currentRec: {
-        ingredients: [
-          {
-            unit: 'Lorem',
-            name: 'Ipsum Dolor',
-            quantity: 0,
-          },
-        ],
-        name: 'Example Recipe',
+
       },
       name: '',
       unitList: [

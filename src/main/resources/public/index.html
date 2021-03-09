@@ -25,17 +25,27 @@
                 <li><a href="#">Plans</a></li>
             </ul>
         </nav>
-        <modal/>
-        <modal/>
-        <modal/>
+        <Modal></Modal>
     </header>
     <!--    Remember to use {{var}} syntax-->
-    <parent/>
+    <div>
+        <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
+        <div>
+            <Titles :curRec="curRec" :recName="recName" @hideErr="hideErr" @plus-ing="showAddIngDiv"
+                    @show-add-rec-div="showAddDiv" @updateCurRec="updateCurRec($event)" @updateRecList="toggleUpdateRecList($event)"
+                    @updateRecName="updateRecName($event)"></Titles>
+            <hr>
+            <Bod :recName="recName" :showAddIng="displayIngDiv" :showAddRec="displayBod" :updateRecList="updateRecList"
+                 @cancel-add-ing="hideIngDiv"
+                 @cancel-add-rec="hideAddDiv" @error="renderErr($event)" @hideErr="hideErr"
+                 @updateCurRec="updateCurRec($event)" @updateRecList="toggleUpdateRecList($event)" @updateRecName="updateRecName($event)"
+                 id="receiver"></Bod>
+        </div>
+    </div>
 </div>
 <!-- Import App -->
 <script src="js/index.js"></script>
 <!-- Import Components -->
-<script src="js/components/parent.js"></script>
 <script src="js/components/titles.js"></script>
 <script src="js/components/bod.js"></script>
 <script src="js/components/modal.js"></script>
@@ -43,6 +53,7 @@
 <script>
         const mountedApp = app.mount('#dishorg')
         $('form').submit(false);
+
 </script>
 </body>
 

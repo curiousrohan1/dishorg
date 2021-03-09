@@ -2,6 +2,11 @@ app.component('Modal', {
   data() {
     return {
       showModal: false,
+      actions:[
+        'Change x',
+        'Log out'
+        'ETC'
+      ]
     };
   },
   methods: {
@@ -18,13 +23,13 @@ app.component('Modal', {
       <button id="modal-btn" @click="openModal"><img
         src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
       </button>
-      <div class="modal" id="account-dropdown">
-        <div class="modal-header" v-show="showModal">
+      <div class="modal" id="account-dropdown" v-show="showModal">
+        <div class="modal-header">
           <span class="close-btn" @click="closeModal">&times;</span>
-          <h1>Experimental Name</h1>
+          <h1>Your Account</h1>
         </div>
         <div class="modal-content">
-          <p>this is the text inside the modal</p>
+          <button v-for="action in actions">{{action}}</button>
         </div>
         <div class="modal-footer">
           <h2>I am the Footer</h2>
