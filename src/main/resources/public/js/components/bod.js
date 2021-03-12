@@ -1,10 +1,9 @@
-app.component('Bod', {
+let bod = app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': },TODO
-//   props:{showAddRec:type,etc}TODO
   props: {
-    showAddRec: Boolean, showAddIng: Boolean, updateRecList: Boolean,
+    showAddIng: Boolean, updateRecList: Boolean,
   },
-  emits: ['cancel-add-rec', 'cancel-add-ing', 'error', 'hide-err', 'update-rec-name', 'update-cur-rec', 'update-rec-list'],
+  emits: ['cancel-add-rec', 'cancel-add-ing', 'hide-err', 'update-rec-name'],
   data() {
     return {
       showDropOne: false,
@@ -17,11 +16,12 @@ app.component('Bod', {
       unitList: [
       ],
       recName: '',
-      currentRec:{
-        ingredients:[
-          {quantity:5,unit:'cups',name:'yumyum'},{quantity:6,unit:'stuffs',name:'gumgum'}
-        ]
-      }
+      currentRec: {
+        ingredients: [
+          { quantity: 5, unit: 'cups', name: 'yumyum' }, { quantity: 6, unit: 'stuffs', name: 'gumgum' },
+        ],
+      },
+      showAddRec: false,
     };
   },
   mounted() {
@@ -51,6 +51,8 @@ app.component('Bod', {
     cancelAddRec() {
       document.getElementById('fail').play();
       this.$emit('cancel-add-rec');
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
     },
     cancelAddIng() {
       document.getElementById('fail').play();
@@ -58,6 +60,8 @@ app.component('Bod', {
       this.unit = 'Unit';
       this.ingName = '';
       this.quantity = '';
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
     },
     addRec() {
       const rec = {
@@ -93,6 +97,8 @@ app.component('Bod', {
         },
       );
       this.$emit('cancel-add-rec');
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
     },
     clickRec(idx) {
       this.$emit('hide-err');
@@ -102,11 +108,14 @@ app.component('Bod', {
       }
       rec.active = true;
       $.get(`/recipes/${rec.id}`).done(this.successOnAjaxOfRecipe).fail(this.failureOnAjaxOfRecipe);
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
+      mountedApp.showRecTitle=true;
     },
     failureOnAjaxOfRecipe(jqXHR) {
       //      document.getElementById('fail').play();
       console.log('Failure :(');
-      let message = "";
+      let message = '';
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
       } else {
@@ -114,6 +123,8 @@ app.component('Bod', {
       }
       mountedApp.error = message;
       console.log(`failure;${message}`);
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
     },
     successOnAjaxOfRecipe(recipe) {
       document.getElementById('success').play();
@@ -166,9 +177,14 @@ app.component('Bod', {
       //              $('#error-message').hide();
       //            });
       console.log('all done! with the success!');
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
     },
     editIng(idx) {
       const ing = mountedApp.curRec.ingredients[idx];
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
+
       // Populate the ingredient's input fields with the current values from mountedApp.curRec and then show
       // the input fields; also hide the "line".
       //      $(`#quantity${idx}`).val(ing.quantity);
@@ -196,6 +212,8 @@ app.component('Bod', {
       //        });
       console.log('calling:');
       console.log(`/recipes/${mountedApp.curRec.id}`);
+      this.currentRec = mountedApp.curRec;
+      this.showAddRec = mountedApp.displayBod;
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));

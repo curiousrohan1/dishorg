@@ -47,7 +47,7 @@
     <div>
         <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
         <div>
-            <Titles :curRec="curRec" :recName="recName" @hideErr="hideErr" @plus-ing="showAddIngDiv"
+            <Titles @hideErr="hideErr" @plus-ing="showAddIngDiv"
                     @show-add-rec-div="showAddDiv"></Titles>
             <hr>
             <Bod :recName="recName" :showAddIng="displayIngDiv" :showAddRec="displayBod" :updateRecList="updateRecList"
@@ -66,8 +66,6 @@
 <script>
         var mountedApp = app.mount('#dishorg')
         $('form').submit(false);
-
 </script>
 </body>
-
 </html>

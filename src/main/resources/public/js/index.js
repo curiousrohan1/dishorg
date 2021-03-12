@@ -19,8 +19,9 @@ const app = Vue.createApp({
       actions: [
         'Change x',
         'Log out',
-        'ETC',
+        'ETC'
       ],
+      showRecTitle:true
     };
   },
   methods: {

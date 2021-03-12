@@ -1,27 +1,30 @@
-app.component('Titles', {
-  props: { recName: String, curRec: Object },
+let titles = app.component('Titles', {
   emits: ['show-add-rec-div', 'plus-ing', 'hide-err', 'update-cur-rec', 'reset-update', 'update-rec-name', 'update-rec-list'],
   data() {
     return {
       showRename: false,
-      showRecTitle: true,
       rename: '',
+      recName: '',
     };
   },
   methods: {
     showAddRecDiv() {
       this.$emit('show-add-rec-div');
+      this.recName = mountedApp.recName;
     },
     cancelRecRename() {
       this.showRename = false;
-      this.showRecTitle = true;
+      mountedApp.showRecTitle = true;
+      this.recName = mountedApp.recName;
     },
     editRecName() {
       this.showRename = true;
-      this.showRecTitle = false;
+      mountedApp.showRecTitle = false;
+      this.recName = mountedApp.recName;
     },
     plusIng() {
       this.$emit('plus-ing');
+      this.recName = mountedApp.recName;
     },
     delRec() {
       $.ajax({
@@ -31,16 +34,18 @@ app.component('Titles', {
       })
         .fail(this.fail)
         .done(this.reset);
+      this.recName = mountedApp.recName;
     },
     fail(jqXHR) {
       document.getElementById('fail').play();
-      let message = "";
+      let message = '';
       if (jqXHR.readyState === 0) {
         message = 'Failed to contact server.';
       } else {
         message = jqXHR.responseJSON.message;
       }
       mountedApp.error = message;
+      this.recName = mountedApp.recName;
     },
     applyRecRename() {
       if (this.rename === mountedApp.curRec.name) {
@@ -63,15 +68,16 @@ app.component('Titles', {
         .fail(
           (jqXHR) => {
             mountedApp.recName = mountedApp.curRec.name;
-            this.showRecTitle = false;
+            mountedApp.showRecTitle = false;
             this.showRename = false;
             this.fail(jqXHR);
           },
         );
       this.showRename = false;
-      this.showRecTitle = true;
+      mountedApp.showRecTitle = true;
       mountedApp.recName = this.rename;
       mountedApp.updateRecList = true;
+      this.recName = mountedApp.recName;
     },
   },
   template:
