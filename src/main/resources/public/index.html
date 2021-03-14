@@ -50,8 +50,7 @@
             <Titles @hideErr="hideErr" @plus-ing="showAddIngDiv"
                     @show-add-rec-div="showAddDiv"></Titles>
             <hr>
-            <Bod :recName="recName" :showAddIng="displayIngDiv" :showAddRec="displayBod" :updateRecList="updateRecList"
-                 @cancel-add-ing="hideIngDiv"
+            <Bod @cancel-add-ing="hideIngDiv"
                  @cancel-add-rec="hideAddDiv" @hideErr="hideErr"
                  id="receiver"></Bod>
         </div>

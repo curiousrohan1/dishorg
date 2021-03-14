@@ -1,8 +1,6 @@
-let bod = app.component('Bod', {
+const bod = app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': },TODO
-  props: {
-    showAddIng: Boolean, updateRecList: Boolean,
-  },
+
   emits: ['cancel-add-rec', 'cancel-add-ing', 'hide-err', 'update-rec-name'],
   data() {
     return {
@@ -22,6 +20,7 @@ let bod = app.component('Bod', {
         ],
       },
       showAddRec: false,
+      showAddIng: false,
     };
   },
   mounted() {
@@ -52,7 +51,7 @@ let bod = app.component('Bod', {
       document.getElementById('fail').play();
       this.$emit('cancel-add-rec');
       this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod;
+      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
     },
     cancelAddIng() {
       document.getElementById('fail').play();
@@ -61,7 +60,7 @@ let bod = app.component('Bod', {
       this.ingName = '';
       this.quantity = '';
       this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod;
+      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
     },
     addRec() {
       const rec = {
@@ -98,7 +97,7 @@ let bod = app.component('Bod', {
       );
       this.$emit('cancel-add-rec');
       this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod;
+      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
     },
     clickRec(idx) {
       this.$emit('hide-err');
@@ -110,7 +109,7 @@ let bod = app.component('Bod', {
       $.get(`/recipes/${rec.id}`).done(this.successOnAjaxOfRecipe).fail(this.failureOnAjaxOfRecipe);
       this.currentRec = mountedApp.curRec;
       this.showAddRec = mountedApp.displayBod;
-      mountedApp.showRecTitle=true;
+      mountedApp.showRecTitle = true; this.showAddIng = mountedApp.displayIngDiv;
     },
     failureOnAjaxOfRecipe(jqXHR) {
       //      document.getElementById('fail').play();
@@ -124,13 +123,13 @@ let bod = app.component('Bod', {
       mountedApp.error = message;
       console.log(`failure;${message}`);
       this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod;
+      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
     },
     successOnAjaxOfRecipe(recipe) {
       document.getElementById('success').play();
       console.log('success!');
       mountedApp.curRec = recipe;
-      if (this.updateRecList) {
+      if (mountedApp.updateRecList) {
         let i = 0;
         while (i < this.recipeList.length) {
           if (this.recipeList[i] !== mountedApp.curRec) {
@@ -178,12 +177,13 @@ let bod = app.component('Bod', {
       //            });
       console.log('all done! with the success!');
       this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod;
+      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
     },
     editIng(idx) {
       const ing = mountedApp.curRec.ingredients[idx];
       this.currentRec = mountedApp.curRec;
       this.showAddRec = mountedApp.displayBod;
+      this.showAddIng = mountedApp.displayIngDiv;
 
       // Populate the ingredient's input fields with the current values from mountedApp.curRec and then show
       // the input fields; also hide the "line".
@@ -214,6 +214,7 @@ let bod = app.component('Bod', {
       console.log(`/recipes/${mountedApp.curRec.id}`);
       this.currentRec = mountedApp.curRec;
       this.showAddRec = mountedApp.displayBod;
+      this.showAddIng = mountedApp.displayIngDiv;
     },
     line(ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
@@ -258,7 +259,7 @@ let bod = app.component('Bod', {
             {{this.line(ing)}}
           </li>
         </ul>
-        <form class="form-inline" v-show="showAddIng" id="make-ing">
+        <form class="form-inline" v-show="displayIngDiv" id="make-ing">
           <label class="sr-only" for="quantity">Quantity</label>
           <input type="text" v-model="quantity" class="form-control mb-2 mr-sm-2 inputIngInfo" placeholder="Quantity" id="quantity"/>
           <label class="sr-only" for="unit-dropdown">Unit</label>
