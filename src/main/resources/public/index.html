@@ -56,8 +56,8 @@
         <div>
             <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
             <div>
-                <LeftPane id="left-pane" @update-err="updateErr($event)" />
-                <RightPane id="recipe-details-container"></RightPane>
+                <LeftPane @update-err="updateErr($event)" id="left-pane"></LeftPane>
+                <RightPane id="recipe-details-container" @update-err="updateErr($event)"></RightPane>
             </div>
         </div>
     </div>
@@ -70,6 +70,7 @@
     <script>
         var mountedApp = app.mount('#dishorg')
         $('form').submit(false);
+
     </script>
 </body>
 

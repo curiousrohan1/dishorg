@@ -1,5 +1,5 @@
 const app = Vue.createApp({
-  data() {
+  data () {
     return {
       accountOpts: [
         'Information',
@@ -25,31 +25,23 @@ const app = Vue.createApp({
     };
   },
   methods: {
-    showAddDiv() {
+    showAddDiv () {
       console.log(`this.displayBod was ${this.displayBod}`);
       console.log(`mountedApp.displayBod was ${mountedApp.displayBod}`);
       this.displayBod = true;
       console.log(`this.displayBod = ${this.displayBod}`);
       console.log(`mountedApp.displayBod = ${mountedApp.displayBod}`);
     },
-    hideAddDiv() {
+    hideAddDiv () {
       this.displayBod = false;
     },
-    showAddIngDiv() {
+    showAddIngDiv () {
       this.displayIngDiv = true;
     },
-    hideIngDiv() {
-      this.displayIngDiv = false;
-    },
-    hideErr() {
-      console.log('hiding warn...');
-      this.displayWarn = false;
-      console.log('hid warn...');
-    },
-    openModal() {
+    openModal () {
       this.showModal = true;
     },
-    closeModal() {
+    closeModal () {
       this.showModal = false;
     },
   },

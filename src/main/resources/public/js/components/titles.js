@@ -81,17 +81,6 @@ const titles = app.component('Titles', {
     /* html */
     `
   <div>
-      <div>
-          <strong id="rec-title" v-show="showRecTitle">{{this.recName}}</strong>&nbsp;&nbsp;&nbsp;
-          <div id="renamed-recipe-name" v-show="showRename">
-              <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename">
-              <button class="btn" id="apply-rec-rename" @click = "applyRecRename"><img src="images/apply.png"></button>
-              <button class="btn" id="cancel-rec-rename" @click = "cancelRecRename"><img src="images/cancel.jpg"></button>
-          </div>
-          <button  class="btn disabled" id="edit-rec-name" @click="editRecName"  v-show="!showRename"><img src="images/edit.jpg"></button>
-          <button class="btn disabled" id="del-rec"  v-show="!showRename" @click="delRec"><img src="images/del.png"></button>
-          <button class="btn text-primary" data-placement="left" data-toggle="tooltip" id="plus-ing"
-           title="Add ingredient" @click="plusIng">+</button>
-    </div>
+
   </div>`,
 });
