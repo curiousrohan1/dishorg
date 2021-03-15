@@ -1,5 +1,19 @@
+// @ts-ignore
+const store = Vuex.createStore({
+  state () {
+    return {
+      currentRec: {},
+      showRecTitle: true
+    }
+  },
+  mutations: {
+    setCurRec (state, newRec) {
+      state.currentRec = newRec;
+    }
+  }
+})
 const app = Vue.createApp({
-  data() {
+  data () {
     return {
       accountOpts: [
         'Information',
@@ -7,7 +21,6 @@ const app = Vue.createApp({
         'Sign Out',
         'Delete Account',
       ],
-      displayWarn: false,
       displayBod: false,
       displayIngDiv: false,
       disabled: true,
@@ -25,32 +38,29 @@ const app = Vue.createApp({
     };
   },
   methods: {
-    showAddDiv() {
-      console.log(`this.displayBod was ${this.displayBod}`);
-      console.log(`mountedApp.displayBod was ${mountedApp.displayBod}`);
-      this.displayBod = true;
-      console.log(`this.displayBod = ${this.displayBod}`);
-      console.log(`mountedApp.displayBod = ${mountedApp.displayBod}`);
-    },
-    hideAddDiv() {
-      this.displayBod = false;
-    },
-    showAddIngDiv() {
+    showAddIngDiv () {
       this.displayIngDiv = true;
     },
-    hideIngDiv() {
+    hideIngDiv () {
       this.displayIngDiv = false;
     },
-    hideErr() {
-      console.log('hiding warn...');
-      this.displayWarn = false;
-      console.log('hid warn...');
-    },
-    openModal() {
+    openModal () {
       this.showModal = true;
     },
-    closeModal() {
+    closeModal () {
       this.showModal = false;
     },
+    updateErr (message) {
+      this.error = message;
+    }
   },
+  computed: {
+    displayWarn () {
+      if (this.error === '') {
+        return false;
+      }
+      return true;
+    }
+  }
 });
+app.use(store);

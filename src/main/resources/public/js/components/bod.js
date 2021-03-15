@@ -2,7 +2,7 @@ const bod = app.component('Bod', {
   // emits: { 'cancel-add-rec': null, 'cancel-add-ing': null, 'adding': },TODO
 
   emits: ['cancel-add-rec', 'cancel-add-ing', 'hide-err', 'update-rec-name'],
-  data() {
+  data () {
     return {
       showDropOne: false,
       unit: 'Unit',
@@ -23,7 +23,7 @@ const bod = app.component('Bod', {
       showAddIng: false,
     };
   },
-  mounted() {
+  mounted () {
     $.get('/recipes', 'json')
       .done(
         (recipeList) => {
@@ -47,13 +47,8 @@ const bod = app.component('Bod', {
     ).fail(this.failureOnAjaxOfRecipe);
   },
   methods: {
-    cancelAddRec() {
-      document.getElementById('fail').play();
-      this.$emit('cancel-add-rec');
-      this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
-    },
-    cancelAddIng() {
+
+    cancelAddIng () {
       document.getElementById('fail').play();
       this.$emit('cancel-add-ing');
       this.unit = 'Unit';
@@ -62,124 +57,10 @@ const bod = app.component('Bod', {
       this.currentRec = mountedApp.curRec;
       this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
     },
-    addRec() {
-      const rec = {
-        name: this.recName,
-        ingredients: [
-        ],
-        id: this.recipeList.length,
-        active: false,
-      };
-      $.post({
-        url: 'recipes',
-        data: JSON.stringify(rec),
-        contentType: 'application/json',
-        dataType: 'json',
-      }).done(
-        (recipe) => {
-          document.getElementById('success').play();
-          mountedApp.curRec = recipe;
-          let i = 0;
-          while (i < this.recipeList.length) {
-            if (this.recipeList[i].name > recipe.name) {
-              this.recipeList.splice(i, 0, recipe);
-              break;
-            } else {
-              i += 1;
-            }
-          }
-          this.clickRec(recipe.idx);
-        },
-      ).fail(
-        (jqXHR) => {
-          this.failureOnAjaxOfRecipe(jqXHR);
-        },
-      );
-      this.$emit('cancel-add-rec');
-      this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
-    },
-    clickRec(idx) {
-      this.$emit('hide-err');
-      const rec = this.recipeList[idx];
-      for (let i = 0; i < this.recipeList.length; i += 1) {
-        this.recipeList[i].active = false;
-      }
-      rec.active = true;
-      $.get(`/recipes/${rec.id}`).done(this.successOnAjaxOfRecipe).fail(this.failureOnAjaxOfRecipe);
-      this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod;
-      mountedApp.showRecTitle = true; this.showAddIng = mountedApp.displayIngDiv;
-    },
-    failureOnAjaxOfRecipe(jqXHR) {
-      //      document.getElementById('fail').play();
-      console.log('Failure :(');
-      let message = '';
-      if (jqXHR.readyState === 0) {
-        message = 'Failed to contact server.';
-      } else {
-        message = jqXHR.responseJSON.message;
-      }
-      mountedApp.error = message;
-      console.log(`failure;${message}`);
-      this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
-    },
-    successOnAjaxOfRecipe(recipe) {
-      document.getElementById('success').play();
-      console.log('success!');
-      mountedApp.curRec = recipe;
-      if (mountedApp.updateRecList) {
-        let i = 0;
-        while (i < this.recipeList.length) {
-          if (this.recipeList[i] !== mountedApp.curRec) {
-            this.recipeList.splice(i, 1);
-            this.recipeList.splice(i, 0, mountedApp.curRec);
-            mountedApp.updateRecList = false;
-            break;
-          }
-          i += 1;
-        }
-      }
-      this.$emit('hide-err');
-      mountedApp.recName = mountedApp.curRec.name;
-      mountedApp.curRec.ingredients.forEach((ingredient, idx) => {
-        const line = this.line(ingredient);
-      //        /// /
-      //        //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
-      //
-      //        //        $(`#ing-edit${idx}`).hide();
-      });
-      //            $('button.edit-recipes').prop('disabled', false);
-      //            $('li > div > form > button.cancel').click(function () {
-      //              $('button.edit-recipes').prop('disabled', false);
-      //              ingCancel($(this).data('idx'));
-      //            });
-      //            $('li > div > form > button.apply').click(function () {
-      //              ingApply($(this).data('idx'));
-      //            });
-      //            $('button.openModal').click(function () {
-      //              currentIdx = $(this).data('idx');
-      //            });
-      //            $('input.inputIngInfo').keypress(function (event) {
-      //              const idx = $(this).data('idx');
-      //              if ($(`#quantity${idx}`).val() !== ''
-      //                && $(`#name${idx}`).val() !== ''
-      //                && event.keyCode === 13) {
-      //                $(`#add-ing${idx}`).click();
-      //              }
-      //            });
-      //            $('*').click(() => {
-      //              $('#error-message').hide();
-      //            });
-      //            $('input.inputIngInfo').focus(() => {
-      //              $('#error-message').hide();
-      //            });
-      console.log('all done! with the success!');
-      this.currentRec = mountedApp.curRec;
-      this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
-    },
-    editIng(idx) {
+
+
+
+    editIng (idx) {
       const ing = mountedApp.curRec.ingredients[idx];
       this.currentRec = mountedApp.curRec;
       this.showAddRec = mountedApp.displayBod;
@@ -194,7 +75,7 @@ const bod = app.component('Bod', {
       //      $(`#ing-edit${idx}`).show();
       //      $(`#ing-line-container${idx}`).hide();
     },
-    applyAddIng() {
+    applyAddIng () {
       this.$emit('hide-err');
       mountedApp.curRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
       $.ajax({
@@ -216,24 +97,17 @@ const bod = app.component('Bod', {
       this.showAddRec = mountedApp.displayBod;
       this.showAddIng = mountedApp.displayIngDiv;
     },
-    line(ing) {
+    line (ing) {
       return (ing.unit === '' || ing.unit === ' ' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
     },
-    applyAddIngI() {
+    applyAddIngI () {
       console.log('applying add-ing...');
     },
   },
   /* html */
   template: `
     <div>
-        <audio id="success">
-          <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
-          <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
-        </audio>
-        <audio id="fail">
-         <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
-         <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
-        </audio>
+
       <div id="left-pane">
         <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
         <ul class="list-group" id="recipe-list">

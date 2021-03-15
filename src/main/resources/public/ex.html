@@ -1,0 +1,22 @@
+<div id="left-titles">
+    <strong class="text-primary">
+        <h2>Recipes:</h2>
+    </strong>
+    <button class="btn text-primary" data-placement="right" data-toggle="tooltip" id="plus-rec" title="Add recipe"
+        @click="showAddRecDiv">+</button>
+</div>
+<hr>
+<div id="left-pane">
+    <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
+    <ul class="list-group" id="recipe-list">
+        <button type="button" @click="clickRec(idx)" class="list-group-item list-group-item-action"
+            :class="{active:rec.active}" v-for="(rec,idx) in recipeList">{{rec.name}}</button>
+    </ul>
+    <div id="add-rec-div" v-show="showAddRec">
+        <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button class="btn" id="add-rec" @click="addRec"><img src="images/apply.png"></button>
+            <button class="btn" id="cancel-add-rec" @click="cancelAddRec"><img src="images/cancel.jpg"></button>
+        </div>
+    </div>
+</div>

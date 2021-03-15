@@ -1,6 +1,6 @@
 const titles = app.component('Titles', {
   emits: ['show-add-rec-div', 'plus-ing', 'hide-err', 'update-cur-rec', 'reset-update', 'update-rec-name', 'update-rec-list'],
-  data() {
+  data () {
     return {
       showRename: false,
       rename: '',
@@ -8,25 +8,22 @@ const titles = app.component('Titles', {
     };
   },
   methods: {
-    showAddRecDiv() {
-      this.$emit('show-add-rec-div');
-      this.recName = mountedApp.recName;
-    },
-    cancelRecRename() {
+
+    cancelRecRename () {
       this.showRename = false;
       mountedApp.showRecTitle = true;
       this.recName = mountedApp.recName;
     },
-    editRecName() {
+    editRecName () {
       this.showRename = true;
       mountedApp.showRecTitle = false;
       this.recName = mountedApp.recName;
     },
-    plusIng() {
+    plusIng () {
       this.$emit('plus-ing');
       this.recName = mountedApp.recName;
     },
-    delRec() {
+    delRec () {
       $.ajax({
         type: 'DELETE',
         url: `/recipes/${mountedApp.curRec.id}`,
@@ -36,7 +33,7 @@ const titles = app.component('Titles', {
         .done(this.reset);
       this.recName = mountedApp.recName;
     },
-    fail(jqXHR) {
+    fail (jqXHR) {
       document.getElementById('fail').play();
       let message = '';
       if (jqXHR.readyState === 0) {
@@ -47,7 +44,7 @@ const titles = app.component('Titles', {
       mountedApp.error = message;
       this.recName = mountedApp.recName;
     },
-    applyRecRename() {
+    applyRecRename () {
       if (this.rename === mountedApp.curRec.name) {
         this.cancelRecRename();
         return;
@@ -81,33 +78,20 @@ const titles = app.component('Titles', {
     },
   },
   template:
-        /* html */
-        `
-    <div>
-      <audio id="success">
-        <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
-        <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
-       </audio>
-       <audio id="fail">
-        <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
-        <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
-       </audio>
-        <div id="left-titles">
-            <strong class="text-primary"><h2>Recipes:</h2></strong>
-            <button class="btn text-primary" data-placement="right" data-toggle="tooltip" id="plus-rec"
-            title="Add recipe" @click="showAddRecDiv">+</button>
-        </div>
-        <div>
-            <strong id="rec-title" v-show="showRecTitle">{{this.recName}}</strong>&nbsp;&nbsp;&nbsp;
-            <div id="renamed-recipe-name" v-show="showRename">
-                <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename">
-                <button class="btn" id="apply-rec-rename" @click = "applyRecRename"><img src="images/apply.png"></button>
-                <button class="btn" id="cancel-rec-rename" @click = "cancelRecRename"><img src="images/cancel.jpg"></button>
-            </div>
-            <button  class="btn disabled" id="edit-rec-name" @click="editRecName"  v-show="!showRename"><img src="images/edit.jpg"></button>
-            <button class="btn disabled" id="del-rec"  v-show="!showRename" @click="delRec"><img src="images/del.png"></button>
-            <button class="btn text-primary" data-placement="left" data-toggle="tooltip" id="plus-ing"
-             title="Add ingredient" @click="plusIng">+</button>
+    /* html */
+    `
+  <div>
+      <div>
+          <strong id="rec-title" v-show="showRecTitle">{{this.recName}}</strong>&nbsp;&nbsp;&nbsp;
+          <div id="renamed-recipe-name" v-show="showRename">
+              <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename">
+              <button class="btn" id="apply-rec-rename" @click = "applyRecRename"><img src="images/apply.png"></button>
+              <button class="btn" id="cancel-rec-rename" @click = "cancelRecRename"><img src="images/cancel.jpg"></button>
+          </div>
+          <button  class="btn disabled" id="edit-rec-name" @click="editRecName"  v-show="!showRename"><img src="images/edit.jpg"></button>
+          <button class="btn disabled" id="del-rec"  v-show="!showRename" @click="delRec"><img src="images/del.png"></button>
+          <button class="btn text-primary" data-placement="left" data-toggle="tooltip" id="plus-ing"
+           title="Add ingredient" @click="plusIng">+</button>
     </div>
   </div>`,
 });

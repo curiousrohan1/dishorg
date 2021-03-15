@@ -10,61 +10,67 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vuex@next"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link href="style.css" rel="stylesheet">
 </head>
 
 <body>
-<div id="dishorg">
-    <header>
-        <img id="logo" src="images/logo.svg">
-        <nav>
-            <ul id="nav">
-                <li><a href="#">Make A Grocery List</a></li>
-                <li><a href="#">Help</a></li>
-                <li><a href="#">Plans</a></li>
-            </ul>
-        </nav>
-        <div>
-            <button @click="openModal" id="modal-btn"><img
-                    src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
-            </button>
-            <div class="modal" id="account-dropdown" v-show="showModal">
-                <div class="modal-header">
-                    <span @click="closeModal" class="close-btn">&times;</span>
-                    <h1>Your Account</h1>
-                </div>
-                <div class="modal-content">
-                    <button v-for="action in actions">{{action}}</button>
-                </div>
-                <div class="modal-footer">
-                    <h2>I am the Footer</h2>
+    <div id="dishorg">
+        <audio id="success">
+            <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
+            <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
+        </audio>
+        <audio id="fail">
+            <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
+            <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
+        </audio>
+        <header>
+            <img id="logo" src="images/logo.svg">
+            <nav>
+                <ul id="nav">
+                    <li><a href="#">Make A Grocery List</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Plans</a></li>
+                </ul>
+            </nav>
+            <div>
+                <button @click="openModal" id="modal-btn"><img
+                        src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
+                </button>
+                <div class="modal" id="account-dropdown" v-show="showModal">
+                    <div class="modal-header">
+                        <span @click="closeModal" class="close-btn">&times;</span>
+                        <h1>Your Account</h1>
+                    </div>
+                    <div class="modal-content">
+                        <button v-for="action in actions">{{action}}</button>
+                    </div>
+                    <div class="modal-footer">
+                        <h2>I am the Footer</h2>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
-    <!--    Remember to use {{var}} syntax-->
-    <div>
-        <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
+        </header>
+        <!--    Remember to use {{var}} syntax-->
         <div>
-            <Titles @hideErr="hideErr" @plus-ing="showAddIngDiv"
-                    @show-add-rec-div="showAddDiv"></Titles>
-            <hr>
-            <Bod @cancel-add-ing="hideIngDiv"
-                 @cancel-add-rec="hideAddDiv" @hideErr="hideErr"
-                 id="receiver"></Bod>
+            <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
+            <div>
+                <LeftPane id="left-pane" @update-err="updateErr($event)" />
+                <RightPane id="recipe-details-container"></RightPane>
+            </div>
         </div>
     </div>
-</div>
-<!-- Import App -->
-<script src="js/index.js"></script>
-<!-- Import Components -->
-<script src="js/components/titles.js"></script>
-<script src="js/components/bod.js"></script>
-<!-- Mount App -->
-<script>
+    <!-- Import App -->
+    <script src="js/index.js"></script>
+    <!-- Import Components -->
+    <script src="js/components/leftPane.js"></script>
+    <script src="js/components/rightPane.js"></script>
+    <!-- Mount App -->
+    <script>
         var mountedApp = app.mount('#dishorg')
         $('form').submit(false);
-</script>
+    </script>
 </body>
+
 </html>

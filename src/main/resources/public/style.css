@@ -60,12 +60,7 @@ img{
 #unit-dropdown{
     width:5rem;
 }
-#left-titles{
-    position:relative;
-    width:49%;
-    float:left;
-    padding-left:1rem;
-}
+
 #left-titles *{
     display: inline;
 }
