@@ -30,8 +30,7 @@ app.component('Leftpane', {
                 this.recipeList[i].active = false;
             }
             rec.active = true;
-            // TODO
-            $.get(`/recipes/${rec.id}`).done(this.successOnAjaxOfRecipe).fail(this.failureOnAjaxOfRecipe);
+            this.$store.commit('setCurRec', rec);
         },
         addRec () {
             const rec = {
@@ -40,7 +39,7 @@ app.component('Leftpane', {
                 ],
                 id: this.recipeList.length,
                 active: false,
-              };
+            };
             $.post({
                 url: 'recipes',
                 data: JSON.stringify(rec),
@@ -63,9 +62,7 @@ app.component('Leftpane', {
                         i += 1;
                     }
                     this.recipeList.splice(i, 0, recipe);
-                    /* TODO
-                     * this.clickRec(recipe.idx);
-                    */
+                    this.clickRec(i);
                 },
             ).fail(
                 (jqXHR) => {
@@ -73,6 +70,7 @@ app.component('Leftpane', {
                 },
             );
             this.showAddRec = false;
+            this.recName = ''
         },
         /**
          * @param {{ [x: string]: string; readyState: number; hasOwnProperty: (arg0: string) => any; responseJSON: { message: string; }; }} jqXHR
@@ -91,7 +89,6 @@ app.component('Leftpane', {
                 message = "An unknown error has occured."
             }
             this.$emit('update-err', message);
-            console.log(`Failure;${message}`);
         },
         cancelAddRec () {
             // document.getElementById('fail').play();
@@ -115,7 +112,6 @@ app.component('Leftpane', {
         //             i += 1;
         //         }
         //     }
-        //     mountedApp.recName = mountedApp.curRec.name;
         //     mountedApp.curRec.ingredients.forEach((ingredient, idx) => {
         //         const line = this.line(ingredient);
         //         //        /// /
@@ -149,8 +145,6 @@ app.component('Leftpane', {
         //     //              $('#error-message').hide();
         //     //            });
         //     console.log('all done! with the success!');
-        //     this.currentRec = mountedApp.curRec;
-        //     this.showAddRec = mountedApp.displayBod; this.showAddIng = mountedApp.displayIngDiv;
         // },
     },
     /* html */

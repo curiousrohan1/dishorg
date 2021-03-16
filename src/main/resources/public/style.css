@@ -41,7 +41,7 @@ header li a {
     float:left;
     padding-left:1rem;
 }
-#recipe-details-container{
+#right-pane{
     position:relative;
     width:49%;
     float:right;

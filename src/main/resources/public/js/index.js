@@ -9,6 +9,10 @@ const store = Vuex.createStore({
   mutations: {
     setCurRec (state, newRec) {
       state.currentRec = newRec;
+    },
+    updateCurRec(state, newRec){
+      state.currentRec.ingredients = newRec.ingredients;
+      state.currentRec.name = newRec.name;
     }
   }
 })
@@ -38,9 +42,7 @@ const app = Vue.createApp({
     };
   },
   methods: {
-    showAddIngDiv () {
-      this.displayIngDiv = true;
-    },
+
     hideIngDiv () {
       this.displayIngDiv = false;
     },
