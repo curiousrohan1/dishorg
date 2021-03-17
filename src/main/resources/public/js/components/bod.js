@@ -6,8 +6,6 @@ const bod = app.component('Bod', {
     return {
       showDropOne: false,
       unit: 'Unit',
-      recipeList: [
-      ],
       ingName: '',
       quantity: '',
       name: '',
@@ -24,25 +22,25 @@ const bod = app.component('Bod', {
     };
   },
 
-        //            $('#recipe-details-container').append(getIngDiv(''));
-        //            unitList.forEach((unit) => {
-        //              $('#unit-dropdown').append(`<option>${unit}</option>`);
-        //            });
-        //            $('#add-ing').click(() => {
-        //              ingApply('');
-        //            });
-        //            $('#cancel-ing').click(() => {
-        //              ingCancel('');
-        //            });
-      },
+  //            $('#recipe-details-container').append(getIngDiv(''));
+  //            unitList.forEach((unit) => {
+  //              $('#unit-dropdown').append(`<option>${unit}</option>`);
+  //            });
+  //            $('#add-ing').click(() => {
+  //              ingApply('');
+  //            });
+  //            $('#cancel-ing').click(() => {
+  //              ingCancel('');
+  //            });
+},
 
   },
-  methods: {
+methods: {
 
 
-  },
-  /* html */
-  template: `
+},
+/* html */
+template: `
     <div>
 
 

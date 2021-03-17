@@ -2,9 +2,7 @@ app.component('Leftpane', {
     emits: ['update-err'],
     data () {
         return {
-            recipeList: [
 
-            ],
             showAddRec: false,
             recName: ''
         };
@@ -12,8 +10,8 @@ app.component('Leftpane', {
     mounted () {
         $.get('/recipes', 'json')
             .done(
-                (recipeList) => {
-                    this.recipeList = recipeList;
+                (/** @type {any} */ recipeList) => {
+                    this.$store.commit('updateRecList', recipeList);
                 },
             ).fail(this.failureOnAjaxOfRecipe);
     },
@@ -25,19 +23,15 @@ app.component('Leftpane', {
          * @param {string | number} idx
          */
         clickRec (idx) {
-            const rec = this.recipeList[idx];
-            for (let i = 0; i < this.recipeList.length; i += 1) {
-                this.recipeList[i].active = false;
-            }
-            rec.active = true;
-            this.$store.commit('setCurRec', rec);
+            this.$store.commit('activateRec', idx);
+            this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
         },
         addRec () {
             const rec = {
                 name: this.recName,
                 ingredients: [
                 ],
-                id: this.recipeList.length,
+                id: this.$store.state.recipeList.length,
                 active: false,
             };
             $.post({
@@ -46,7 +40,7 @@ app.component('Leftpane', {
                 contentType: 'application/json',
                 dataType: 'json',
             }).done(
-                (recipe) => {
+                (/** @type {{ name: number; }} */ recipe) => {
                     // document.getElementById('success').play();
                     this.$store.commit('setCurRec', recipe);
                     let i = 0;
@@ -58,14 +52,16 @@ app.component('Leftpane', {
                     //         break;
                     //     }
                     // }
-                    while (i < this.recipeList.length && this.recipeList[i].name < recipe.name) {
+                    while (i < this.$store.state.recipeList.length && this.$store.state.recipeList[i].name < recipe.name) {
                         i += 1;
                     }
-                    this.recipeList.splice(i, 0, recipe);
+                    let newList = this.$store.state.recipeList;
+                    newList.splice(i, 0, recipe);
+                    this.$store.commit('updateRecList', newList);
                     this.clickRec(i);
                 },
             ).fail(
-                (jqXHR) => {
+                (/** @type {{ [x: string]: string; readyState: number; hasOwnProperty: (arg0: string) => any; responseJSON: { message: string; }; }} */ jqXHR) => {
                     this.failureOnAjaxOfRecipe(jqXHR);
                 },
             );
@@ -162,7 +158,7 @@ app.component('Leftpane', {
             <!--    <div data-offset="0" data-spy="scroll" data-target="#recipe-list">-->
             <ul class="list-group" id="recipe-list">
                 <button type="button" @click="clickRec(idx)" class="list-group-item list-group-item-action"
-                    :class="{active:rec.active}" v-for="(rec,idx) in recipeList">{{rec.name}}</button>
+                    :class="{active:rec.active}" v-for="(rec,idx) in this.$store.state.recipeList">{{rec.name}}</button>
             </ul>
             <div id="add-rec-div" v-show="showAddRec">
                 <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName">

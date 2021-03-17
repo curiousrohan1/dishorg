@@ -143,6 +143,7 @@ app.component('Rightpane', {
                 .done(
                     (recipeList) => {
                         console.log('Got here, and ' + recipeList + ' is the recipe list.')
+                        this.$store.commit('updateRecList', recipeList);
                     },
                 ).fail(this.fail);
 

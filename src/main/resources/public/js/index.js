@@ -3,16 +3,29 @@ const store = Vuex.createStore({
   state () {
     return {
       currentRec: {},
-      showRecTitle: true
+      showRecTitle: true,
+      recipeList: []
     }
   },
   mutations: {
     setCurRec (state, newRec) {
       state.currentRec = newRec;
     },
-    updateCurRec(state, newRec){
+    updateCurRec (state, newRec) {
       state.currentRec.ingredients = newRec.ingredients;
       state.currentRec.name = newRec.name;
+    },
+    updateRecList (state, newRecList) {
+      state.recipeList.length = 0
+      for (let i = 0; i < newRecList.length; i += 1) {
+        state.recipeList.splice(state.recipeList.length, 0, newRecList[i]);
+      }
+    },
+    activateRec (state, idx) {
+      for (let i = 0; i < state.recipeList.length; i += 1) {
+        state.recipeList[i].active = false;
+      }
+      state.recipeList[idx].active = true;
     }
   }
 })
