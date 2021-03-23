@@ -43,7 +43,6 @@ app.component('Leftpane', {
                 (/** @type {{ name: number; }} */ recipe) => {
                     // document.getElementById('success').play();
                     this.$store.commit('setCurRec', recipe);
-                    let i = 0;
                     // while (i < this.recipeList.length) {
                     //     if (this.recipeList[i].name <= recipe.name) {
                     //         i += 1;
@@ -52,13 +51,8 @@ app.component('Leftpane', {
                     //         break;
                     //     }
                     // }
-                    while (i < this.$store.state.recipeList.length && this.$store.state.recipeList[i].name < recipe.name) {
-                        i += 1;
-                    }
-                    let newList = this.$store.state.recipeList;
-                    newList.splice(i, 0, recipe);
-                    this.$store.commit('updateRecList', newList);
-                    this.clickRec(i);
+                    this.$store.commit('addRecipe', recipe);
+                    this.clickRec(this.findRec(recipe));
                 },
             ).fail(
                 (/** @type {{ [x: string]: string; readyState: number; hasOwnProperty: (arg0: string) => any; responseJSON: { message: string; }; }} */ jqXHR) => {
@@ -90,6 +84,13 @@ app.component('Leftpane', {
             // document.getElementById('fail').play();
             this.showAddRec = false;
             this.recName = '';
+        },
+        findRec(recipe){
+          for(let i = 0; i<this.$store.state.recipeList.length; i+=1){
+            if(this.$store.state.recipeList[i]===recipe){
+              return i;
+            }
+          }
         }
         // successOnAjaxOfRecipe (recipe) {
         //     // document.getElementById('success').play();

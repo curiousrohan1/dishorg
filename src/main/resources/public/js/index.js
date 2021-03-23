@@ -16,16 +16,28 @@ const store = Vuex.createStore({
       state.currentRec.name = newRec.name;
     },
     updateRecList (state, newRecList) {
-      state.recipeList.length = 0
+      state.recipeList.length = 0;
       for (let i = 0; i < newRecList.length; i += 1) {
         state.recipeList.splice(state.recipeList.length, 0, newRecList[i]);
+        console.log('i = '+i+', and the recipe selected is ');
+        console.log(state.recipeList[i]);
+        console.log('state.recipeList.length = '+state.recipeList.length);
       }
+      console.log('after loop: state.recipeList.length = '+state.recipeList.length);
     },
     activateRec (state, idx) {
       for (let i = 0; i < state.recipeList.length; i += 1) {
         state.recipeList[i].active = false;
       }
+      console.log(state);
       state.recipeList[idx].active = true;
+    },
+    addRecipe(state, recipe){
+      let i = 0;
+      while (i < state.recipeList.length && state.recipeList[i].name < recipe.name) {
+        i += 1;
+      }
+      state.recipeList.splice(i, 0, recipe);
     }
   }
 })
