@@ -35,7 +35,7 @@
                 </ul>
             </nav>
             <div>
-                <button @click="openModal" id="modal-btn"><img
+                <button click="openModal" id="modal-btn"><img
                         src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
                 </button>
                 <div class="modal" id="account-dropdown" v-show="showModal">
@@ -56,7 +56,7 @@
         <div>
             <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
             <div>
-                <LeftPane @update-err="updateErr($event)" id="left-pane"></LeftPane>
+                <LeftPane @update-err="updateErr($event)" id="left-pane" @cancel-rec-rename="cancelRename"></LeftPane>
                 <RightPane id="right-pane" @update-err="updateErr($event)"></RightPane>
             </div>
         </div>
