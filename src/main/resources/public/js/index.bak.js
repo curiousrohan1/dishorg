@@ -26,11 +26,7 @@ const app = Vue.createApp({
   },
   methods: {
     showAddDiv () {
-      console.log(`this.displayBod was ${this.displayBod}`);
-      console.log(`mountedApp.displayBod was ${mountedApp.displayBod}`);
       this.displayBod = true;
-      console.log(`this.displayBod = ${this.displayBod}`);
-      console.log(`mountedApp.displayBod = ${mountedApp.displayBod}`);
     },
     hideAddDiv () {
       this.displayBod = false;

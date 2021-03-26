@@ -1,4 +1,4 @@
-app.component('Rightpane', {
+let rightPane = app.component('Rightpane', {
     emits: ['update-err'],
     data () {
         return {
@@ -11,7 +11,8 @@ app.component('Rightpane', {
             unitList: [],
             name: '',
             showContainer: true,
-            updateRecList: false
+            updateRecList: false,
+            idx: ''
         };
     },
     mounted () {
@@ -28,10 +29,15 @@ app.component('Rightpane', {
             this.unit = 'Unit';
             this.name = '';
             this.quantity = '';
+            this.showIng(this.idx+1);
         },
         editIng (idx) {
-            const ing = this.$store.state.currentRec.ingredients[idx];
-            console.log(ing)
+            const ing = JSON.parse(JSON.stringify(this.$store.state.currentRec.ingredients[idx]));
+            this.quantity = ing.quantity;
+            this.name = ing.name;
+            this.unit = ing.unit;
+            this.displayIngDiv = true;
+            this.idx = idx;
             // Populate the ingredient's input fields with the current values from mountedApp.curRec and then show
             // the input fields; also hide the "line".
             //      $(`#quantity${idx}`).val(ing.quantity);
@@ -96,7 +102,6 @@ app.component('Rightpane', {
         fail (jqXHR) {
             //      document.getElementById('fail').play();
             let message = '';
-            console.log(jqXHR);
             if (jqXHR.readyState === 0) {
                 message = 'Failed to contact server.';
             } else if (jqXHR.hasOwnProperty('responseJSON')) {
@@ -124,15 +129,15 @@ app.component('Rightpane', {
             }).done(
                 (data) => {
                     this.$store.commit('updateCurRec', data);
+                    this.$store.commit('sortRecList');
                 },
-            )
-                .fail(
-                    (jqXHR) => {
-                        this.$store.state.showRecTitle = true;
-                        this.showRename = false;
-                        this.fail(jqXHR);
-                    },
-                );
+            ).fail(
+                (jqXHR) => {
+                    this.$store.state.showRecTitle = true;
+                    this.showRename = false;
+                    this.fail(jqXHR);
+                },
+            );
             this.showRename = false;
             this.showRecTitle = true;
         },
@@ -142,12 +147,18 @@ app.component('Rightpane', {
             $.get('/recipes', 'json')
                 .done(
                     (recipeList) => {
-                        console.log('Got here, and ' + recipeList + ' is the recipe list.')
                         this.$store.commit('updateRecList', recipeList);
+                        this.$store.commit('sortRecList');
                     },
                 ).fail(this.fail);
 
             this.$emit('update-err', '');
+        },
+        showIng (idx) {
+            if (idx === this.idx) {
+                return false;
+            }
+            return true;
         }
     },
     /* html */
@@ -171,7 +182,7 @@ app.component('Rightpane', {
           <hr>
           <div id="recipe-details-container" v-show="showContainer">
               <ul id="recipe-details">
-                  <li class="ingItem" v-for="(ing,idx) in this.$store.state.currentRec.ingredients">
+                  <li class="ingItem" v-for="(ing,idx) in this.$store.state.currentRec.ingredients" v-show="showIng(idx)">
                       <button @click="editIng(idx)" class="edit-recipes btn">
                           <img src="images/edit.jpg">
                       </button>

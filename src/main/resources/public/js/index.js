@@ -19,25 +19,36 @@ const store = Vuex.createStore({
       state.recipeList.length = 0;
       for (let i = 0; i < newRecList.length; i += 1) {
         state.recipeList.splice(state.recipeList.length, 0, newRecList[i]);
-        console.log('i = '+i+', and the recipe selected is ');
-        console.log(state.recipeList[i]);
-        console.log('state.recipeList.length = '+state.recipeList.length);
       }
-      console.log('after loop: state.recipeList.length = '+state.recipeList.length);
     },
     activateRec (state, idx) {
       for (let i = 0; i < state.recipeList.length; i += 1) {
         state.recipeList[i].active = false;
       }
-      console.log(state);
       state.recipeList[idx].active = true;
     },
-    addRecipe(state, recipe){
+    addRecipe (state, recipe) {
       let i = 0;
       while (i < state.recipeList.length && state.recipeList[i].name < recipe.name) {
         i += 1;
       }
       state.recipeList.splice(i, 0, recipe);
+    },
+    sortRecList (state) {
+      console.log(state.recipeList)
+      state.recipeList.sort(
+        (a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          // a must be equal to b
+          return 0;
+        }
+      );
+      console.log(state.recipeList)
     }
   }
 })
@@ -79,6 +90,9 @@ const app = Vue.createApp({
     },
     updateErr (message) {
       this.error = message;
+    },
+    cancelRename () {
+      console.log(rightPane._component.methods)
     }
   },
   computed: {

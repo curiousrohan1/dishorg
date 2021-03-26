@@ -1,5 +1,5 @@
 app.component('Leftpane', {
-    emits: ['update-err'],
+    emits: ['update-err', 'cancel-rec-rename'],
     data () {
         return {
 
@@ -12,6 +12,7 @@ app.component('Leftpane', {
             .done(
                 (/** @type {any} */ recipeList) => {
                     this.$store.commit('updateRecList', recipeList);
+                    this.$store.commit('sortRecList');
                 },
             ).fail(this.failureOnAjaxOfRecipe);
     },
@@ -25,6 +26,7 @@ app.component('Leftpane', {
         clickRec (idx) {
             this.$store.commit('activateRec', idx);
             this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
+            this.$emit('cancel-rec-rename');
         },
         addRec () {
             const rec = {
@@ -68,7 +70,6 @@ app.component('Leftpane', {
         failureOnAjaxOfRecipe (jqXHR) {
             //      document.getElementById('fail').play();
             let message = '';
-            console.log(jqXHR);
             if (jqXHR.readyState === 0) {
                 message = 'Failed to contact server.';
             } else if (jqXHR.hasOwnProperty('responseJSON')) {
@@ -85,12 +86,12 @@ app.component('Leftpane', {
             this.showAddRec = false;
             this.recName = '';
         },
-        findRec(recipe){
-          for(let i = 0; i<this.$store.state.recipeList.length; i+=1){
-            if(this.$store.state.recipeList[i]===recipe){
-              return i;
+        findRec (recipe) {
+            for (let i = 0; i < this.$store.state.recipeList.length; i += 1) {
+                if (JSON.stringify(this.$store.state.recipeList[i]) === JSON.stringify(recipe)) {
+                    return i;
+                }
             }
-          }
         }
         // successOnAjaxOfRecipe (recipe) {
         //     // document.getElementById('success').play();
