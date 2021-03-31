@@ -191,6 +191,17 @@ let rightPane = app.component('Rightpane', {
         success (recipe) {
             console.log('success!');
             this.$store.commit('setCurRec', recipe);
+        },
+        delIng (idx) {
+            this.$store.state.currentRec.ingredients.splice(idx, 1)
+            $.ajax({
+                type: 'PUT',
+                url: `/recipes/${this.$store.state.currentRec.id}`,
+                data: JSON.stringify(this.$store.state.currentRec),
+                contentType: 'application/json',
+                dataType: 'json',
+            }).fail(this.fail)
+                .done(this.success);
         }
     },
     /* html */
@@ -218,7 +229,7 @@ let rightPane = app.component('Rightpane', {
                       <button @click="editIng(idx)" class="edit-recipes btn">
                           <img src="images/edit.jpg">
                       </button>
-                      <button class="btn openModal" data-target="#cont-del-modal" data-toggle="modal" type="button">
+                      <button class="btn" @click="delIng(idx)">
                           <img src="images/del.png" style="width:30px;height:30px;">
                       </button>
                       {{this.line(ing)}}
