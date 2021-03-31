@@ -48,6 +48,7 @@ let rightPane = app.component('Rightpane', {
             //      $(`#ing-line-container${idx}`).hide();
         },
         applyAddIng () {
+            console.log('Quantity: '+this.quantity+', Name: '+this.name+', and Unit: '+this.unit+'.')
             this.$emit('update-err', '');
             if(this.editIngIdx === -1){
               let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
@@ -68,8 +69,22 @@ let rightPane = app.component('Rightpane', {
               this.name = '';
               this.unit = '[No Unit]';
             }else{
-              console.log('Quantity: '+this.quantity+', Name: '+this.name+', and Unit: '+this.unit='.')
-              this.$store.commit('updateEditIng',this.editIngIdx,this.quantity,this.name,this.unit);
+              console.log('Quantity: '+this.quantity+', Name: '+this.name+', and Unit: '+this.unit+'.')
+              var ing = {
+                quantity:this.quantity,
+                name:this.name,
+                unit:this.unit
+              }
+              var editIngObj={
+                idx:this.editIngIdx,
+                ing:ing
+              }
+              this.$store.commit('updateEditIng',editIngObj);
+              this.displayIngDiv = false;
+              this.unit = '[No Unit]';
+              this.name = '';
+              this.quantity = '';
+              this.editIngIdx = -1;
             }
             //      axios.put(`/recipes/${mountedApp.curRec.id}`, mountedApp.curRec)
             //        .then(this.successOnAjaxOfRecipe)
