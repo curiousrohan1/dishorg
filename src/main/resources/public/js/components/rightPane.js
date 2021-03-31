@@ -12,7 +12,7 @@ let rightPane = app.component('Rightpane', {
             name: '',
             showContainer: true,
             updateRecList: false,
-            idx: ''
+            editIngIdx: -1
         };
     },
     mounted () {
@@ -26,10 +26,10 @@ let rightPane = app.component('Rightpane', {
         cancelAddIng () {
             // document.getElementById('fail').play();
             this.displayIngDiv = false;
-            this.unit = 'Unit';
+            this.unit = '[No Unit]';
             this.name = '';
             this.quantity = '';
-            this.showIng(this.idx+1);
+            this.editIngIdx = -1;
         },
         editIng (idx) {
             const ing = JSON.parse(JSON.stringify(this.$store.state.currentRec.ingredients[idx]));
@@ -37,7 +37,7 @@ let rightPane = app.component('Rightpane', {
             this.name = ing.name;
             this.unit = ing.unit;
             this.displayIngDiv = true;
-            this.idx = idx;
+            this.editIngIdx = idx;
             // Populate the ingredient's input fields with the current values from mountedApp.curRec and then show
             // the input fields; also hide the "line".
             //      $(`#quantity${idx}`).val(ing.quantity);
@@ -49,23 +49,28 @@ let rightPane = app.component('Rightpane', {
         },
         applyAddIng () {
             this.$emit('update-err', '');
-            let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
-            otherRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
-            $.ajax({
-                type: 'PUT',
-                url: `/recipes/${otherRec.id}`,
-                data: JSON.stringify(otherRec),
-                contentType: 'application/json',
-                dataType: 'json',
-            }).fail(this.failureOnAjaxOfRecipe)
-                .done(
-                    (recipe) => {
-                        this.$store.commit('updateCurRec', recipe);
-                    }
-                );
-            this.quantity = 0;
-            this.name = '';
-            this.unit = ''
+            if(this.editIngIdx === -1){
+              let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
+              otherRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
+              $.ajax({
+                  type: 'PUT',
+                  url: `/recipes/${otherRec.id}`,
+                  data: JSON.stringify(otherRec),
+                  contentType: 'application/json',
+                  dataType: 'json',
+              }).fail(this.failureOnAjaxOfRecipe)
+                  .done(
+                      (recipe) => {
+                          this.$store.commit('updateCurRec', recipe);
+                      }
+                  );
+              this.quantity = 0;
+              this.name = '';
+              this.unit = '[No Unit]';
+            }else{
+              console.log('Quantity: '+this.quantity+', Name: '+this.name+', and Unit: '+this.unit='.')
+              this.$store.commit('updateEditIng',this.editIngIdx,this.quantity,this.name,this.unit);
+            }
             //      axios.put(`/recipes/${mountedApp.curRec.id}`, mountedApp.curRec)
             //        .then(this.successOnAjaxOfRecipe)
             //        .catch((error) => {
@@ -73,7 +78,7 @@ let rightPane = app.component('Rightpane', {
             //        });
         },
         line (ing) {
-            return (ing.unit === 'Unit' || ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
+            return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
         },
         applyAddIngI () {
             console.log('applying add-ing...');
@@ -155,7 +160,7 @@ let rightPane = app.component('Rightpane', {
             this.$emit('update-err', '');
         },
         showIng (idx) {
-            if (idx === this.idx) {
+            if (idx === this.editIngIdx) {
                 return false;
             }
             return true;
@@ -198,7 +203,6 @@ let rightPane = app.component('Rightpane', {
                          v-model="quantity"/>
                   <label class="sr-only" for="unit-dropdown">Unit</label>
                   <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown" v-model="unit">
-                      <option selected>Unit</option>
                       <option v-for="unit in unitList">{{unit}}</option>
                   </select>
                   <label class="sr-only" for="name">Name</label>

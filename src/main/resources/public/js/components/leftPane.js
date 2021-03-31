@@ -1,4 +1,4 @@
-app.component('Leftpane', {
+let leftPane=app.component('Leftpane', {
     emits: ['update-err', 'cancel-rec-rename'],
     data () {
         return {
