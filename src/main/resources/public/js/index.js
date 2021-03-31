@@ -50,7 +50,7 @@ const store = Vuex.createStore({
       );
       console.log(state.recipeList)
     },
-    updateEditIng(state,obj){
+    updateEditIng (state, obj) {
       state.currentRec.ingredients[obj.idx] = obj.ing;
     }
   }

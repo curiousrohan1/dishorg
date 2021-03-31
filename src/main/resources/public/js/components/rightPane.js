@@ -48,50 +48,58 @@ let rightPane = app.component('Rightpane', {
             //      $(`#ing-line-container${idx}`).hide();
         },
         applyAddIng () {
-            console.log('Quantity: '+this.quantity+', Name: '+this.name+', and Unit: '+this.unit+'.')
+            console.log('Quantity: ' + this.quantity + ', Name: ' + this.name + ', and Unit: ' + this.unit + '.')
             this.$emit('update-err', '');
-            if(this.editIngIdx === -1){
-              let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
-              otherRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
-              $.ajax({
-                  type: 'PUT',
-                  url: `/recipes/${otherRec.id}`,
-                  data: JSON.stringify(otherRec),
-                  contentType: 'application/json',
-                  dataType: 'json',
-              }).fail(this.failureOnAjaxOfRecipe)
-                  .done(
-                      (recipe) => {
-                          this.$store.commit('updateCurRec', recipe);
-                      }
-                  );
-              this.quantity = 0;
-              this.name = '';
-              this.unit = '[No Unit]';
-            }else{
-              console.log('Quantity: '+this.quantity+', Name: '+this.name+', and Unit: '+this.unit+'.')
-              var ing = {
-                quantity:this.quantity,
-                name:this.name,
-                unit:this.unit
-              }
-              var editIngObj={
-                idx:this.editIngIdx,
-                ing:ing
-              }
-              this.$store.commit('updateEditIng',editIngObj);
-              this.displayIngDiv = false;
-              this.unit = '[No Unit]';
-              this.name = '';
-              this.quantity = '';
-              this.editIngIdx = -1;
+            if (this.editIngIdx === -1) {
+                let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
+                otherRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
+                $.ajax({
+                    type: 'PUT',
+                    url: `/recipes/${otherRec.id}`,
+                    data: JSON.stringify(otherRec),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                }).fail(this.failureOnAjaxOfRecipe)
+                    .done(
+                        (recipe) => {
+                            this.$store.commit('updateCurRec', recipe);
+                        }
+                    );
+                this.quantity = 0;
+                this.name = '';
+                this.unit = '[No Unit]';
+            } else {
+                var editIngObj = {
+                    idx: this.editIngIdx,
+                    ing: {
+                        quantity: this.quantity,
+                        name: this.name,
+                        unit: this.unit
+                    }
+                }
+                this.$store.commit('updateEditIng', editIngObj);
+                this.displayIngDiv = false;
+                this.unit = '[No Unit]';
+                this.name = '';
+                this.quantity = '';
+                this.editIngIdx = -1;
+                $.ajax({
+                    type: 'PUT',
+                    url: `/recipes/${this.$store.state.currentRec.id}`,
+                    data: JSON.stringify(this.$store.state.currentRec),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                }).fail(this.fail)
+                    .done(this.success);
+                // Populate the ingredient`s input fields with the current values from currentRec and then show
+                // the input fields; also hide the "line".
             }
-            //      axios.put(`/recipes/${mountedApp.curRec.id}`, mountedApp.curRec)
-            //        .then(this.successOnAjaxOfRecipe)
-            //        .catch((error) => {
-            //          console.log(error);
-            //        });
         },
+        //      axios.put(`/recipes/${mountedApp.curRec.id}`, mountedApp.curRec)
+        //        .then(this.successOnAjaxOfRecipe)
+        //        .catch((error) => {
+        //          console.log(error);
+        //        });
         line (ing) {
             return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
         },
@@ -179,6 +187,10 @@ let rightPane = app.component('Rightpane', {
                 return false;
             }
             return true;
+        },
+        success (recipe) {
+            console.log('success!');
+            this.$store.commit('setCurRec', recipe);
         }
     },
     /* html */
