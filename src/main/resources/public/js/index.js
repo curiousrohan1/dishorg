@@ -93,6 +93,9 @@ const app = Vue.createApp({
     },
     updateErr (message) {
       this.error = message;
+      window.setTimeout(()=>{
+        this.error='';
+      },3000)
     },
     cancelRename () {
       console.log(rightPane._component.methods)

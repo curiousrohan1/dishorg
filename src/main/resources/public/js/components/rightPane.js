@@ -6,8 +6,8 @@ let rightPane = app.component('Rightpane', {
             showRename: false,
             rename: '',
             displayIngDiv: false,
-            quantity: 0,
-            unit: '',
+            quantity: '',
+            unit: '[No Unit]',
             unitList: [],
             name: '',
             showContainer: true,
@@ -171,6 +171,7 @@ let rightPane = app.component('Rightpane', {
         },
         reset () {
             this.showContainer = false;
+            this.$store.commit('updateCurRec',{});
             // On page load, gets the recipe list, and appends as buttons to a ul in left pane.
             $.get('/recipes', 'json')
                 .done(
@@ -210,7 +211,7 @@ let rightPane = app.component('Rightpane', {
           <div>
               <strong id="rec-title" v-show="showRecTitle">{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
               <div id="renamed-recipe-name" v-show="showRename">
-                  <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename">
+                  <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename" v-on:keyup.enter="applyRecRename">
                   <button @click="applyRecRename" class="btn" id="apply-rec-rename"><img src="images/apply.png"></button>
                   <button @click="cancelRecRename" class="btn" id="cancel-rec-rename"><img src="images/cancel.jpg"></button>
               </div>
@@ -238,14 +239,14 @@ let rightPane = app.component('Rightpane', {
               <form class="form-inline" id="make-ing" v-show="displayIngDiv">
                   <label class="sr-only" for="quantity">Quantity</label>
                   <input class="form-control mb-2 mr-sm-2 inputIngInfo" id="quantity" placeholder="Quantity" type="text"
-                         v-model="quantity"/>
+                         v-model="quantity" v-on:keyup.enter="applyAddIng"/>
                   <label class="sr-only" for="unit-dropdown">Unit</label>
                   <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown" v-model="unit">
                       <option v-for="unit in unitList">{{unit}}</option>
                   </select>
                   <label class="sr-only" for="name">Name</label>
                   <input class="form-control mb-2 mr-sm-2 inputIngInfo" id="name" placeholder="The Food's Name"
-                         type="text" v-model="name"/>
+                         type="text" v-model="name" v-on:keyup.enter="applyAddIng"/>
                   <div class="btn-group" role="group">
                       <button @click="applyAddIng" class="btn"><img src="images/apply.png"></button>
                       <button @click="cancelAddIng" class="btn"><img src="images/cancel.jpg"></button>

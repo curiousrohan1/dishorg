@@ -162,7 +162,7 @@ let leftPane = app.component('Leftpane', {
                     :class="{active:rec.active}" v-for="(rec,idx) in this.$store.state.recipeList">{{rec.name}}</button>
             </ul>
             <div id="add-rec-div" v-show="showAddRec">
-                <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName">
+                <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName" v-on:keyup.enter="addRec">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button class="btn" id="add-rec" @click="addRec"><img src="images/apply.png"></button>
                     <button class="btn" id="cancel-add-rec" @click="cancelAddRec"><img src="images/cancel.jpg"></button>
