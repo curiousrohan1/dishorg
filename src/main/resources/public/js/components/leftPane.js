@@ -9,7 +9,7 @@ let leftPane = app.component('Leftpane', {
     mounted () {
         $.get('/recipes', 'json')
             .done(
-                (/** @type {any} */ recipeList) => {
+                (recipeList) => {
                     this.$store.commit('updateRecList', recipeList);
                     this.$store.commit('sortRecList');
                 },
@@ -19,9 +19,6 @@ let leftPane = app.component('Leftpane', {
         showAddRecDiv () {
             this.showAddRec = true;
         },
-        /**
-         * @param {string | number} idx
-         */
         clickRec (idx) {
             this.$store.commit('activateRec', idx);
             this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
@@ -41,7 +38,7 @@ let leftPane = app.component('Leftpane', {
                 contentType: 'application/json',
                 dataType: 'json',
             }).done(
-                (/** @type {{ name: number; }} */ recipe) => {
+                (recipe) => {
                     // document.getElementById('success').play();
                     this.$store.commit('setCurRec', recipe);
                     // while (i < this.recipeList.length) {
@@ -56,16 +53,13 @@ let leftPane = app.component('Leftpane', {
                     this.clickRec(this.findRec(recipe));
                 },
             ).fail(
-                (/** @type {{ [x: string]: string; readyState: number; hasOwnProperty: (arg0: string) => any; responseJSON: { message: string; }; }} */ jqXHR) => {
+                (jqXHR) => {
                     this.failureOnAjaxOfRecipe(jqXHR);
                 },
             );
             this.showAddRec = false;
             this.recName = ''
         },
-        /**
-         * @param {{ [x: string]: string; readyState: number; hasOwnProperty: (arg0: string) => any; responseJSON: { message: string; }; }} jqXHR
-         */
         failureOnAjaxOfRecipe (jqXHR) {
             //      document.getElementById('fail').play();
             let message = '';
