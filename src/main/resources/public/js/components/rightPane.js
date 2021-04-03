@@ -171,7 +171,7 @@ let rightPane = app.component('Rightpane', {
         },
         reset () {
             this.showContainer = false;
-            this.$store.commit('updateCurRec',{});
+            this.$store.commit('updateCurRec', {});
             // On page load, gets the recipe list, and appends as buttons to a ul in left pane.
             $.get('/recipes', 'json')
                 .done(
