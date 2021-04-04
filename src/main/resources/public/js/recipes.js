@@ -159,8 +159,8 @@ function successOnAjaxOfRecipe(recipe) {
   $('input.inputIngInfo').keypress(function (event) {
     const idx = $(this).data('idx');
     if ($(`#quantity${idx}`).val() !== ''
-        && $(`#name${idx}`).val() !== ''
-        && event.keyCode === 13) {
+      && $(`#name${idx}`).val() !== ''
+      && event.keyCode === 13) {
       $(`#add-ing${idx}`).click();
     }
   });
