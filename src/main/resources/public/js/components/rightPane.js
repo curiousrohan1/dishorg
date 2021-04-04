@@ -171,7 +171,7 @@ app.component('Rightpane', {
             this.$store.commit('setCurRec', recipe);
         },
         delIng (idx) {
-            this.$store.state.currentRec.ingredients.splice(idx, 1)
+            this.$store.commit('delIng', idx)
             $.ajax({
                 type: 'PUT',
                 url: `/recipes/${this.$store.state.currentRec.id}`,
@@ -184,52 +184,62 @@ app.component('Rightpane', {
     },
     /* html */
     template: `
-      <div>
-          <div>
-              <strong id="rec-title" v-show="showRecTitle">{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
-              <div id="renamed-recipe-name" v-show="showRename">
-                  <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename" v-on:keyup.enter="applyRecRename">
-                  <button @click="applyRecRename" class="btn" id="apply-rec-rename"><img src="images/apply.png"></button>
-                  <button @click="cancelRecRename" class="btn" id="cancel-rec-rename"><img src="images/cancel.jpg"></button>
-              </div>
-              <button @click="editRecName" class="btn disabled" id="edit-rec-name" v-show="!showRename"><img
-                      src="images/edit.jpg"></button>
-              <button @click="delRec" class="btn disabled" id="del-rec" v-show="!showRename"><img src="images/del.png">
-              </button>
-              <button @click="plusIng" class="btn text-primary" data-placement="left" data-toggle="tooltip"
-                      id="plus-ing" title="Add ingredient">+
-              </button>
-          </div>
-          <hr>
-          <div id="recipe-details-container" v-show="showContainer">
-              <ul id="recipe-details">
-                  <li class="ingItem" v-for="(ing,idx) in this.$store.state.currentRec.ingredients" v-show="showIng(idx)">
-                      <button @click="editIng(idx)" class="edit-recipes btn">
-                          <img src="images/edit.jpg">
-                      </button>
-                      <button class="btn" @click="delIng(idx)">
-                          <img src="images/del.png" style="width:30px;height:30px;">
-                      </button>
-                      {{this.line(ing)}}
-                  </li>
-              </ul>
-              <form class="form-inline" id="make-ing" v-show="displayIngDiv">
-                  <label class="sr-only" for="quantity">Quantity</label>
-                  <input class="form-control mb-2 mr-sm-2 inputIngInfo" id="quantity" placeholder="Quantity" type="text"
-                         v-model="quantity" v-on:keyup.enter="applyAddIng"/>
-                  <label class="sr-only" for="unit-dropdown">Unit</label>
-                  <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown" v-model="unit">
-                      <option v-for="unit in unitList">{{unit}}</option>
-                  </select>
-                  <label class="sr-only" for="name">Name</label>
-                  <input class="form-control mb-2 mr-sm-2 inputIngInfo" id="name" placeholder="The Food's Name"
-                         type="text" v-model="name" v-on:keyup.enter="applyAddIng"/>
-                  <div class="btn-group" role="group">
-                      <button @click="applyAddIng" class="btn"><img src="images/apply.png"></button>
-                      <button @click="cancelAddIng" class="btn"><img src="images/cancel.jpg"></button>
-                  </div>
-              </form>
-          </div>
-      </div>
+    <div>
+        <div>
+            <strong id="rec-title" v-show="showRecTitle">{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
+            <div id="renamed-recipe-name" v-show="showRename">
+                <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename" v-on:keyup.enter="applyRecRename">
+                <button @click="applyRecRename" class="btn" id="apply-rec-rename">
+                    <img src="images/apply.png">
+                </button>
+            <button @click="cancelRecRename" class="btn" id="cancel-rec-rename">
+                <img src="images/cancel.jpg">
+            </button>
+            </div>
+            <button @click="editRecName" class="btn disabled" id="edit-rec-name" v-show="!showRename">
+                <img src="images/edit.jpg">
+            </button>
+            <button @click="delRec" class="btn disabled" id="del-rec" v-show="!showRename">
+                <img src="images/del.png">
+            </button>
+            <button @click="plusIng" class="btn text-primary" data-placement="left" data-toggle="tooltip"
+                    id="plus-ing" title="Add ingredient">+
+            </button>
+        </div>
+        <hr>
+        <div id="recipe-details-container" v-show="showContainer">
+            <ul id="recipe-details">
+                <li class="ingItem" v-for="(ing,idx) in this.$store.state.currentRec.ingredients" v-show="showIng(idx)">
+                    <button @click="editIng(idx)" class="edit-recipes btn">
+                        <img src="images/edit.jpg">
+                    </button>
+                    <button class="btn" @click="delIng(idx)">
+                        <img src="images/del.png" style="width:30px;height:30px;">
+                    </button>
+                    {{this.line(ing)}}
+                </li>
+            </ul>
+            <form class="form-inline" id="make-ing" v-show="displayIngDiv">
+                <label class="sr-only" for="quantity">Quantity</label>
+                <input class="form-control mb-2 mr-sm-2 inputIngInfo" id="quantity" placeholder="Quantity" type="text"
+                        v-model="quantity" v-on:keyup.enter="applyAddIng"/>
+                <label class="sr-only" for="unit-dropdown">Unit</label>
+                <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown" v-model="unit">
+                    <option v-for="unit in unitList">{{unit}}</option>
+                </select>
+                <label class="sr-only" for="name">Name</label>
+                <input class="form-control mb-2 mr-sm-2 inputIngInfo" id="name" placeholder="The Food's Name"
+                        type="text" v-model="name" v-on:keyup.enter="applyAddIng"/>
+                <div class="btn-group" role="group">
+                    <button @click="applyAddIng" class="btn">
+                        <img src="images/apply.png">
+                    </button>
+                    <button @click="cancelAddIng" class="btn">
+                        <img src="images/cancel.jpg">    
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     `
 })

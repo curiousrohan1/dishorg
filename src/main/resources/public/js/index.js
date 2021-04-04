@@ -48,6 +48,9 @@ const store = Vuex.createStore({
     },
     updateEditIng (state, obj) {
       state.currentRec.ingredients[obj.idx] = obj.ing;
+    },
+    delIng(state,idx){
+      state.currentRec.ingredients.splice(idx,1);
     }
   }
 })
