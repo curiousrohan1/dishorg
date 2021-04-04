@@ -1,4 +1,4 @@
-let leftPane = app.component('Leftpane', {
+app.component('Leftpane', {
     emits: ['update-err', 'cancel-rec-rename'],
     data () {
         return {
@@ -39,16 +39,7 @@ let leftPane = app.component('Leftpane', {
                 dataType: 'json',
             }).done(
                 (recipe) => {
-                    // document.getElementById('success').play();
                     this.$store.commit('setCurRec', recipe);
-                    // while (i < this.recipeList.length) {
-                    //     if (this.recipeList[i].name <= recipe.name) {
-                    //         i += 1;
-                    //     }
-                    //     else {
-                    //         break;
-                    //     }
-                    // }
                     this.$store.commit('addRecipe', recipe);
                     this.clickRec(this.findRec(recipe));
                 },
@@ -61,7 +52,6 @@ let leftPane = app.component('Leftpane', {
             this.recName = ''
         },
         failureOnAjaxOfRecipe (jqXHR) {
-            //      document.getElementById('fail').play();
             let message = '';
             if (jqXHR.readyState === 0) {
                 message = 'Failed to contact server.';
@@ -75,7 +65,6 @@ let leftPane = app.component('Leftpane', {
             this.$emit('update-err', message);
         },
         cancelAddRec () {
-            // document.getElementById('fail').play();
             this.showAddRec = false;
             this.recName = '';
         },
@@ -86,57 +75,6 @@ let leftPane = app.component('Leftpane', {
                 }
             }
         }
-        // successOnAjaxOfRecipe (recipe) {
-        //     // document.getElementById('success').play();
-        //     console.log('success!');
-        //     this.$store.commit('setCurRec', recipe);
-
-        //     if (mountedApp.updateRecList) {
-        //         let i = 0;
-        //         while (i < this.recipeList.length) {
-        //             if (this.recipeList[i] !== mountedApp.curRec) {
-        //                 this.recipeList.splice(i, 1);
-        //                 this.recipeList.splice(i, 0, mountedApp.curRec);
-        //                 mountedApp.updateRecList = false;
-        //                 break;
-        //             }
-        //             i += 1;
-        //         }
-        //     }
-        //     mountedApp.curRec.ingredients.forEach((ingredient, idx) => {
-        //         const line = this.line(ingredient);
-        //         //        /// /
-        //         //        //        $('#recipe-details').append(`<li id="ing-edit${idx}">${getIngDiv(idx)}</li>`);
-        //         //
-        //         //        //        $(`#ing-edit${idx}`).hide();
-        //     });
-        //     //            $('button.edit-recipes').prop('disabled', false);
-        //     //            $('li > div > form > button.cancel').click(function () {
-        //     //              $('button.edit-recipes').prop('disabled', false);
-        //     //              ingCancel($(this).data('idx'));
-        //     //            });
-        //     //            $('li > div > form > button.apply').click(function () {
-        //     //              ingApply($(this).data('idx'));
-        //     //            });
-        //     //            $('button.openModal').click(function () {
-        //     //              currentIdx = $(this).data('idx');
-        //     //            });
-        //     //            $('input.inputIngInfo').keypress(function (event) {
-        //     //              const idx = $(this).data('idx');
-        //     //              if ($(`#quantity${idx}`).val() !== ''
-        //     //                && $(`#name${idx}`).val() !== ''
-        //     //                && event.keyCode === 13) {
-        //     //                $(`#add-ing${idx}`).click();
-        //     //              }
-        //     //            });
-        //     //            $('*').click(() => {
-        //     //              $('#error-message').hide();
-        //     //            });
-        //     //            $('input.inputIngInfo').focus(() => {
-        //     //              $('#error-message').hide();
-        //     //            });
-        //     console.log('all done! with the success!');
-        // },
     },
     /* html */
     template: `

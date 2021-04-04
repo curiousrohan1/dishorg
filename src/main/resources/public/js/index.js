@@ -1,4 +1,3 @@
-// @ts-ignore
 const store = Vuex.createStore({
   state () {
     return {
@@ -35,7 +34,6 @@ const store = Vuex.createStore({
       state.recipeList.splice(i, 0, recipe);
     },
     sortRecList (state) {
-      console.log(state.recipeList)
       state.recipeList.sort(
         (a, b) => {
           if (a.name < b.name) {
@@ -44,11 +42,9 @@ const store = Vuex.createStore({
           if (a.name > b.name) {
             return 1;
           }
-          // a must be equal to b
           return 0;
         }
       );
-      console.log(state.recipeList)
     },
     updateEditIng (state, obj) {
       state.currentRec.ingredients[obj.idx] = obj.ing;
@@ -81,7 +77,6 @@ const app = Vue.createApp({
     };
   },
   methods: {
-
     hideIngDiv () {
       this.displayIngDiv = false;
     },
@@ -97,9 +92,6 @@ const app = Vue.createApp({
         this.error = '';
       }, 3000)
     },
-    cancelRename () {
-      console.log(rightPane._component.methods)
-    }
   },
   computed: {
     displayWarn () {

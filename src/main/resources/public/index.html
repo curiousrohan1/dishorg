@@ -11,7 +11,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/vuex@next"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link href="style.css" rel="stylesheet">
 </head>
 
@@ -35,7 +34,8 @@
                 </ul>
             </nav>
             <div>
-                <button click="openModal" id="modal-btn"><img
+                <button click="openModal" id="modal-btn">
+                    <img
                         src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
                 </button>
                 <div class="modal" id="account-dropdown" v-show="showModal">
@@ -70,8 +70,6 @@
     <script>
         var mountedApp = app.mount('#dishorg')
         $('form').submit(false);
-
-
     </script>
 </body>
 

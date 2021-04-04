@@ -1,4 +1,4 @@
-let rightPane = app.component('Rightpane', {
+app.component('Rightpane', {
     emits: ['update-err'],
     data () {
         return {
@@ -24,7 +24,6 @@ let rightPane = app.component('Rightpane', {
     },
     methods: {
         cancelAddIng () {
-            // document.getElementById('fail').play();
             this.displayIngDiv = false;
             this.unit = '[No Unit]';
             this.name = '';
@@ -38,17 +37,8 @@ let rightPane = app.component('Rightpane', {
             this.unit = ing.unit;
             this.displayIngDiv = true;
             this.editIngIdx = idx;
-            // Populate the ingredient's input fields with the current values from mountedApp.curRec and then show
-            // the input fields; also hide the "line".
-            //      $(`#quantity${idx}`).val(ing.quantity);
-            //      $(`#unit-dropdown${idx}`).val(ing.unit);
-            //      $(`#name${idx}`).val(ing.name);
-            //      $('button.edit-recipes').prop('disabled', true);
-            //      $(`#ing-edit${idx}`).show();
-            //      $(`#ing-line-container${idx}`).hide();
         },
         applyAddIng () {
-            console.log('Quantity: ' + this.quantity + ', Name: ' + this.name + ', and Unit: ' + this.unit + '.')
             this.$emit('update-err', '');
             if (this.editIngIdx === -1) {
                 let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
@@ -91,20 +81,10 @@ let rightPane = app.component('Rightpane', {
                     dataType: 'json',
                 }).fail(this.fail)
                     .done(this.success);
-                // Populate the ingredient`s input fields with the current values from currentRec and then show
-                // the input fields; also hide the "line".
             }
         },
-        //      axios.put(`/recipes/${mountedApp.curRec.id}`, mountedApp.curRec)
-        //        .then(this.successOnAjaxOfRecipe)
-        //        .catch((error) => {
-        //          console.log(error);
-        //        });
         line (ing) {
             return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
-        },
-        applyAddIngI () {
-            console.log('applying add-ing...');
         },
         cancelRecRename () {
             this.showRename = false;
@@ -128,7 +108,6 @@ let rightPane = app.component('Rightpane', {
                 .done(this.reset);
         },
         fail (jqXHR) {
-            //      document.getElementById('fail').play();
             let message = '';
             if (jqXHR.readyState === 0) {
                 message = 'Failed to contact server.';
@@ -172,7 +151,6 @@ let rightPane = app.component('Rightpane', {
         reset () {
             this.showContainer = false;
             this.$store.commit('updateCurRec', {});
-            // On page load, gets the recipe list, and appends as buttons to a ul in left pane.
             $.get('/recipes', 'json')
                 .done(
                     (recipeList) => {
@@ -190,7 +168,6 @@ let rightPane = app.component('Rightpane', {
             return true;
         },
         success (recipe) {
-            console.log('success!');
             this.$store.commit('setCurRec', recipe);
         },
         delIng (idx) {
