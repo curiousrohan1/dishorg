@@ -78,6 +78,7 @@ const app = Vue.createApp({
         'ETC',
       ],
       showRecTitle: true,
+      hovered: false,
     };
   },
   methods: {
@@ -96,6 +97,9 @@ const app = Vue.createApp({
         this.error = '';
       }, 3000)
     },
+    setHover (boole) {
+      this.hovered = boole;
+    }
   },
   computed: {
     displayWarn () {

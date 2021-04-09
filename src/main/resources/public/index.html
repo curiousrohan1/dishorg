@@ -31,7 +31,9 @@
             </div> -->
             <input placeholder="Username">
             <input placeholder="Password">
-            <button id="login-form-submit" class='btn btn-dark'>Log in</button>
+            <button id="login-form-submit" class='btn' @mouseover="setHover(true)" @mouseleave="setHover(false)"
+                :class="btn-dark:hovered,btn-light:!hovered">Log
+                in</button>
             </main>
         </div>
         <div v-show='!this.$store.state.signIn'>
@@ -45,7 +47,7 @@
                     </ul>
                 </nav>
                 <div>
-                    <button click="openModal" id="modal-btn">
+                    <button @click="openModal" id="modal-btn">
                         <img
                             src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
                     </button>
@@ -64,7 +66,7 @@
                 </div>
             </header>
             <div>
-                <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
+                <p class="alert alert-danger" role="alert" id="error-message" v-show="displayWarn">{{error}}</p>
                 <div>
                     <LeftPane @cancel-rec-rename="cancelRename" @update-err="updateErr($event)" id="left-pane">
                     </LeftPane>
