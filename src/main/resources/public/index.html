@@ -15,48 +15,61 @@
 </head>
 
 <body>
+    <audio id="success">
+        <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
+        <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
+    </audio>
+    <audio id="fail">
+        <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
+        <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
+    </audio>
     <div id="dishorg">
-        <audio id="success">
-            <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
-            <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
-        </audio>
-        <audio id="fail">
-            <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
-            <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
-        </audio>
-        <header>
-            <img id="logo" src="images/logo.svg">
-            <nav>
-                <ul id="nav">
-                    <li><a href="#">Make A Grocery List</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Plans</a></li>
-                </ul>
-            </nav>
-            <div>
-                <button click="openModal" id="modal-btn">
-                    <img
-                        src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
-                </button>
-                <div class="modal" id="account-dropdown" v-show="showModal">
-                    <div class="modal-header">
-                        <span @click="closeModal" class="close-btn">&times;</span>
-                        <h1>Your Account</h1>
-                    </div>
-                    <div class="modal-content">
-                        <button v-for="action in actions">{{action}}</button>
-                    </div>
-                    <div class="modal-footer">
-                        <h2>I am the Footer</h2>
+        <div id='sign-in' v-show='this.$store.state.signIn'>
+            <h1 id="login-header">Login</h1>
+            <!-- <div id="login-error-msg-holder">
+                <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
+            </div> -->
+            <input placeholder="Username">
+            <input placeholder="Password">
+            <button id="login-form-submit" class='btn btn-dark'>Log in</button>
+            </main>
+        </div>
+        <div v-show='!this.$store.state.signIn'>
+            <header>
+                <img id="logo" src="images/logo.svg">
+                <nav>
+                    <ul id="nav">
+                        <li><a href="#">Make A Grocery List</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Plans</a></li>
+                    </ul>
+                </nav>
+                <div>
+                    <button click="openModal" id="modal-btn">
+                        <img
+                            src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
+                    </button>
+                    <div class="modal" id="account-dropdown" v-show="showModal">
+                        <div class="modal-header">
+                            <span @click="closeModal" class="close-btn">&times;</span>
+                            <h1>Your Account</h1>
+                        </div>
+                        <div class="modal-content">
+                            <button v-for="action in actions">{{action}}</button>
+                        </div>
+                        <div class="modal-footer">
+                            <h2>I am the Footer</h2>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
-        <div>
-            <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
+            </header>
             <div>
-                <LeftPane @cancel-rec-rename="cancelRename" @update-err="updateErr($event)" id="left-pane"></LeftPane>
-                <RightPane @update-err="updateErr($event)" id="right-pane"></RightPane>
+                <p class="alert-danger" id="error-message" v-show="displayWarn">{{error}}</p>
+                <div>
+                    <LeftPane @cancel-rec-rename="cancelRename" @update-err="updateErr($event)" id="left-pane">
+                    </LeftPane>
+                    <RightPane @update-err="updateErr($event)" id="right-pane"></RightPane>
+                </div>
             </div>
         </div>
     </div>

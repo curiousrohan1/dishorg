@@ -3,7 +3,8 @@ const store = Vuex.createStore({
     return {
       currentRec: {},
       showRecTitle: true,
-      recipeList: []
+      recipeList: [],
+      signIn: true
     }
   },
   mutations: {
@@ -49,8 +50,8 @@ const store = Vuex.createStore({
     updateEditIng (state, obj) {
       state.currentRec.ingredients[obj.idx] = obj.ing;
     },
-    delIng(state,idx){
-      state.currentRec.ingredients.splice(idx,1);
+    delIng (state, idx) {
+      state.currentRec.ingredients.splice(idx, 1);
     }
   }
 })
