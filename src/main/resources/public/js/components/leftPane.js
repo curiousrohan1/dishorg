@@ -1,5 +1,5 @@
 app.component('Leftpane', {
-    emits: ['update-err', 'cancel-rec-rename'],
+    emits: ['update-err'],
     data () {
         return {
             showAddRec: false,
@@ -18,11 +18,11 @@ app.component('Leftpane', {
     methods: {
         showAddRecDiv () {
             this.showAddRec = true;
+            this.$refs.newRecName.focus()
         },
         clickRec (idx) {
             this.$store.commit('activateRec', idx);
             this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
-            this.$emit('cancel-rec-rename');
         },
         addRec () {
             const rec = {
@@ -93,7 +93,7 @@ app.component('Leftpane', {
                     :class="{active:rec.active}" v-for="(rec,idx) in this.$store.state.recipeList">{{rec.name}}</button>
             </ul>
             <div id="add-rec-div" v-show="showAddRec">
-                <input id="new-recipe-name" placeholder="New Recipe name..." type="text" v-model="this.recName" v-on:keyup.enter="addRec">
+                <input ref="newRecName" placeholder="New Recipe name..." type="text" v-model="this.recName" v-on:keyup.enter="addRec">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button class="btn" id="add-rec" @click="addRec">
                         <img src="images/apply.png">

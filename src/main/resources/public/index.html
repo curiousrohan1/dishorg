@@ -24,19 +24,18 @@
         <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
     </audio>
     <div id="dishorg">
-        <div id='sign-in' v-show='this.$store.state.signIn'>
+        <div id='sign-in' v-show='this.signIn'>
             <h1 id="login-header">Login</h1>
             <!-- <div id="login-error-msg-holder">
                 <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
             </div> -->
-            <input placeholder="Username">
-            <input placeholder="Password">
+            <input placeholder="Username" v-model='this.username'>
+            <input placeholder="Password" v-model='this.password'>
             <button id="login-form-submit" class='btn' @mouseover="setHover(true)" @mouseleave="setHover(false)"
-                :class="btn-dark:hovered,btn-light:!hovered">Log
+                :class="classObj" @click="logIn">Log
                 in</button>
-            </main>
         </div>
-        <div v-show='!this.$store.state.signIn'>
+        <div v-show='!this.signIn'>
             <header>
                 <img id="logo" src="images/logo.svg">
                 <nav>
@@ -68,7 +67,7 @@
             <div>
                 <p class="alert alert-danger" role="alert" id="error-message" v-show="displayWarn">{{error}}</p>
                 <div>
-                    <LeftPane @cancel-rec-rename="cancelRename" @update-err="updateErr($event)" id="left-pane">
+                    <LeftPane @update-err="updateErr($event)" id="left-pane">
                     </LeftPane>
                     <RightPane @update-err="updateErr($event)" id="right-pane"></RightPane>
                 </div>

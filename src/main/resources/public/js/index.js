@@ -3,8 +3,7 @@ const store = Vuex.createStore({
     return {
       currentRec: {},
       showRecTitle: true,
-      recipeList: [],
-      signIn: true
+      recipeList: []
     }
   },
   mutations: {
@@ -79,7 +78,13 @@ const app = Vue.createApp({
       ],
       showRecTitle: true,
       hovered: false,
-    };
+      classObj: {
+        'btn-dark': this.hovered, 'btn-light': !this.hovered
+      },
+      username: '',
+      password: '',
+      signIn: true
+    }
   },
   methods: {
     hideIngDiv () {
@@ -99,6 +104,9 @@ const app = Vue.createApp({
     },
     setHover (boole) {
       this.hovered = boole;
+    },
+    logIn () {
+      this.signIn = false;
     }
   },
   computed: {
