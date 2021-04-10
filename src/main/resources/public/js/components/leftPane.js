@@ -80,11 +80,9 @@ app.component('Leftpane', {
     template: `
     <div>
         <div>
-            <strong class="text-primary">
-                <h2>Recipes:</h2>
-            </strong>
-            <button class="btn text-primary" data-placement="right" data-toggle="tooltip" id="plus-rec" title="Add recipe"
-                @click="showAddRecDiv">+</button>
+            <h2 class="text text-success">Recipes:</h2>
+            <button class="btn btn-dark" data-placement="right" data-toggle="tooltip" id="plus-rec" title="Add recipe"
+            @click="showAddRecDiv">+</button>
         </div>
         <hr>
         <div>

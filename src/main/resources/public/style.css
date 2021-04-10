@@ -66,8 +66,6 @@ img{
 }
 #plus-rec{
     float:right;
-    width:3rem;
-    height:3rem;
 }
 .disabled{
     cursor: not-allowed;
@@ -77,9 +75,6 @@ img{
 }
 #error-message{
     text-align: center;
-}
-#logo{
-    width:max-content
 }
 #account-dropdown{
     float:right;
@@ -128,14 +123,6 @@ img{
 .close-btn:hover {
     color: darkgray;
 }
-@-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
-}
-@keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
-}
 modal{
     float:right;
     position:relative;
@@ -158,4 +145,23 @@ modal *{
     margin-left: auto;
     margin-right: auto;
     vertical-align: middle;
+}
+#nav-bar{
+    margin: auto;
+    width: 50%;
+    padding: 5px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+}
+#logo{
+    margin: auto;
+    width: auto;
+    padding: auto;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+    height:auto
 }

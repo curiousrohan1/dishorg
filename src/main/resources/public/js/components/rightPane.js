@@ -186,7 +186,7 @@ app.component('Rightpane', {
     template: `
     <div>
         <div>
-            <strong id="rec-title" v-show="showRecTitle">{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
+            <strong id="rec-title" v-show="showRecTitle" class='text text-success'>{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name" v-show="showRename">
                 <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename" v-on:keyup.enter="applyRecRename">
                 <button @click="applyRecRename" class="btn" id="apply-rec-rename">
@@ -196,13 +196,13 @@ app.component('Rightpane', {
                 <img src="images/cancel.jpg">
             </button>
             </div>
-            <button @click="editRecName" class="btn disabled" id="edit-rec-name" v-show="!showRename">
-                <img src="images/edit.jpg">
+            <button @click="editRecName" class="btn btn-outline-dark" id="edit-rec-name" v-show="!showRename">
+                <img src="images/edit.png">
             </button>
-            <button @click="delRec" class="btn disabled" id="del-rec" v-show="!showRename">
+            <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="!showRename">
                 <img src="images/del.png">
             </button>
-            <button @click="plusIng" class="btn text-primary" data-placement="left" data-toggle="tooltip"
+            <button @click="plusIng" class="btn btn-dark" data-placement="left" data-toggle="tooltip"
                     id="plus-ing" title="Add ingredient">+
             </button>
         </div>
@@ -210,10 +210,10 @@ app.component('Rightpane', {
         <div id="recipe-details-container" v-show="showContainer">
             <ul id="recipe-details">
                 <li class="ingItem" v-for="(ing,idx) in this.$store.state.currentRec.ingredients" v-show="showIng(idx)">
-                    <button @click="editIng(idx)" class="edit-recipes btn">
-                        <img src="images/edit.jpg">
+                    <button @click="editIng(idx)" class="edit-recipes btn btn-outline-dark">
+                        <img src="images/edit.png">
                     </button>
-                    <button class="btn" @click="delIng(idx)">
+                    <button class="btn btn-outline-dark" @click="delIng(idx)">
                         <img src="images/del.png" style="width:30px;height:30px;">
                     </button>
                     {{this.line(ing)}}

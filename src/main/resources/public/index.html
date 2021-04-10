@@ -24,6 +24,34 @@
         <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
     </audio>
     <div id="dishorg">
+        <header id="nav-bar">
+            <img src="images/logo.png">
+            <nav>
+                <ul id="nav">
+                    <li><a href="#">Make A Grocery List</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Plans</a></li>
+                </ul>
+            </nav>
+            <!--                <div>-->
+            <!--                    <button @click="openModal" id="modal-btn">-->
+            <!--                        <img-->
+            <!--                            src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">-->
+            <!--                    </button>-->
+            <!--                    <div class="modal" id="account-dropdown" v-show="showModal">-->
+            <!--                        <div class="modal-header">-->
+            <!--                            <span @click="closeModal" class="close-btn">&times;</span>-->
+            <!--                            <h1>Your Account</h1>-->
+            <!--                        </div>-->
+            <!--                        <div class="modal-content">-->
+            <!--                            <button v-for="action in actions">{{action}}</button>-->
+            <!--                        </div>-->
+            <!--                        <div class="modal-footer">-->
+            <!--                            <h2>I am the Footer</h2>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+        </header>
         <div id='sign-in' v-show='this.signIn'>
             <h1 id="login-header">Login</h1>
             <!-- <div id="login-error-msg-holder">
@@ -36,34 +64,6 @@
                 in</button>
         </div>
         <div v-show='!this.signIn'>
-            <header>
-                <img id="logo" src="images/logo.svg">
-                <nav>
-                    <ul id="nav">
-                        <li><a href="#">Make A Grocery List</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Plans</a></li>
-                    </ul>
-                </nav>
-                <div>
-                    <button @click="openModal" id="modal-btn">
-                        <img
-                            src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">
-                    </button>
-                    <div class="modal" id="account-dropdown" v-show="showModal">
-                        <div class="modal-header">
-                            <span @click="closeModal" class="close-btn">&times;</span>
-                            <h1>Your Account</h1>
-                        </div>
-                        <div class="modal-content">
-                            <button v-for="action in actions">{{action}}</button>
-                        </div>
-                        <div class="modal-footer">
-                            <h2>I am the Footer</h2>
-                        </div>
-                    </div>
-                </div>
-            </header>
             <div>
                 <p class="alert alert-danger" role="alert" id="error-message" v-show="displayWarn">{{error}}</p>
                 <div>

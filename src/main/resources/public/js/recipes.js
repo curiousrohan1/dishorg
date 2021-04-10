@@ -119,7 +119,7 @@ function successOnAjaxOfRecipe(recipe) {
     $('#recipe-details').append(`
       <li id="ing-line-container${idx}">
       <button class="edit-recipes btn" id="edit-ing${idx}" data-idx="${idx}">
-      <img src="images/edit.jpg"style="width:30px;height:30px;">
+      <img src="images/edit.png"style="width:30px;height:30px;">
       </button>
       <button type="button" class="btn openModal" data-toggle="modal" data-idx="${idx}"
       id="open-modal${idx}" data-target="#cont-del-modal">
