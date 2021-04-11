@@ -96,7 +96,13 @@ app.component('Rightpane', {
             this.rename = this.$store.state.currentRec.name;
         },
         plusIng () {
-            this.displayIngDiv = true;
+            if (this.$store.state.currentRec !== {}) {
+                this.displayIngDiv = true;
+                this.$nextTick(() => {
+                    this.$refs.quantity.focus();
+                });
+            }
+            console.log(this.showRightButtons)
         },
         delRec () {
             $.ajax({
@@ -180,6 +186,10 @@ app.component('Rightpane', {
                 dataType: 'json',
             }).fail(this.fail)
                 .done(this.success);
+        },
+        showRightButtons () {
+            console.log(this.$store.state.currentRec);
+            return this.$store.state.currentRec !== {};
         }
     },
     /* html */
@@ -196,14 +206,14 @@ app.component('Rightpane', {
                 <img src="images/cancel.jpg">
             </button>
             </div>
-            <button @click="editRecName" class="btn btn-outline-dark" id="edit-rec-name" v-show="!showRename">
+            <button @click="editRecName" class="btn btn-outline-dark" id="edit-rec-name" v-show="this.showRightButtons">
                 <img src="images/edit.png">
             </button>
-            <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="!showRename">
+            <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="this.showRightButtons">
                 <img src="images/del.png">
             </button>
             <button @click="plusIng" class="btn btn-dark" data-placement="left" data-toggle="tooltip"
-                    id="plus-ing" title="Add ingredient">+
+                    id="plus-ing" title="Add ingredient" v-show="this.showRightButtons">+
             </button>
         </div>
         <hr>
@@ -221,7 +231,7 @@ app.component('Rightpane', {
             </ul>
             <form class="form-inline" id="make-ing" v-show="displayIngDiv">
                 <label class="sr-only" for="quantity">Quantity</label>
-                <input class="form-control mb-2 mr-sm-2 inputIngInfo" id="quantity" placeholder="Quantity" type="text"
+                <input class="form-control mb-2 mr-sm-2 inputIngInfo" ref="quantity" placeholder="Quantity" type="text"
                         v-model="quantity" v-on:keyup.enter="applyAddIng"/>
                 <label class="sr-only" for="unit-dropdown">Unit</label>
                 <select class="form-control mb-2 mr-sm-2 " id="unit-dropdown" v-model="unit">
@@ -241,5 +251,8 @@ app.component('Rightpane', {
             </form>
         </div>
     </div>
-    `
+    `,
+    computed: {
+
+    }
 })

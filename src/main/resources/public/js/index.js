@@ -72,6 +72,7 @@ const app = Vue.createApp({
       updateRecList: false,
       showModal: false,
       actions: [
+        'Options',
         'Change x',
         'Log out',
         'ETC',
@@ -91,10 +92,7 @@ const app = Vue.createApp({
       this.displayIngDiv = false;
     },
     openModal () {
-      this.showModal = true;
-    },
-    closeModal () {
-      this.showModal = false;
+      this.showModal = !this.showModal;
     },
     updateErr (message) {
       this.error = message;
@@ -116,6 +114,11 @@ const app = Vue.createApp({
       }
       return true;
     }
-  }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.username.focus();
+    });
+  },
 });
 app.use(store);

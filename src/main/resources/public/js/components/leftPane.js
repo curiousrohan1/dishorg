@@ -18,7 +18,10 @@ app.component('Leftpane', {
     methods: {
         showAddRecDiv () {
             this.showAddRec = true;
-            this.$refs.newRecName.focus()
+            this.$nextTick(() => {
+                this.$refs.newRecName.focus();
+            });
+
         },
         clickRec (idx) {
             this.$store.commit('activateRec', idx);

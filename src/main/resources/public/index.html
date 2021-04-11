@@ -33,6 +33,12 @@
                     <li><a href="#">Plans</a></li>
                 </ul>
             </nav>
+            <div id='account-dropdown'>
+                <button class="btn" @click="openModal"><img id='prof-pic' src="images/profilePic.jpg"></button>
+                <div v-show="this.showModal"class="btn-group-vertical">
+                        <button v-for="action in actions" class="btn btn-dark btn-group-sm">{{action}}</button>
+                </div>
+            </div>
             <!--                <div>-->
             <!--                    <button @click="openModal" id="modal-btn">-->
             <!--                        <img-->
@@ -55,18 +61,25 @@
         <div id='sign-in' v-show='this.signIn'>
             <h1 id="login-header">Login</h1>
             <!-- <div id="login-error-msg-holder">
-                <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
-            </div> -->
-            <input placeholder="Username" v-model='this.username'>
-            <input placeholder="Password" v-model='this.password'>
-            <button id="login-form-submit" class='btn' @mouseover="setHover(true)" @mouseleave="setHover(false)"
-                :class="classObj" @click="logIn">Log
-                in</button>
+            <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
+        </div> -->
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <input aria-label="Username" class="form-control" placeholder="Username" ref='username' type="text"
+                        v-model='this.username'>
+                    <input aria-label="Password" class="form-control" placeholder="Password" ref='password' type="text"
+                        v-model='this.password'>
+                </div>
+                <button :class="classObj" @click="logIn" @mouseleave="setHover(false)" @mouseover="setHover(true)"
+                    class='btn' id="login-form-submit">Log
+                    in
+                </button>
+            </div>
         </div>
         <div v-show='!this.signIn'>
             <div>
-                <p class="alert alert-danger" role="alert" id="error-message" v-show="displayWarn">{{error}}</p>
-                <div>
+                <p class="alert alert-danger" id="error-message" role="alert" v-show="displayWarn">{{error}}</p>
+                <div class="clearfix">
                     <LeftPane @update-err="updateErr($event)" id="left-pane">
                     </LeftPane>
                     <RightPane @update-err="updateErr($event)" id="right-pane"></RightPane>
@@ -83,6 +96,7 @@
     <script>
         var mountedApp = app.mount('#dishorg')
         $('form').submit(false);
+
     </script>
 </body>
 
