@@ -8,7 +8,15 @@ const store = Vuex.createStore({
   },
   mutations: {
     setCurRec (state, newRec) {
-      state.currentRec = newRec;
+      if (newRec === {}) {
+        for (var prop in state.currentRec) {
+          if (state.currentRec.hasOwnProperty(prop)) {
+            delete state.currentRec[prop];
+          }
+        }
+      } else {
+        state.currentRec = newRec;
+      }
     },
     updateCurRec (state, newRec) {
       state.currentRec.ingredients = newRec.ingredients;
@@ -57,12 +65,6 @@ const store = Vuex.createStore({
 const app = Vue.createApp({
   data () {
     return {
-      accountOpts: [
-        'Information',
-        'Change Password',
-        'Sign Out',
-        'Delete Account',
-      ],
       displayBod: false,
       displayIngDiv: false,
       disabled: true,
@@ -72,10 +74,10 @@ const app = Vue.createApp({
       updateRecList: false,
       showModal: false,
       actions: [
-        'Options',
         'Change x',
+        'Change Password',
         'Log out',
-        'ETC',
+        'Delete Account',
       ],
       showRecTitle: true,
       hovered: false,
@@ -84,7 +86,8 @@ const app = Vue.createApp({
       },
       username: '',
       password: '',
-      signIn: true
+      signIn: true,
+      displayRightPane:true
     }
   },
   methods: {
@@ -105,14 +108,31 @@ const app = Vue.createApp({
     },
     logIn () {
       this.signIn = false;
+    },
+    isEmpty (obj) {
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key))
+          return false;
+      }
+      return true;
+    },
+    hideRightPane(){
+      this.displayRightPane=false;
+    },
+    displayRightPane(){
+      this.displayRightPane=true;
     }
   },
   computed: {
     displayWarn () {
-      if (this.error === '') {
-        return false;
-      }
-      return true;
+      return this.error !== '';
+    },
+    displayModalButton () {
+      return (this.username !== '') && (this.password !== '');
+    },
+    showRightPane () {
+      this.displayRightPane=!this.isEmpty(this.$store.state.currentRec);
+      return !this.isEmpty(this.$store.state.currentRec);
     }
   },
   mounted () {

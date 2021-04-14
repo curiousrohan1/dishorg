@@ -76,14 +76,6 @@ img{
 #error-message{
     text-align: center;
 }
-#account-dropdown{
-    float:right;
-    position: relative;
-}
-#account-dropdown *{
-    display: inline;
-}
-
 #account-img{
     width: 50px;
     height: 50px;
@@ -123,13 +115,6 @@ img{
 .close-btn:hover {
     color: darkgray;
 }
-modal{
-    float:right;
-    position:relative;
-}
-modal *{
-    display:inline;
-}
 #sign-in {
     margin: auto;
     width: 50%;
@@ -165,18 +150,7 @@ modal *{
     vertical-align: middle;
     height:auto
 }
-#account-dropdown{
-    float:right;
-    position:relative;
-}
-#nav-container{
-    display:inline;
-}
 #prof-pic{
     width: 50px;
     height: 50px;
-}
-header div div button{
-  width:50px;
-  height:10px;
 }

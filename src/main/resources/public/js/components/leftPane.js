@@ -1,5 +1,5 @@
 app.component('Leftpane', {
-    emits: ['update-err'],
+    emits: ['update-err','show-right-pane'],
     data () {
         return {
             showAddRec: false,
@@ -53,6 +53,7 @@ app.component('Leftpane', {
             );
             this.showAddRec = false;
             this.recName = ''
+            this.$emit('show-right-pane');
         },
         failureOnAjaxOfRecipe (jqXHR) {
             let message = '';

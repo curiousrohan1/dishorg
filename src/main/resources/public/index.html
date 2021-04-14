@@ -15,15 +15,17 @@
 </head>
 
 <body>
-    <audio id="success">
-        <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
-        <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
-    </audio>
-    <audio id="fail">
-        <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
-        <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
-    </audio>
-    <div id="dishorg">
+<audio id="success">
+    <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
+    <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
+</audio>
+<audio id="fail">
+    <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
+    <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
+</audio>
+<div id="dishorg">
+    <!-- Button trigger modal -->
+    <div>
         <header id="nav-bar">
             <img src="images/logo.png">
             <nav>
@@ -33,71 +35,85 @@
                     <li><a href="#">Plans</a></li>
                 </ul>
             </nav>
-            <div id='account-dropdown'>
-                <button class="btn" @click="openModal"><img id='prof-pic' src="images/profilePic.jpg"></button>
-                <div v-show="this.showModal"class="btn-group-vertical">
-                        <button v-for="action in actions" class="btn btn-dark btn-group-sm">{{action}}</button>
-                </div>
-            </div>
-            <!--                <div>-->
-            <!--                    <button @click="openModal" id="modal-btn">-->
-            <!--                        <img-->
-            <!--                            src="https://cdn1.iconfinder.com/data/icons/foxy-universal-circle-glyph/24/circle-round-userinterface-people-account-person-profile-512.png">-->
-            <!--                    </button>-->
-            <!--                    <div class="modal" id="account-dropdown" v-show="showModal">-->
-            <!--                        <div class="modal-header">-->
-            <!--                            <span @click="closeModal" class="close-btn">&times;</span>-->
-            <!--                            <h1>Your Account</h1>-->
-            <!--                        </div>-->
-            <!--                        <div class="modal-content">-->
-            <!--                            <button v-for="action in actions">{{action}}</button>-->
-            <!--                        </div>-->
-            <!--                        <div class="modal-footer">-->
-            <!--                            <h2>I am the Footer</h2>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                </div>-->
+            <button class="btn" data-target="#account-dropdown" data-toggle="modal" type="button" v-show="this.displayModalButton">
+                <img id='prof-pic' src="images/profilePic.jpg">
+            </button>
         </header>
-        <div id='sign-in' v-show='this.signIn'>
-            <h1 id="login-header">Login</h1>
-            <!-- <div id="login-error-msg-holder">
-            <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
-        </div> -->
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <input aria-label="Username" class="form-control" placeholder="Username" ref='username' type="text"
-                        v-model='this.username'>
-                    <input aria-label="Password" class="form-control" placeholder="Password" ref='password' type="text"
-                        v-model='this.password'>
-                </div>
-                <button :class="classObj" @click="logIn" @mouseleave="setHover(false)" @mouseover="setHover(true)"
-                    class='btn' id="login-form-submit">Log
-                    in
-                </button>
+
+    </div>
+    <div id='sign-in' v-show='this.signIn'>
+        <h1 id="login-header">Login</h1>
+        <!-- <div id="login-error-msg-holder">
+        <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
+    </div> -->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <input aria-label="Username" class="form-control" placeholder="Username" ref='username' type="text"
+                       v-model='this.username'>
+                <input aria-label="Password" class="form-control" placeholder="Password" ref='password' type="text"
+                       v-model='this.password'>
+            </div>
+            <button :class="classObj" @click="logIn" @mouseleave="setHover(false)" @mouseover="setHover(true)"
+                    class='btn' id="login-form-submit">Log in
+            </button>
+        </div>
+    </div>
+    <div v-show='!this.signIn'>
+        <div>
+            <p class="alert alert-danger" id="error-message" role="alert" v-show="displayWarn">{{error}}</p>
+            <div class="clearfix">
+                <LeftPane @update-err="updateErr($event)" @show-right-pane="displayRightPane" id="left-pane"></LeftPane>
+                <RightPane @update-err="updateErr($event)" @hide-right-pane="hideRightPane" id="right-pane" v-show="this.showRightPane&&this.displayRightPane"></RightPane>
             </div>
         </div>
-        <div v-show='!this.signIn'>
-            <div>
-                <p class="alert alert-danger" id="error-message" role="alert" v-show="displayWarn">{{error}}</p>
-                <div class="clearfix">
-                    <LeftPane @update-err="updateErr($event)" id="left-pane">
-                    </LeftPane>
-                    <RightPane @update-err="updateErr($event)" id="right-pane"></RightPane>
+    </div>
+    <div aria-hidden="true" aria-labelledby="accountModalLabel" class="modal fade" id="account-dropdown"
+         tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="accountModalLabel">Your Account</h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="media">
+                        <img src="images/profilePic.jpg" class="mr-3">
+                        <div class="media-body">
+                            <u class="mt-0">Account Info</u>
+                            <br>
+                            Username:<p>{{this.username}}</p>
+                            Password:<p>{{this.password}}</p>
+                        </div>
+                    </div>
+                    <div class="btn-group-vertical">
+                        <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle"
+                                data-toggle="dropdown" id="options" type="button">
+                            Options
+                        </button>
+                        <div aria-labelledby="options" class="dropdown-menu">
+                            <button class='btn btn-link dropdown-item' v-for="action in actions">{{action}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Import App -->
-    <script src="js/index.js"></script>
-    <!-- Import Components -->
-    <script src="js/components/leftPane.js"></script>
-    <script src="js/components/rightPane.js"></script>
-    <!-- Mount App -->
-    <script>
+</div>
+<!-- Import App -->
+<script src="js/index.js"></script>
+<!-- Import Components -->
+<script src="js/components/leftPane.js"></script>
+<script src="js/components/rightPane.js"></script>
+<!-- Mount App -->
+<script>
         var mountedApp = app.mount('#dishorg')
         $('form').submit(false);
-
-    </script>
+</script>
 </body>
 
 </html>

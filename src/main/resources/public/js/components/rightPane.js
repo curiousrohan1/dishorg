@@ -1,5 +1,5 @@
 app.component('Rightpane', {
-    emits: ['update-err'],
+    emits: ['update-err','hide-right-pane'],
     data () {
         return {
             showRecTitle: true,
@@ -14,6 +14,9 @@ app.component('Rightpane', {
             updateRecList: false,
             editIngIdx: -1
         };
+    },
+    computed: {
+
     },
     mounted () {
         $.get('/units').done(
@@ -105,6 +108,7 @@ app.component('Rightpane', {
             console.log(this.showRightButtons)
         },
         delRec () {
+            console.log(this.$store.state.currentRec)
             $.ajax({
                 type: 'DELETE',
                 url: `/recipes/${this.$store.state.currentRec.id}`,
@@ -112,6 +116,9 @@ app.component('Rightpane', {
             })
                 .fail(this.fail)
                 .done(this.reset);
+            if(this.$store.state.recipeList.length===0){
+              this.$emit('hide-right-pane');
+            }
         },
         fail (jqXHR) {
             let message = '';
@@ -251,8 +258,5 @@ app.component('Rightpane', {
             </form>
         </div>
     </div>
-    `,
-    computed: {
-
-    }
+    `
 })
