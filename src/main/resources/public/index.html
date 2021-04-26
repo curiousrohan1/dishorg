@@ -35,7 +35,7 @@
                     <li><a href="#">Plans</a></li>
                 </ul>
             </nav>
-            <button class="btn" data-target="#account-dropdown" data-toggle="modal" type="button" v-show="this.displayModalButton">
+            <button class="btn" data-target="#account-dropdown" data-toggle="modal" type="button" v-show="!this.signIn">
                 <img id='prof-pic' src="images/profilePic.jpg">
             </button>
         </header>
@@ -50,11 +50,11 @@
             <div class="input-group-prepend">
                 <input aria-label="Username" class="form-control" placeholder="Username" ref='username' type="text"
                        v-model='this.username'>
-                <input aria-label="Password" class="form-control" placeholder="Password" ref='password' type="text"
+                <input aria-label="Password" class="form-control" placeholder="Password" ref='password' type="password"
                        v-model='this.password'>
             </div>
             <button :class="classObj" @click="logIn" @mouseleave="setHover(false)" @mouseover="setHover(true)"
-                    class='btn' id="login-form-submit">Log in
+                    class='btn' id="login-form-submit" v-show="this.displayModalButton">Log in
             </button>
         </div>
     </div>
@@ -63,7 +63,7 @@
             <p class="alert alert-danger" id="error-message" role="alert" v-show="displayWarn">{{error}}</p>
             <div class="clearfix">
                 <LeftPane @update-err="updateErr($event)" @show-right-pane="displayRightPane" id="left-pane"></LeftPane>
-                <RightPane @update-err="updateErr($event)" @hide-right-pane="hideRightPane" id="right-pane" v-show="this.showRightPane&&this.displayRightPane"></RightPane>
+                <RightPane @update-err="updateErr($event)" @hide-right-pane="hideRightPane" id="right-pane" v-show="this.rightPaneShow&&this.displayRightPane"></RightPane>
             </div>
         </div>
     </div>
@@ -87,6 +87,8 @@
                             Password:<p>{{this.password}}</p>
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
                     <div class="btn-group-vertical">
                         <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle"
                                 data-toggle="dropdown" id="options" type="button">
@@ -96,8 +98,6 @@
                             <button class='btn btn-link dropdown-item' v-for="action in actions">{{action}}</button>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
                     <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
                 </div>
             </div>

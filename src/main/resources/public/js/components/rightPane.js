@@ -10,7 +10,6 @@ app.component('Rightpane', {
             unit: '[No Unit]',
             unitList: [],
             name: '',
-            showContainer: true,
             updateRecList: false,
             editIngIdx: -1
         };
@@ -162,7 +161,6 @@ app.component('Rightpane', {
             this.showRecTitle = true;
         },
         reset () {
-            this.showContainer = false;
             this.$store.commit('updateCurRec', {});
             $.get('/recipes', 'json')
                 .done(
@@ -213,10 +211,10 @@ app.component('Rightpane', {
                 <img src="images/cancel.jpg">
             </button>
             </div>
-            <button @click="editRecName" class="btn btn-outline-dark" id="edit-rec-name" v-show="this.showRightButtons">
+            <button @click="editRecName" class="btn btn-outline-dark" id="edit-rec-name" v-show="showRecTitle">
                 <img src="images/edit.png">
             </button>
-            <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="this.showRightButtons">
+            <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="showRecTitle">
                 <img src="images/del.png">
             </button>
             <button @click="plusIng" class="btn btn-dark" data-placement="left" data-toggle="tooltip"
@@ -224,7 +222,7 @@ app.component('Rightpane', {
             </button>
         </div>
         <hr>
-        <div id="recipe-details-container" v-show="showContainer">
+        <div id="recipe-details-container">
             <ul id="recipe-details">
                 <li class="ingItem" v-for="(ing,idx) in this.$store.state.currentRec.ingredients" v-show="showIng(idx)">
                     <button @click="editIng(idx)" class="edit-recipes btn btn-outline-dark">

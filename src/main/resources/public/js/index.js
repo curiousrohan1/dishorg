@@ -9,11 +9,12 @@ const store = Vuex.createStore({
   mutations: {
     setCurRec (state, newRec) {
       if (newRec === {}) {
-        for (var prop in state.currentRec) {
-          if (state.currentRec.hasOwnProperty(prop)) {
-            delete state.currentRec[prop];
-          }
-        }
+//        for (var prop in state.currentRec) {
+//          if (state.currentRec.hasOwnProperty(prop)) {
+//            delete state.currentRec[prop];
+//          }
+//        }
+        state.currentRec={};
       } else {
         state.currentRec = newRec;
       }
@@ -87,7 +88,7 @@ const app = Vue.createApp({
       username: '',
       password: '',
       signIn: true,
-      displayRightPane:true
+      rightPaneShow:true
     }
   },
   methods: {
