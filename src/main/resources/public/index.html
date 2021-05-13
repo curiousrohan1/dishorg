@@ -1,119 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Cook It Best</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/vue@next"></script>
+    <!--    <script src="https://unpkg.com/vue-router@next"></script>-->
     <script src="https://unpkg.com/vuex@next"></script>
-    <link href="style.css" rel="stylesheet">
-</head>
+    <link href="style.css" rel="stylesheet" />
+  </head>
 
-<body>
-<audio id="success">
-    <source src="http://soundbible.com/grab.php?id=1003&type=mp3" type="audio/mp3">
-    <source src="http://soundbible.com/grab.php?id=1003&type=wav" type="audio/wav">
-</audio>
-<audio id="fail">
-    <source src="http://soundbible.com/grab.php?id=1945&type=mp3" type="audio/mp3">
-    <source src="http://soundbible.com/grab.php?id=1945&type=wav" type="audio/wav">
-</audio>
-<div id="dishorg">
-    <!-- Button trigger modal -->
-    <div>
-        <header id="nav-bar">
-            <img src="images/logo.png">
-            <nav>
-                <ul id="nav">
-                    <li><a href="#">Make A Grocery List</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Plans</a></li>
-                </ul>
-            </nav>
-            <button class="btn" data-target="#account-dropdown" data-toggle="modal" type="button" v-show="!this.signIn">
-                <img id='prof-pic' src="images/profilePic.jpg">
-            </button>
-        </header>
+  <body>
+    <audio id="success">
+      <source
+        src="http://soundbible.com/grab.php?id=1003&type=mp3"
+        type="audio/mp3"
+      />
+      <source
+        src="http://soundbible.com/grab.php?id=1003&type=wav"
+        type="audio/wav"
+      />
+    </audio>
+    <audio id="fail">
+      <source
+        src="http://soundbible.com/grab.php?id=1945&type=mp3"
+        type="audio/mp3"
+      />
+      <source
+        src="http://soundbible.com/grab.php?id=1945&type=wav"
+        type="audio/wav"
+      />
+    </audio>
+    <div id="dishorg">
+      <!-- Button trigger modal -->
+      <header id="nav-bar">
+        <img src="images/logo.png" />
+        <nav>
+          <ul id="nav">
+            <li>
+              <!--              <router-link to="/make-list">Make A Grocery List</router-link>-->
+            </li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Plans</a></li>
+          </ul>
+        </nav>
+        <button
+          class="btn"
+          data-target="#account-dropdown"
+          data-toggle="modal"
+          type="button"
+          v-show="!this.signIn"
+        >
+          <img id="prof-pic" src="images/profilePic.jpg" />
+        </button>
+      </header>
 
-    </div>
-    <div id='sign-in' v-show='this.signIn'>
-        <h1 id="login-header">Login</h1>
-        <!-- <div id="login-error-msg-holder">
-        <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
-    </div> -->
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <input aria-label="Username" class="form-control" placeholder="Username" ref='username' type="text"
-                       v-model='this.username'>
-                <input aria-label="Password" class="form-control" placeholder="Password" ref='password' type="password"
-                       v-model='this.password'>
-            </div>
-            <button :class="classObj" @click="logIn" @mouseleave="setHover(false)" @mouseover="setHover(true)"
-                    class='btn' id="login-form-submit" v-show="this.displayModalButton">Log in
-            </button>
-        </div>
-    </div>
-    <div v-show='!this.signIn'>
+      <signin id="sign-in" v-if="this.signIn"></signin>
+      <div v-else>
         <div>
-            <p class="alert alert-danger" id="error-message" role="alert" v-show="displayWarn">{{error}}</p>
-            <div class="clearfix">
-                <LeftPane @update-err="updateErr($event)" @show-right-pane="displayRightPane" id="left-pane"></LeftPane>
-                <RightPane @update-err="updateErr($event)" @hide-right-pane="hideRightPane" id="right-pane" v-show="this.rightPaneShow&&this.displayRightPane"></RightPane>
-            </div>
+          <p
+            class="alert alert-danger"
+            id="error-message"
+            role="alert"
+            v-show="displayWarn"
+          >
+            {{error}}
+          </p>
+          <div class="clearfix">
+            <LeftPane
+              @update-err="updateErr($event)"
+              @show-right-pane="displayRightPane"
+              id="left-pane"
+            ></LeftPane>
+            <RightPane
+              @update-err="updateErr($event)"
+              @hide-right-pane="hideRightPane"
+              id="right-pane"
+              v-show="this.rightPaneShow&&this.displayRightPane"
+            ></RightPane>
+          </div>
         </div>
-    </div>
-    <div aria-hidden="true" aria-labelledby="accountModalLabel" class="modal fade" id="account-dropdown"
-         tabindex="-1">
+      </div>
+      <div
+        aria-hidden="true"
+        aria-labelledby="accountModalLabel"
+        class="modal fade"
+        id="account-dropdown"
+        tabindex="-1"
+      >
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="accountModalLabel">Your Account</h5>
-                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="media">
-                        <img src="images/profilePic.jpg" class="mr-3">
-                        <div class="media-body">
-                            <u class="mt-0">Account Info</u>
-                            <br>
-                            Username:<p>{{this.username}}</p>
-                            Password:<p>{{this.password}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="btn-group-vertical">
-                        <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle"
-                                data-toggle="dropdown" id="options" type="button">
-                            Options
-                        </button>
-                        <div aria-labelledby="options" class="dropdown-menu">
-                            <button class='btn btn-link dropdown-item' v-for="action in actions">{{action}}</button>
-                        </div>
-                    </div>
-                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                </div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="accountModalLabel">Your Account</h5>
+              <button
+                aria-label="Close"
+                class="close"
+                data-dismiss="modal"
+                type="button"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
+            <div class="modal-body">
+              <div class="media">
+                <img src="images/profilePic.jpg" class="mr-3" />
+                <div class="media-body">
+                  <u class="mt-0">Account Info</u>
+                  <br />
+                  Username:
+                  <p>{{this.username}}</p>
+                  Password:
+                  <p>{{this.password}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="btn-group-vertical">
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  class="btn dropdown-toggle"
+                  data-toggle="dropdown"
+                  id="options"
+                  type="button"
+                >
+                  Options
+                </button>
+                <div aria-labelledby="options" class="dropdown-menu">
+                  <button
+                    class="btn btn-link dropdown-item"
+                    v-for="action in actions"
+                  >
+                    {{action}}
+                  </button>
+                </div>
+              </div>
+              <button
+                class="btn btn-secondary"
+                data-dismiss="modal"
+                type="button"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-<!-- Import App -->
-<script src="js/index.js"></script>
-<!-- Import Components -->
-<script src="js/components/leftPane.js"></script>
-<script src="js/components/rightPane.js"></script>
-<!-- Mount App -->
-<script>
-        var mountedApp = app.mount('#dishorg')
-        $('form').submit(false);
-</script>
-</body>
-
+    <!-- Import App -->
+    <script src="js/index.js"></script>
+    <!-- Import Components -->
+    <script src="js/components/leftPane.js"></script>
+    <script src="js/components/rightPane.js"></script>
+    <!-- Mount App -->
+    <script>
+      app.mount("#dishorg");
+      $("form").submit(false);
+    </script>
+  </body>
 </html>

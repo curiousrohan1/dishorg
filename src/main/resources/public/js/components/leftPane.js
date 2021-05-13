@@ -1,92 +1,99 @@
 app.component('Leftpane', {
-    emits: ['update-err','show-right-pane'],
-    data () {
-        return {
-            showAddRec: false,
-            recName: ''
-        };
+  emits: ['update-err', 'show-right-pane'],
+  data() {
+    return {
+      showAddRec: false,
+      recName: '',
+      plusRecChar: '+'
+    };
+  },
+  mounted() {
+    $.get('/recipes', 'json')
+      .done(
+        (recipeList) => {
+          this.$store.commit('updateRecList', recipeList);
+          this.$store.commit('sortRecList');
+        },
+      ).fail(this.failureOnAjaxOfRecipe);
+  },
+  methods: {
+    showAddRecDiv() {
+      if (this.plusRecChar === '+') {
+        this.showAddRec = true;
+        this.$nextTick(() => {
+          this.$refs.newRecName.focus();
+        });
+        this.plusRecChar = '-';
+      }
+      else {
+        this.cancelAddRec();
+      }
     },
-    mounted () {
-        $.get('/recipes', 'json')
-            .done(
-                (recipeList) => {
-                    this.$store.commit('updateRecList', recipeList);
-                    this.$store.commit('sortRecList');
-                },
-            ).fail(this.failureOnAjaxOfRecipe);
+    clickRec(idx) {
+      this.$store.commit('activateRec', idx);
+      this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
     },
-    methods: {
-        showAddRecDiv () {
-            this.showAddRec = true;
-            this.$nextTick(() => {
-                this.$refs.newRecName.focus();
-            });
-
+    addRec() {
+      const rec = {
+        name: this.recName,
+        ingredients: [
+        ],
+        id: this.$store.state.recipeList.length,
+        active: false,
+      };
+      $.post({
+        url: 'recipes',
+        data: JSON.stringify(rec),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).done(
+        (recipe) => {
+          this.$store.commit('setCurRec', recipe);
+          this.$store.commit('addRecipe', recipe);
+          this.clickRec(this.findRec(recipe));
         },
-        clickRec (idx) {
-            this.$store.commit('activateRec', idx);
-            this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
+      ).fail(
+        (jqXHR) => {
+          this.failureOnAjaxOfRecipe(jqXHR);
         },
-        addRec () {
-            const rec = {
-                name: this.recName,
-                ingredients: [
-                ],
-                id: this.$store.state.recipeList.length,
-                active: false,
-            };
-            $.post({
-                url: 'recipes',
-                data: JSON.stringify(rec),
-                contentType: 'application/json',
-                dataType: 'json',
-            }).done(
-                (recipe) => {
-                    this.$store.commit('setCurRec', recipe);
-                    this.$store.commit('addRecipe', recipe);
-                    this.clickRec(this.findRec(recipe));
-                },
-            ).fail(
-                (jqXHR) => {
-                    this.failureOnAjaxOfRecipe(jqXHR);
-                },
-            );
-            this.showAddRec = false;
-            this.recName = ''
-            this.$emit('show-right-pane');
-        },
-        failureOnAjaxOfRecipe (jqXHR) {
-            let message = '';
-            if (jqXHR.readyState === 0) {
-                message = 'Failed to contact server.';
-            } else if (jqXHR.hasOwnProperty('responseJSON')) {
-                message = jqXHR.responseJSON.message;
-            } else if (jqXHR.hasOwnProperty('responseText')) {
-                message = jqXHR['responseText'];
-            } else {
-                message = "An unknown error has occured."
-            }
-            this.$emit('update-err', message);
-        },
-        cancelAddRec () {
-            this.showAddRec = false;
-            this.recName = '';
-        },
-        findRec (recipe) {
-            for (let i = 0; i < this.$store.state.recipeList.length; i += 1) {
-                if (JSON.stringify(this.$store.state.recipeList[i]) === JSON.stringify(recipe)) {
-                    return i;
-                }
-            }
+      );
+      this.showAddRec = false;
+      this.recName = ''
+      this.$emit('show-right-pane');
+    },
+    failureOnAjaxOfRecipe(jqXHR) {
+      let message = '';
+      if (jqXHR.readyState === 0) {
+        message = 'Failed to contact server.';
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseJSON')) {
+        message = jqXHR.responseJSON.message;
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
+        message = jqXHR['responseText'];
+      } else {
+        message = "An unknown error has occured."
+      }
+      this.$emit('update-err', message);
+    },
+    cancelAddRec() {
+      this.showAddRec = false;
+      this.recName = '';
+      this.plusRecChar = '-';
+    },
+    findRec(recipe) {
+      for (let i = 0; i < this.$store.state.recipeList.length; i += 1) {
+        if (JSON.stringify(this.$store.state.recipeList[i]) === JSON.stringify(recipe)) {
+          return i;
         }
-    },
-    /* html */
-    template: `
+      }
+    }
+  },
+  /* html */
+  template: `
     <div>
         <div>
             <h2 class="text text-success">Recipes:</h2>
             <button class="btn btn-dark" data-placement="right" data-toggle="tooltip" id="plus-rec" title="Add recipe"
-            @click="showAddRecDiv">+</button>
+            @click="showAddRecDiv">{{this.plusRecChar}}</button>
         </div>
         <hr>
         <div>

@@ -1,5 +1,13 @@
+/* eslint-disable no-undef */
+const groceryList = { template: '<div>make a grocery list</div>' }
+const routes = [
+  {
+    path: '/foo', component: groceryList
+  }
+]
+//const router = new VueRouter({ routes })
 const store = Vuex.createStore({
-  state () {
+  state() {
     return {
       currentRec: {},
       showRecTitle: true,
@@ -7,42 +15,42 @@ const store = Vuex.createStore({
     }
   },
   mutations: {
-    setCurRec (state, newRec) {
+    setCurRec(state, newRec) {
       if (newRec === {}) {
-//        for (var prop in state.currentRec) {
-//          if (state.currentRec.hasOwnProperty(prop)) {
-//            delete state.currentRec[prop];
-//          }
-//        }
-        state.currentRec={};
+        //        for (var prop in state.currentRec) {
+        //          if (state.currentRec.hasOwnProperty(prop)) {
+        //            delete state.currentRec[prop];
+        //          }
+        //        }
+        state.currentRec = {};
       } else {
         state.currentRec = newRec;
       }
     },
-    updateCurRec (state, newRec) {
+    updateCurRec(state, newRec) {
       state.currentRec.ingredients = newRec.ingredients;
       state.currentRec.name = newRec.name;
     },
-    updateRecList (state, newRecList) {
+    updateRecList(state, newRecList) {
       state.recipeList.length = 0;
       for (let i = 0; i < newRecList.length; i += 1) {
         state.recipeList.splice(state.recipeList.length, 0, newRecList[i]);
       }
     },
-    activateRec (state, idx) {
+    activateRec(state, idx) {
       for (let i = 0; i < state.recipeList.length; i += 1) {
         state.recipeList[i].active = false;
       }
       state.recipeList[idx].active = true;
     },
-    addRecipe (state, recipe) {
+    addRecipe(state, recipe) {
       let i = 0;
       while (i < state.recipeList.length && state.recipeList[i].name < recipe.name) {
         i += 1;
       }
       state.recipeList.splice(i, 0, recipe);
     },
-    sortRecList (state) {
+    sortRecList(state) {
       state.recipeList.sort(
         (a, b) => {
           if (a.name < b.name) {
@@ -55,16 +63,17 @@ const store = Vuex.createStore({
         }
       );
     },
-    updateEditIng (state, obj) {
+    updateEditIng(state, obj) {
       state.currentRec.ingredients[obj.idx] = obj.ing;
     },
-    delIng (state, idx) {
+    delIng(state, idx) {
       state.currentRec.ingredients.splice(idx, 1);
     }
   }
 })
 const app = Vue.createApp({
-  data () {
+//  router,
+  data() {
     return {
       displayBod: false,
       displayIngDiv: false,
@@ -88,58 +97,59 @@ const app = Vue.createApp({
       username: '',
       password: '',
       signIn: true,
-      rightPaneShow:true
+      rightPaneShow: true
     }
   },
   methods: {
-    hideIngDiv () {
+    hideIngDiv() {
       this.displayIngDiv = false;
     },
-    openModal () {
+    openModal() {
       this.showModal = !this.showModal;
     },
-    updateErr (message) {
+    updateErr(message) {
       this.error = message;
       window.setTimeout(() => {
         this.error = '';
       }, 3000)
     },
-    setHover (boole) {
+    setHover(boole) {
       this.hovered = boole;
     },
-    logIn () {
+    logIn() {
       this.signIn = false;
     },
-    isEmpty (obj) {
+    isEmpty(obj) {
       for (var key in obj) {
-        if (obj.hasOwnProperty(key))
+        if (Object.prototype.hasOwnProperty.call(obj, key))
           return false;
       }
       return true;
     },
-    hideRightPane(){
-      this.displayRightPane=false;
+    hideRightPane() {
+      this.displayRightPane = false;
     },
-    displayRightPane(){
-      this.displayRightPane=true;
+    displayRightPane() {
+      this.displayRightPane = true;
     }
   },
   computed: {
-    displayWarn () {
+    displayWarn() {
       return this.error !== '';
     },
-    displayModalButton () {
+    displayModalButton() {
       return (this.username !== '') && (this.password !== '');
     },
-    showRightPane () {
-      this.displayRightPane=!this.isEmpty(this.$store.state.currentRec);
+    showRightPane() {
+      this.displayRightPane = !this.isEmpty(this.$store.state.currentRec);
       return !this.isEmpty(this.$store.state.currentRec);
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
+      console.log("this.$refs=")
+      console.log(this.$refs)
       this.$refs.username.focus();
     });
   },
-});
-app.use(store);
+}).use(store);

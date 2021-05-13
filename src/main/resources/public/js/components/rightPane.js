@@ -1,204 +1,207 @@
 app.component('Rightpane', {
-    emits: ['update-err','hide-right-pane'],
-    data () {
-        return {
-            showRecTitle: true,
-            showRename: false,
-            rename: '',
-            displayIngDiv: false,
-            quantity: '',
-            unit: '[No Unit]',
-            unitList: [],
-            name: '',
-            updateRecList: false,
-            editIngIdx: -1
-        };
-    },
-    computed: {
+  emits: ['update-err', 'hide-right-pane'],
+  data() {
+    return {
+      showRecTitle: true,
+      showRename: false,
+      rename: '',
+      displayIngDiv: false,
+      quantity: '',
+      unit: '[No Unit]',
+      unitList: [],
+      name: '',
+      updateRecList: false,
+      editIngIdx: -1,
+      plusIngChar: '+'
+    };
+  },
+  computed: {
 
+  },
+  mounted() {
+    $.get('/units').done(
+      (units) => {
+        this.unitList = units;
+      }
+    ).fail(this.failureOnAjaxOfRecipe);
+  },
+  methods: {
+    cancelAddIng() {
+      this.displayIngDiv = false;
+      this.unit = '[No Unit]';
+      this.name = '';
+      this.quantity = '';
+      this.editIngIdx = -1;
     },
-    mounted () {
-        $.get('/units').done(
-            (units) => {
-                this.unitList = units;
-            }
-        ).fail(this.failureOnAjaxOfRecipe);
+    editIng(idx) {
+      const ing = JSON.parse(JSON.stringify(this.$store.state.currentRec.ingredients[idx]));
+      this.quantity = ing.quantity;
+      this.name = ing.name;
+      this.unit = ing.unit;
+      this.displayIngDiv = true;
+      this.editIngIdx = idx;
     },
-    methods: {
-        cancelAddIng () {
-            this.displayIngDiv = false;
-            this.unit = '[No Unit]';
-            this.name = '';
-            this.quantity = '';
-            this.editIngIdx = -1;
-        },
-        editIng (idx) {
-            const ing = JSON.parse(JSON.stringify(this.$store.state.currentRec.ingredients[idx]));
-            this.quantity = ing.quantity;
-            this.name = ing.name;
-            this.unit = ing.unit;
-            this.displayIngDiv = true;
-            this.editIngIdx = idx;
-        },
-        applyAddIng () {
-            this.$emit('update-err', '');
-            if (this.editIngIdx === -1) {
-                let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
-                otherRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
-                $.ajax({
-                    type: 'PUT',
-                    url: `/recipes/${otherRec.id}`,
-                    data: JSON.stringify(otherRec),
-                    contentType: 'application/json',
-                    dataType: 'json',
-                }).fail(this.failureOnAjaxOfRecipe)
-                    .done(
-                        (recipe) => {
-                            this.$store.commit('updateCurRec', recipe);
-                        }
-                    );
-                this.quantity = 0;
-                this.name = '';
-                this.unit = '[No Unit]';
-            } else {
-                var editIngObj = {
-                    idx: this.editIngIdx,
-                    ing: {
-                        quantity: this.quantity,
-                        name: this.name,
-                        unit: this.unit
-                    }
-                }
-                this.$store.commit('updateEditIng', editIngObj);
-                this.displayIngDiv = false;
-                this.unit = '[No Unit]';
-                this.name = '';
-                this.quantity = '';
-                this.editIngIdx = -1;
-                $.ajax({
-                    type: 'PUT',
-                    url: `/recipes/${this.$store.state.currentRec.id}`,
-                    data: JSON.stringify(this.$store.state.currentRec),
-                    contentType: 'application/json',
-                    dataType: 'json',
-                }).fail(this.fail)
-                    .done(this.success);
+    applyAddIng() {
+      this.$emit('update-err', '');
+      if (this.editIngIdx === -1) {
+        let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
+        otherRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
+        $.ajax({
+          type: 'PUT',
+          url: `/recipes/${otherRec.id}`,
+          data: JSON.stringify(otherRec),
+          contentType: 'application/json',
+          dataType: 'json',
+        }).fail(this.failureOnAjaxOfRecipe)
+          .done(
+            (recipe) => {
+              this.$store.commit('updateCurRec', recipe);
             }
-        },
-        line (ing) {
-            return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
-        },
-        cancelRecRename () {
-            this.showRename = false;
-            this.showRecTitle = true;
-        },
-        editRecName () {
-            this.showRename = true;
-            this.showRecTitle = false;
-            this.rename = this.$store.state.currentRec.name;
-        },
-        plusIng () {
-            if (this.$store.state.currentRec !== {}) {
-                this.displayIngDiv = true;
-                this.$nextTick(() => {
-                    this.$refs.quantity.focus();
-                });
-            }
-            console.log(this.showRightButtons)
-        },
-        delRec () {
-            console.log(this.$store.state.currentRec)
-            $.ajax({
-                type: 'DELETE',
-                url: `/recipes/${this.$store.state.currentRec.id}`,
-                dataType: 'json',
-            })
-                .fail(this.fail)
-                .done(this.reset);
-            if(this.$store.state.recipeList.length===0){
-              this.$emit('hide-right-pane');
-            }
-        },
-        fail (jqXHR) {
-            let message = '';
-            if (jqXHR.readyState === 0) {
-                message = 'Failed to contact server.';
-            } else if (jqXHR.hasOwnProperty('responseJSON')) {
-                message = jqXHR.responseJSON.message;
-            } else if (jqXHR.hasOwnProperty('responseText')) {
-                message = jqXHR['responseText'];
-            } else {
-                message = "An unknown error has occured."
-            }
-            this.$emit('update-err', message);
-        },
-        applyRecRename () {
-            if (this.rename === this.$store.state.currentRec.name) {
-                this.cancelRecRename();
-                return;
-            }
-            this.$emit('update-err', '');
-            const otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec));
-            otherRec.name = this.rename;
-            $.post({
-                url: 'recipes',
-                data: JSON.stringify(otherRec),
-                contentType: 'application/json',
-                dataType: 'json',
-            }).done(
-                (data) => {
-                    this.$store.commit('updateCurRec', data);
-                    this.$store.commit('sortRecList');
-                },
-            ).fail(
-                (jqXHR) => {
-                    this.$store.state.showRecTitle = true;
-                    this.showRename = false;
-                    this.fail(jqXHR);
-                },
-            );
-            this.showRename = false;
-            this.showRecTitle = true;
-        },
-        reset () {
-            this.$store.commit('updateCurRec', {});
-            $.get('/recipes', 'json')
-                .done(
-                    (recipeList) => {
-                        this.$store.commit('updateRecList', recipeList);
-                        this.$store.commit('sortRecList');
-                    },
-                ).fail(this.fail);
-
-            this.$emit('update-err', '');
-        },
-        showIng (idx) {
-            if (idx === this.editIngIdx) {
-                return false;
-            }
-            return true;
-        },
-        success (recipe) {
-            this.$store.commit('setCurRec', recipe);
-        },
-        delIng (idx) {
-            this.$store.commit('delIng', idx)
-            $.ajax({
-                type: 'PUT',
-                url: `/recipes/${this.$store.state.currentRec.id}`,
-                data: JSON.stringify(this.$store.state.currentRec),
-                contentType: 'application/json',
-                dataType: 'json',
-            }).fail(this.fail)
-                .done(this.success);
-        },
-        showRightButtons () {
-            console.log(this.$store.state.currentRec);
-            return this.$store.state.currentRec !== {};
+          );
+        this.quantity = 0;
+        this.name = '';
+        this.unit = '[No Unit]';
+      } else {
+        var editIngObj = {
+          idx: this.editIngIdx,
+          ing: {
+            quantity: this.quantity,
+            name: this.name,
+            unit: this.unit
+          }
         }
+        this.$store.commit('updateEditIng', editIngObj);
+        this.displayIngDiv = false;
+        this.unit = '[No Unit]';
+        this.name = '';
+        this.quantity = '';
+        this.editIngIdx = -1;
+        $.ajax({
+          type: 'PUT',
+          url: `/recipes/${this.$store.state.currentRec.id}`,
+          data: JSON.stringify(this.$store.state.currentRec),
+          contentType: 'application/json',
+          dataType: 'json',
+        }).fail(this.fail)
+          .done(this.success);
+      }
     },
-    /* html */
-    template: `
+    line(ing) {
+      return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
+    },
+    cancelRecRename() {
+      this.showRename = false;
+      this.showRecTitle = true;
+    },
+    editRecName() {
+      this.showRename = true;
+      this.showRecTitle = false;
+      this.rename = this.$store.state.currentRec.name;
+    },
+    plusIng() {
+      if (this.plusRecChar === '+') {
+        if (this.$store.state.currentRec !== {}) {
+          this.displayIngDiv = true;
+          this.$nextTick(() => {
+            this.$refs.quantity.focus();
+          });
+        }
+      }
+      else {
+        this.cancelAddIng();
+      }
+    },
+    delRec() {
+      $.ajax({
+        type: 'DELETE',
+        url: `/recipes/${this.$store.state.currentRec.id}`,
+        dataType: 'json',
+      })
+        .fail(this.fail)
+        .done(this.reset);
+      if (this.$store.state.recipeList.length === 0) {
+        this.$emit('hide-right-pane');
+      }
+    },
+    fail(jqXHR) {
+      let message = '';
+      if (jqXHR.readyState === 0) {
+        message = 'Failed to contact server.';
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseJSON')) {
+        message = jqXHR.responseJSON.message;
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
+        message = jqXHR['responseText'];
+      } else {
+        message = "An unknown error has occured."
+      }
+      this.$emit('update-err', message);
+    },
+    applyRecRename() {
+      if (this.rename === this.$store.state.currentRec.name) {
+        this.cancelRecRename();
+        return;
+      }
+      this.$emit('update-err', '');
+      const otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec));
+      otherRec.name = this.rename;
+      $.post({
+        url: 'recipes',
+        data: JSON.stringify(otherRec),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).done(
+        (data) => {
+          this.$store.commit('updateCurRec', data);
+          this.$store.commit('sortRecList');
+        },
+      ).fail(
+        (jqXHR) => {
+          this.$store.state.showRecTitle = true;
+          this.showRename = false;
+          this.fail(jqXHR);
+        },
+      );
+      this.showRename = false;
+      this.showRecTitle = true;
+    },
+    reset() {
+      this.$store.commit('updateCurRec', {});
+      $.get('/recipes', 'json')
+        .done(
+          (recipeList) => {
+            this.$store.commit('updateRecList', recipeList);
+            this.$store.commit('sortRecList');
+          },
+        ).fail(this.fail);
+
+      this.$emit('update-err', '');
+    },
+    showIng(idx) {
+      if (idx === this.editIngIdx) {
+        return false;
+      }
+      return true;
+    },
+    success(recipe) {
+      this.$store.commit('setCurRec', recipe);
+    },
+    delIng(idx) {
+      this.$store.commit('delIng', idx)
+      $.ajax({
+        type: 'PUT',
+        url: `/recipes/${this.$store.state.currentRec.id}`,
+        data: JSON.stringify(this.$store.state.currentRec),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).fail(this.fail)
+        .done(this.success);
+    },
+    showRightButtons() {
+      return this.$store.state.currentRec !== {};
+    }
+  },
+  /* html */
+  template: `
     <div>
         <div>
             <strong id="rec-title" v-show="showRecTitle" class='text text-success'>{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
@@ -218,7 +221,7 @@ app.component('Rightpane', {
                 <img src="images/del.png">
             </button>
             <button @click="plusIng" class="btn btn-dark" data-placement="left" data-toggle="tooltip"
-                    id="plus-ing" title="Add ingredient" v-show="this.showRightButtons">+
+                    id="plus-ing" title="Add ingredient" v-show="this.showRightButtons">{{plusIngChar}}
             </button>
         </div>
         <hr>
