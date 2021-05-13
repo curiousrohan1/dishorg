@@ -1,11 +1,17 @@
-/* eslint-disable no-undef */
 const groceryList = { template: '<div>make a grocery list</div>' }
+const home={template:'<div>Home</div>'}
 const routes = [
   {
     path: '/foo', component: groceryList
+  },
+  {
+    path:'/', component:home
   }
 ]
-//const router = new VueRouter({ routes })
+const router = VueRouter.createRouter({
+  history: VueRouter.createWebHashHistory(),
+  routes
+})
 const store = Vuex.createStore({
   state() {
     return {
@@ -72,7 +78,6 @@ const store = Vuex.createStore({
   }
 })
 const app = Vue.createApp({
-//  router,
   data() {
     return {
       displayBod: false,
@@ -144,12 +149,5 @@ const app = Vue.createApp({
       this.displayRightPane = !this.isEmpty(this.$store.state.currentRec);
       return !this.isEmpty(this.$store.state.currentRec);
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      console.log("this.$refs=")
-      console.log(this.$refs)
-      this.$refs.username.focus();
-    });
-  },
-}).use(store);
+  }
+}).use(store).use(router);

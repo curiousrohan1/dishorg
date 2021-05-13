@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/vue@next"></script>
-    <!--    <script src="https://unpkg.com/vue-router@next"></script>-->
+    <script src="https://unpkg.com/vue-router@4"></script>
     <script src="https://unpkg.com/vuex@next"></script>
     <link href="style.css" rel="stylesheet" />
   </head>
@@ -45,7 +45,7 @@
         <nav>
           <ul id="nav">
             <li>
-              <!--              <router-link to="/make-list">Make A Grocery List</router-link>-->
+              <router-link to="/foo">Make A Grocery List</router-link>
             </li>
             <li><a href="#">Help</a></li>
             <li><a href="#">Plans</a></li>
@@ -62,8 +62,8 @@
         </button>
       </header>
 
-      <signin id="sign-in" v-if="this.signIn"></signin>
-      <div v-else>
+<!--      <signin id="sign-in" v-if="this.signIn"></signin>-->
+      <div>
         <div>
           <p
             class="alert alert-danger"
@@ -159,6 +159,7 @@
     <!-- Import Components -->
     <script src="js/components/leftPane.js"></script>
     <script src="js/components/rightPane.js"></script>
+    <script src="js/views/signIn.js"></script>
     <!-- Mount App -->
     <script>
       app.mount("#dishorg");

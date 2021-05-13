@@ -35,5 +35,10 @@ app.component('Signin', {
           </button>
         </div>
       </div>
-  `
+  `,
+  mounted() {
+      this.$nextTick(() => {
+        this.$refs.username.focus();
+      });
+    },
 })
