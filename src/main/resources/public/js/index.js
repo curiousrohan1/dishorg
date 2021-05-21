@@ -1,11 +1,20 @@
+import Makerec from "views/makeRec.js";
+import Signin from "views/signIn.js";
 const groceryList = { template: '<div>make a grocery list</div>' }
-const home={template:'<div>Home</div>'}
+const home = { template: '<div>Home</div>' }
+
 const routes = [
   {
-    path: '/foo', component: groceryList
+    path: '/groceries', component: groceryList
   },
   {
-    path:'/', component:home
+    path: '/', component: home
+  },
+  {
+    path: '/make-a-recipe', component: Makerec
+  },
+  {
+    path: '/sign-in', component: Signin
   }
 ]
 const router = VueRouter.createRouter({
@@ -17,7 +26,8 @@ const store = Vuex.createStore({
     return {
       currentRec: {},
       showRecTitle: true,
-      recipeList: []
+      recipeList: [],
+      error: ''
     }
   },
   mutations: {
@@ -74,6 +84,9 @@ const store = Vuex.createStore({
     },
     delIng(state, idx) {
       state.currentRec.ingredients.splice(idx, 1);
+    },
+    setError(state, newError) {
+      state.error = newError;
     }
   }
 })
@@ -83,7 +96,6 @@ const app = Vue.createApp({
       displayBod: false,
       displayIngDiv: false,
       disabled: true,
-      error: '',
       recName: '',
       curRec: {},
       updateRecList: false,
@@ -95,14 +107,9 @@ const app = Vue.createApp({
         'Delete Account',
       ],
       showRecTitle: true,
-      hovered: false,
-      classObj: {
-        'btn-dark': this.hovered, 'btn-light': !this.hovered
-      },
-      username: '',
-      password: '',
       signIn: true,
-      rightPaneShow: true
+      username: '',
+      password: ''
     }
   },
   methods: {
@@ -112,18 +119,7 @@ const app = Vue.createApp({
     openModal() {
       this.showModal = !this.showModal;
     },
-    updateErr(message) {
-      this.error = message;
-      window.setTimeout(() => {
-        this.error = '';
-      }, 3000)
-    },
-    setHover(boole) {
-      this.hovered = boole;
-    },
-    logIn() {
-      this.signIn = false;
-    },
+
     isEmpty(obj) {
       for (var key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key))
@@ -131,23 +127,15 @@ const app = Vue.createApp({
       }
       return true;
     },
-    hideRightPane() {
-      this.displayRightPane = false;
-    },
-    displayRightPane() {
-      this.displayRightPane = true;
+
+    setCreds(obj) {
+      this.username = obj.username;
+      this.password = obj.password;
     }
   },
   computed: {
-    displayWarn() {
-      return this.error !== '';
-    },
-    displayModalButton() {
-      return (this.username !== '') && (this.password !== '');
-    },
-    showRightPane() {
-      this.displayRightPane = !this.isEmpty(this.$store.state.currentRec);
-      return !this.isEmpty(this.$store.state.currentRec);
-    }
+
+
+
   }
 }).use(store).use(router);

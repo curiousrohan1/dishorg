@@ -1,4 +1,37 @@
-app.component('Signin', {
+export default app.component('Signin', {
+  emits: ['usrnm-psswd'],
+  data() {
+    return {
+      username: '',
+      password: '',
+      hovered: false,
+      classObj: {
+        'btn-dark': this.hovered, 'btn-light': !this.hovered
+      },
+    }
+  },
+  computed: {
+    displayModalButton() {
+      return (this.username !== '') && (this.password !== '');
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.username.focus();
+    });
+  },
+  methods: {
+    logIn() {
+      this.signIn = false;
+      this.$emit('usrnm-psswd', {
+        username: this.username,
+        password: this.password
+      })
+    },
+    setHover(boole) {
+      this.hovered = boole;
+    },
+  },
   /*html*/
   template: `
      <div>
@@ -35,10 +68,5 @@ app.component('Signin', {
           </button>
         </div>
       </div>
-  `,
-  mounted() {
-      this.$nextTick(() => {
-        this.$refs.username.focus();
-      });
-    },
-})
+  `
+});

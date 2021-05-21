@@ -45,7 +45,7 @@
         <nav>
           <ul id="nav">
             <li>
-              <router-link to="/foo">Make A Grocery List</router-link>
+              <router-link to="/make-a-recipe">Make A Grocery List</router-link>
             </li>
             <li><a href="#">Help</a></li>
             <li><a href="#">Plans</a></li>
@@ -61,33 +61,10 @@
           <img id="prof-pic" src="images/profilePic.jpg" />
         </button>
       </header>
+      <router-view></router-view>
 
-<!--      <signin id="sign-in" v-if="this.signIn"></signin>-->
-      <div>
-        <div>
-          <p
-            class="alert alert-danger"
-            id="error-message"
-            role="alert"
-            v-show="displayWarn"
-          >
-            {{error}}
-          </p>
-          <div class="clearfix">
-            <LeftPane
-              @update-err="updateErr($event)"
-              @show-right-pane="displayRightPane"
-              id="left-pane"
-            ></LeftPane>
-            <RightPane
-              @update-err="updateErr($event)"
-              @hide-right-pane="hideRightPane"
-              id="right-pane"
-              v-show="this.rightPaneShow&&this.displayRightPane"
-            ></RightPane>
-          </div>
-        </div>
-      </div>
+<!--      <signin id="sign-in" v-if="this.signIn" @usrnm-psswd="setCreds(this.$event)"></signin>-->
+
       <div
         aria-hidden="true"
         aria-labelledby="accountModalLabel"
