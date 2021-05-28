@@ -1,4 +1,4 @@
-export default  = app.component('Makerec', {
+let makeRec = app.component('Makerec', {
   data() {
     return {
       exhibitRightPane: false
@@ -27,8 +27,8 @@ export default  = app.component('Makerec', {
     },
   },
   /*html*/
-  template:
-    `<div>
+  template: `
+    <div>
       <div>
         <p
           class="alert alert-danger"
@@ -52,6 +52,6 @@ export default  = app.component('Makerec', {
           ></RightPane>
         </div>
       </div>
-    </div>`
-
-})
+    </div>
+`
+});

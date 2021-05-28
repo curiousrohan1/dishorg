@@ -1,26 +1,4 @@
-import Makerec from "views/makeRec.js";
-import Signin from "views/signIn.js";
-const groceryList = { template: '<div>make a grocery list</div>' }
-const home = { template: '<div>Home</div>' }
 
-const routes = [
-  {
-    path: '/groceries', component: groceryList
-  },
-  {
-    path: '/', component: home
-  },
-  {
-    path: '/make-a-recipe', component: Makerec
-  },
-  {
-    path: '/sign-in', component: Signin
-  }
-]
-const router = VueRouter.createRouter({
-  history: VueRouter.createWebHashHistory(),
-  routes
-})
 const store = Vuex.createStore({
   state() {
     return {
@@ -138,4 +116,4 @@ const app = Vue.createApp({
 
 
   }
-}).use(store).use(router);
+}).use(store);

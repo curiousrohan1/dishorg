@@ -1,4 +1,4 @@
-export default app.component('Signin', {
+let signIn = app.component('Signin', {
   emits: ['usrnm-psswd'],
   data() {
     return {
