@@ -1,18 +1,43 @@
-const groceryList = { template: '<div>make a grocery list</div>' }
-const home = { template: '<div>Home</div>' }
-
 const routes = [
   {
-    path: '/groceries', component: groceryList
+    path: '/make-a-grocery-list',
+    component: {
+      template: `
+        <Makegrocery></Makegrocery>
+       `
+    }
   },
   {
-    path: '/', component: home
+    path: '/',
+    component: {
+      template: `
+        <Home></Home>
+      `
+    }
   },
   {
-    path: '/sign-in', component: signIn
+    path: '/sign-in',
+    component: {
+      template: `
+        <Signin></Signin>
+      `
+    }
   },
   {
-    path: '/make-a-recipe', component: makeRec
+    path: '/make-a-recipe',
+    component: {
+      template: `
+        <Makerec></Makerec>
+      `
+    }
+  },
+  {
+    path: '/help',
+    component: {
+      template: `
+        <Help></Help>
+      `
+    }
   }
 ]
 const router = VueRouter.createRouter({

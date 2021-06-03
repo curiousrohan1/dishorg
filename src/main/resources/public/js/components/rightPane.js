@@ -1,5 +1,5 @@
-app.component('Rightpane', {
-  emits: ['update-err', 'hide-right-pane'],
+let rightPane=app.component('Rightpane', {
+  emits: ['update-err'],
   data() {
     return {
       showRecTitle: true,
@@ -119,9 +119,9 @@ app.component('Rightpane', {
       })
         .fail(this.fail)
         .done(this.reset);
-      if (this.$store.state.recipeList.length === 0) {
-        this.$emit('hide-right-pane');
-      }
+//      if (this.$store.state.recipeList.length === 0) {
+//        this.$emit('hide-right-pane');
+//      }
     },
     fail(jqXHR) {
       let message = '';

@@ -41,30 +41,33 @@
     <div id="dishorg">
       <!-- Button trigger modal -->
       <header id="nav-bar">
-        <img src="images/logo.png" />
+        <router-link to="/"> <img src="images/logo.png" /> </router-link>
         <nav>
-          <ul id="nav">
+          <ul id="nav" v-show="!this.signedIn">
             <li>
-              <router-link to="/sign-in">Make A Grocery List</router-link>
+              <router-link to="/make-a-grocery-list">
+                Make a Grocery List
+              </router-link>
             </li>
-            <li><a href="#">Help</a></li>
-            <li><a href="#">Plans</a></li>
+            <li>
+              <router-link to="/make-a-recipe">Make a Recipe</router-link>
+            </li>
+            <li>
+              <router-link to="/help">Help</router-link>
+            </li>
+            <li>
+              <button
+                class="btn"
+                data-target="#account-dropdown"
+                data-toggle="modal"
+              >
+                <img id="prof-pic" src="images/profilePic.jpg" />
+              </button>
+            </li>
           </ul>
         </nav>
-        <button
-          class="btn"
-          data-target="#account-dropdown"
-          data-toggle="modal"
-          type="button"
-          v-show="!this.signIn"
-        >
-          <img id="prof-pic" src="images/profilePic.jpg" />
-        </button>
       </header>
       <router-view></router-view>
-
-      <!--      <signin id="sign-in" v-if="this.signIn" @usrnm-psswd="setCreds(this.$event)"></signin>-->
-
       <div
         aria-hidden="true"
         aria-labelledby="accountModalLabel"
@@ -136,10 +139,12 @@
     <!-- Import Components -->
     <script src="js/components/leftPane.js"></script>
     <script src="js/components/rightPane.js"></script>
-    <!-- Import Views -->
-    <script src="js/views/signIn.js"></script>
-    <script src="js/views/makeRec.js"></script>
-     <!-- Import Router -->
+    <script src="js/components/makeRec.js"></script>
+    <script src="js/components/makeGrocery.js"></script>
+    <script src="js/components/signIn.js"></script>
+    <script src="js/components/home.js"></script>
+    <script src="js/components/help.js"></script>
+    <!-- Import Router -->
     <script src="js/router.js"></script>
     <!-- Mount App -->
     <script>

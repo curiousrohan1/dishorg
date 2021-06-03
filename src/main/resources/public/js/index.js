@@ -85,7 +85,7 @@ const app = Vue.createApp({
         'Delete Account',
       ],
       showRecTitle: true,
-      signIn: true,
+      signedIn: true,
       username: '',
       password: ''
     }
