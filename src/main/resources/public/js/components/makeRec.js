@@ -1,9 +1,4 @@
 app.component('Makerec', {
-  data() {
-    return {
-      exhibitRightPane: false
-    }
-  },
   computed: {
     displayWarn() {
       return this.$store.state.error !== '';
@@ -15,12 +10,6 @@ app.component('Makerec', {
       window.setTimeout(() => {
         this.$store.commit('setError', '');
       }, 3000)
-    },
-    hideRightPane() {
-      this.exhibitRightPane = false;
-    },
-    displayRightPane() {
-      this.exhibitRightPane = true;
     },
   },
   /*html*/
@@ -38,14 +27,11 @@ app.component('Makerec', {
         <div class="clearfix">
           <Leftpane
             @update-err="updateErr($event)"
-            @show-right-pane="displayRightPane"
             id="left-pane"
           ></Leftpane>
           <Rightpane
             @update-err="updateErr($event)"
-            @hide-right-pane="hideRightPane"
             id="right-pane"
-            v-show="this.exhibitRightPane"
           ></Rightpane>
         </div>
       </div>

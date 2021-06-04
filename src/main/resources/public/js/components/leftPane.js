@@ -1,4 +1,4 @@
-let leftPane=app.component('Leftpane', {
+let leftPane = app.component('Leftpane', {
   emits: ['update-err'],
   data() {
     return {
@@ -34,6 +34,7 @@ let leftPane=app.component('Leftpane', {
       this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
     },
     addRec() {
+      this.plusRecChar = '+';
       const rec = {
         name: this.recName,
         ingredients: [
@@ -76,7 +77,7 @@ let leftPane=app.component('Leftpane', {
     cancelAddRec() {
       this.showAddRec = false;
       this.recName = '';
-      this.plusRecChar = '-';
+      this.plusRecChar = '+';
     },
     findRec(recipe) {
       for (let i = 0; i < this.$store.state.recipeList.length; i += 1) {
@@ -91,7 +92,7 @@ let leftPane=app.component('Leftpane', {
     <div>
         <div>
             <h2 class="text text-success">Recipes:</h2>
-            <button class="btn btn-dark" data-placement="right" data-toggle="tooltip" id="plus-rec" title="Add recipe"
+            <button class="btn btn-dark clearfix" data-placement="right" data-toggle="tooltip" id="plus-rec" title="Add recipe"
             @click="showAddRecDiv">{{this.plusRecChar}}</button>
         </div>
         <hr>

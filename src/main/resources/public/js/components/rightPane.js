@@ -1,4 +1,4 @@
-let rightPane=app.component('Rightpane', {
+let rightPane = app.component('Rightpane', {
   emits: ['update-err'],
   data() {
     return {
@@ -16,7 +16,10 @@ let rightPane=app.component('Rightpane', {
     };
   },
   computed: {
-
+    recipesExist() {
+      console.log(this.$store.state.currentRec);
+      return this.$store.state.recipeList.length !== 0 && !this.isEmpty(this.$store.state.currentRec);
+    }
   },
   mounted() {
     $.get('/units').done(
@@ -26,12 +29,32 @@ let rightPane=app.component('Rightpane', {
     ).fail(this.failureOnAjaxOfRecipe);
   },
   methods: {
+    isEmpty(data) {
+      if (typeof (data) === 'object') {
+        if (JSON.stringify(data) === '{}' || JSON.stringify(data) === '[]') {
+          return true;
+        } else if (!data) {
+          return true;
+        }
+        return false;
+      } else if (typeof (data) === 'string') {
+        if (!data.trim()) {
+          return true;
+        }
+        return false;
+      } else if (typeof (data) === 'undefined') {
+        return true;
+      } else {
+        return false;
+      }
+    },
     cancelAddIng() {
       this.displayIngDiv = false;
       this.unit = '[No Unit]';
       this.name = '';
       this.quantity = '';
       this.editIngIdx = -1;
+      this.plusIngChar = '+';
     },
     editIng(idx) {
       const ing = JSON.parse(JSON.stringify(this.$store.state.currentRec.ingredients[idx]));
@@ -99,13 +122,14 @@ let rightPane=app.component('Rightpane', {
       this.rename = this.$store.state.currentRec.name;
     },
     plusIng() {
-      if (this.plusRecChar === '+') {
+      if (this.plusIngChar === '+') {
         if (this.$store.state.currentRec !== {}) {
           this.displayIngDiv = true;
           this.$nextTick(() => {
             this.$refs.quantity.focus();
           });
         }
+        this.plusIngChar = '-';
       }
       else {
         this.cancelAddIng();
@@ -119,9 +143,6 @@ let rightPane=app.component('Rightpane', {
       })
         .fail(this.fail)
         .done(this.reset);
-//      if (this.$store.state.recipeList.length === 0) {
-//        this.$emit('hide-right-pane');
-//      }
     },
     fail(jqXHR) {
       let message = '';
@@ -203,7 +224,7 @@ let rightPane=app.component('Rightpane', {
   /* html */
   template: `
     <div>
-        <div>
+        <div v-show="recipesExist">
             <strong id="rec-title" v-show="showRecTitle" class='text text-success'>{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name" v-show="showRename">
                 <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename" v-on:keyup.enter="applyRecRename">
@@ -220,7 +241,7 @@ let rightPane=app.component('Rightpane', {
             <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="showRecTitle">
                 <img src="images/del.png">
             </button>
-            <button @click="plusIng" class="btn btn-dark" data-placement="left" data-toggle="tooltip"
+            <button @click="plusIng" class="btn btn-dark clearfix" data-placement="left" data-toggle="tooltip"
                     id="plus-ing" title="Add ingredient" v-show="this.showRightButtons">{{plusIngChar}}
             </button>
         </div>
@@ -253,7 +274,7 @@ let rightPane=app.component('Rightpane', {
                         <img src="images/apply.png">
                     </button>
                     <button @click="cancelAddIng" class="btn">
-                        <img src="images/cancel.jpg">    
+                        <img src="images/cancel.jpg">
                     </button>
                 </div>
             </form>

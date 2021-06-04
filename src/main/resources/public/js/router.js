@@ -16,14 +16,6 @@ const routes = [
     }
   },
   {
-    path: '/sign-in',
-    component: {
-      template: `
-        <Signin></Signin>
-      `
-    }
-  },
-  {
     path: '/make-a-recipe',
     component: {
       template: `
