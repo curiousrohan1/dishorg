@@ -5,7 +5,9 @@ const store = Vuex.createStore({
       currentRec: {},
       showRecTitle: true,
       recipeList: [],
-      error: ''
+      error: '',
+      groceryList: [],
+      currentGroc: {}
     }
   },
   mutations: {
@@ -25,10 +27,20 @@ const store = Vuex.createStore({
       state.currentRec.ingredients = newRec.ingredients;
       state.currentRec.name = newRec.name;
     },
+    updateGrocRec(state, newRec) {
+      state.currentRec.ingredients = newRec.ingredients;
+      state.currentRec.name = newRec.name;
+    },
     updateRecList(state, newRecList) {
       state.recipeList.length = 0;
       for (let i = 0; i < newRecList.length; i += 1) {
         state.recipeList.splice(state.recipeList.length, 0, newRecList[i]);
+      }
+    },
+    updateGrocList(state, newGrocList) {
+      state.groceryList.length = 0;
+      for (let i = 0; i < newGrocList.length; i += 1) {
+        state.groceryList.splice(state.groceryList.length, 0, newGrocList[i]);
       }
     },
     activateRec(state, idx) {
@@ -46,6 +58,19 @@ const store = Vuex.createStore({
     },
     sortRecList(state) {
       state.recipeList.sort(
+        (a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        }
+      );
+    },
+    sortGrocList(state) {
+      state.groceryList.sort(
         (a, b) => {
           if (a.name < b.name) {
             return -1;

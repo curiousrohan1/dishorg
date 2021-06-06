@@ -2,12 +2,9 @@ package org.dishorg.dishorg;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -21,6 +18,9 @@ public class Recipe {
 
     @ElementCollection
     private List<Ingredient> ingredients;
+
+    @ManyToMany(mappedBy = "recipes")
+    private Set<GroceryList> groceryList;
 
     public Recipe() {
     }

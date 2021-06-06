@@ -15,7 +15,6 @@ app.component('Makerec', {
   /*html*/
   template: `
     <div>
-      <div>
         <p
           class="alert alert-danger"
           id="error-message"
@@ -34,7 +33,6 @@ app.component('Makerec', {
             id="right-pane"
           ></Rightpane>
         </div>
-      </div>
     </div>
 `
 })
