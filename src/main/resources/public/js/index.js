@@ -7,7 +7,8 @@ const store = Vuex.createStore({
       recipeList: [],
       error: '',
       groceryList: [],
-      currentGroc: {}
+      currentGroc: {},
+      showGrocTitle: true
     }
   },
   mutations: {
@@ -27,9 +28,9 @@ const store = Vuex.createStore({
       state.currentRec.ingredients = newRec.ingredients;
       state.currentRec.name = newRec.name;
     },
-    updateGrocRec(state, newRec) {
-      state.currentRec.ingredients = newRec.ingredients;
-      state.currentRec.name = newRec.name;
+    updateCurGroc(state, newGroc) {
+      state.currentGroc.ingredients = newGroc.ingredients;
+      state.currentGroc.name = newGroc.name;
     },
     updateRecList(state, newRecList) {
       state.recipeList.length = 0;
@@ -49,12 +50,25 @@ const store = Vuex.createStore({
       }
       state.recipeList[idx].active = true;
     },
+    activateGroc(state, idx) {
+      for (let i = 0; i < state.groceryList.length; i += 1) {
+        state.groceryList[i].active = false;
+      }
+      state.groceryList[idx].active = true;
+    },
     addRecipe(state, recipe) {
       let i = 0;
       while (i < state.recipeList.length && state.recipeList[i].name < recipe.name) {
         i += 1;
       }
       state.recipeList.splice(i, 0, recipe);
+    },
+    addGroc(state, grocery) {
+      let i = 0;
+      while (i < state.groceryList.length && state.groceryList[i].name < grocery.name) {
+        i += 1;
+      }
+      state.groceryList.splice(i, 0, grocery);
     },
     sortRecList(state) {
       state.recipeList.sort(
@@ -87,6 +101,9 @@ const store = Vuex.createStore({
     },
     delIng(state, idx) {
       state.currentRec.ingredients.splice(idx, 1);
+    },
+    delRec(state, idx) {
+      state.currentGroc.recipes.splice(idx, 1);
     },
     setError(state, newError) {
       state.error = newError;

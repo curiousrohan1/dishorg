@@ -51,7 +51,14 @@ header li a {
   width: 100%;
   display: inline;
 }
+#make-rec {
+  width: 100%;
+  display: inline;
+}
 #make-ing * {
+  display: inline;
+}
+#make-rec * {
   display: inline;
 }
 img {
@@ -64,14 +71,13 @@ img {
 #left-titles * {
   display: inline;
 }
-#plus-rec {
+#plus-rec,
+#plus-ing,
+#plus-groc {
   float: right;
 }
 .disabled {
   cursor: not-allowed;
-}
-#plus-ing {
-  float: right;
 }
 #error-message {
   text-align: center;
@@ -148,5 +154,8 @@ img {
   display: table;
 }
 #recipe-details-container {
+  position: inherit;
+}
+#grocery-details-container {
   position: inherit;
 }

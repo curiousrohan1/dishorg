@@ -19,9 +19,6 @@ public class Recipe {
     @ElementCollection
     private List<Ingredient> ingredients;
 
-    @ManyToMany(mappedBy = "recipes")
-    private Set<GroceryList> groceryList;
-
     public Recipe() {
     }
 

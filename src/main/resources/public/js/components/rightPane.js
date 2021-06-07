@@ -17,7 +17,6 @@ let rightPane = app.component('Rightpane', {
   },
   computed: {
     recipesExist() {
-      console.log(this.$store.state.currentRec);
       return this.$store.state.recipeList.length !== 0 && !this.isEmpty(this.$store.state.currentRec);
     }
   },

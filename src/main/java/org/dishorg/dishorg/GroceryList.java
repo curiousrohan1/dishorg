@@ -15,7 +15,6 @@ public class GroceryList {
     @Column(unique = true)
     private String name;
 
-    //    @ElementCollection
     @ManyToMany
     @JoinTable(
             name = "grocery_list_recipe",
@@ -31,3 +30,4 @@ public class GroceryList {
         this.recipes = recipes;
     }
 }
+//Make a grocery controller TODO

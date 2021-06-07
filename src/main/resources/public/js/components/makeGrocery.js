@@ -11,7 +11,6 @@ app.component('Makegrocery', {
       unitList: [],
       name: '',
       updateRecList: false,
-      editRecIdx: -1,
       plusRecChar: '+',
       showAddGroc: false,
       grocName: '',
@@ -23,31 +22,18 @@ app.component('Makegrocery', {
       return this.$store.state.error !== '';
     },
     groceriesExist() {
-      console.log(this.$store.state.currentGroc);
       return this.$store.state.groceryList.length !== 0 && !this.isEmpty(this.$store.state.currentGroc);
     }
   },
+  // TODO duplication of grocery lists
   mounted() {
-    // $.get('/units').done(
-    //   (units) => {
-    //     this.unitList = units;
-    //   }
-    // ).fail(this.failureOnAjaxOfRecipe);
-    $.get('/recipes', 'json')
-      .done(
-        (recipeList) => {
-          this.$store.commit('updateRecList', recipeList);
-          this.$store.commit('sortRecList');
-        },
-      ).fail(this.failureOnAjaxOfRecipe);
     // Have to add get query here TODO
-    /* $.get('/groceries','json').done(
-      (groceryList)=>{
-        this.$store.commit('updateGrocList',groceryList);
+    $.get('/groceries', 'json').done(
+      (groceryList) => {
+        this.$store.commit('updateGrocList', groceryList);
         this.$store.commit('sortGrocList');
       }
     )
-    */
   },
   methods: {
     updateErr(message) {
@@ -78,72 +64,26 @@ app.component('Makegrocery', {
     cancelAddRec() {
       this.displayRecDiv = false;
       this.rec = {};
-      this.editRecIdx = -1;
       this.plusRecChar = '+';
     },
-    editRec(idx) {
-      const rec = JSON.parse(JSON.stringify(this.$store.state.currentGroc.recipes[idx]));
-      this.rec = rec;
-      this.displayRecDiv = true;
-      this.editRecIdx = idx;
-    },
     applyAddRec() {
-      this.$emit('update-err', '');
-      if (this.editRecIdx === -1) {
-        let otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc))
-        otherGroc.recipes.push(this.rec);
-        // $.ajax({
-        //   type: 'PUT',
-        //   url: `/recipes/${otherRec.id}`,
-        //   data: JSON.stringify(otherRec),
-        //   contentType: 'application/json',
-        //   dataType: 'json',
-        // }).fail(this.failureOnAjaxOfRecipe)
-        //   .done(
-        //     (recipe) => {
-        //       this.$store.commit('updateCurRec', recipe);
-        //     }
-        //   ); TODO
-        /* $.ajax({
-          type:'PUT',
-          url:`/groceries/${otherGroc.id}`,
-          data:JSON.stringify(otherGroc),
-          contentType: 'application/json',
-          dataType: 'json',
-        }).fail(this.failureOnAjaxOfRecipe)
+      this.updateErr('');
+      let otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc))
+      otherGroc.recipes.push(this.rec);
+      //        Sort the recipes and grocery lists TODO
+      $.ajax({
+        type: 'PUT',
+        url: `/groceries/${otherGroc.id}`,
+        data: JSON.stringify(otherGroc),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).fail(this.failureOnAjaxOfRecipe)
         .done(
           (grocery) => {
             this.$store.commit('updateCurGroc', grocery);
           }
         );
-        */
-        this.quantity = 0;
-        this.name = '';
-        this.rec = '[No Unit]';
-      } else {
-        var editIngObj = {
-          idx: this.editRecIdx,
-          ing: {
-            quantity: this.quantity,
-            name: this.name,
-            unit: this.unit
-          }
-        }
-        this.$store.commit('updateEditIng', editIngObj);
-        this.displayRecDiv = false;
-        this.rec = '[No Unit]';
-        this.name = '';
-        this.quantity = '';
-        this.editRecIdx = -1;
-        $.ajax({
-          type: 'PUT',
-          url: `/recipes/${this.$store.state.currentGroc.id}`,
-          data: JSON.stringify(this.$store.state.currentGroc),
-          contentType: 'application/json',
-          dataType: 'json',
-        }).fail(this.fail)
-          .done(this.success);
-      }
+      this.rec = {};
     },
     line(ing) {
       return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
@@ -152,18 +92,15 @@ app.component('Makegrocery', {
       this.showRename = false;
       this.showGrocTitle = true;
     },
-    editgrocName() {
+    editGrocName() {
       this.showRename = true;
       this.showGrocTitle = false;
       this.rename = this.$store.state.currentGroc.name;
     },
     plusRec() {
       if (this.plusRecChar === '+') {
-        if (this.$store.state.currentGroc !== {}) {
+        if (!this.isEmpty(this.$store.state.currentGroc)) {
           this.displayRecDiv = true;
-          this.$nextTick(() => {
-            this.$refs.quantity.focus();
-          });
         }
         this.plusRecChar = '-';
       }
@@ -174,7 +111,7 @@ app.component('Makegrocery', {
     delGroc() {
       $.ajax({
         type: 'DELETE',
-        url: `/recipes/${this.$store.state.currentGroc.id}`,
+        url: `/groceries/${this.$store.state.currentGroc.id}`,
         dataType: 'json',
       })
         .fail(this.fail)
@@ -189,27 +126,27 @@ app.component('Makegrocery', {
       } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
         message = jqXHR['responseText'];
       } else {
-        message = "An unknown error has occured."
+        message = "An unknown error has occurred."
       }
-      this.$emit('update-err', message);
+      this.updateErr(message);
     },
     applyGrocRename() {
       if (this.rename === this.$store.state.currentGroc.name) {
         this.cancelGrocRename();
         return;
       }
-      this.$emit('update-err', '');
-      const otherRec = JSON.parse(JSON.stringify(this.$store.state.currentGroc));
-      otherRec.name = this.rename;
+      this.updateErr('');
+      const otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc));
+      otherGroc.name = this.rename;
       $.post({
-        url: 'recipes',
-        data: JSON.stringify(otherRec),
+        url: 'groceries',
+        data: JSON.stringify(otherGroc),
         contentType: 'application/json',
         dataType: 'json',
       }).done(
         (data) => {
-          this.$store.commit('updateCurRec', data);
-          this.$store.commit('sortRecList');
+          this.$store.commit('updateCurGroc', data);
+          this.$store.commit('sortGrocList');
         },
       ).fail(
         (jqXHR) => {
@@ -222,31 +159,25 @@ app.component('Makegrocery', {
       this.showGrocTitle = true;
     },
     reset() {
-      this.$store.commit('updateCurRec', {});
-      $.get('/recipes', 'json')
+      this.$store.commit('updateGrocRec', {});
+      $.get('/groceries', 'json')
         .done(
-          (recipeList) => {
-            this.$store.commit('updateRecList', recipeList);
-            this.$store.commit('sortRecList');
+          (groceryList) => {
+            this.$store.commit('updateGrocList', groceryList);
+            this.$store.commit('sortGrocList');
           },
         ).fail(this.fail);
 
-      this.$emit('update-err', '');
-    },
-    showRec(idx) {
-      if (idx === this.editRecIdx) {
-        return false;
-      }
-      return true;
+      this.updateErr('');
     },
     success(recipe) {
-      this.$store.commit('setCurRec', recipe);
+      this.$store.commit('setCurGroc', recipe);
     },
     delRec(idx) {
-      this.$store.commit('delIng', idx)
+      this.$store.commit('delRec', idx)
       $.ajax({
         type: 'PUT',
-        url: `/recipes/${this.$store.state.currentGroc.id}`,
+        url: `/groceries/${this.$store.state.currentGroc.id}`,
         data: JSON.stringify(this.$store.state.currentGroc),
         contentType: 'application/json',
         dataType: 'json',
@@ -254,7 +185,7 @@ app.component('Makegrocery', {
         .done(this.success);
     },
     showRightButtons() {
-      return this.$store.state.currentGroc !== {};
+      return !this.isEmpty(this.$store.state.currentGroc);
     },
     showAddGrocDiv() {
       if (this.plusGrocChar === '+') {
@@ -269,58 +200,45 @@ app.component('Makegrocery', {
       }
     },
     clickGroc(idx) {
-      this.$store.commit('activateRec', idx);
-      this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
+      this.$store.commit('activateGroc', idx);
+      this.$store.commit('updateCurGroc', this.$store.state.groceryList[idx]);
     },
     addGroc() {
       this.plusGrocChar = '+';
-      const rec = {
+      const groc = {
         name: this.grocName,
-        ingredients: [
+        recipes: [
         ],
-        id: this.$store.state.recipeList.length,
+        id: this.$store.state.groceryList.length,
         active: false,
       };
       $.post({
-        url: 'recipes',
-        data: JSON.stringify(rec),
+        url: 'groceries',
+        data: JSON.stringify(groc),
         contentType: 'application/json',
         dataType: 'json',
       }).done(
-        (recipe) => {
-          this.$store.commit('setCurRec', recipe);
-          this.$store.commit('addGrocipe', recipe);
-          this.clickGroc(this.findRec(recipe));
+        (grocery) => {
+          this.$store.commit('updateCurGroc', grocery);
+          this.$store.commit('addGroc', grocery);
+          this.clickGroc(this.findGroc(grocery));
         },
       ).fail(
         (jqXHR) => {
-          this.failureOnAjaxOfRecipe(jqXHR);
+          this.fail(jqXHR);
         },
       );
       this.showAddGroc = false;
       this.grocName = ''
-    },
-    failureOnAjaxOfRecipe(jqXHR) {
-      let message = '';
-      if (jqXHR.readyState === 0) {
-        message = 'Failed to contact server.';
-      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseJSON')) {
-        message = jqXHR.responseJSON.message;
-      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
-        message = jqXHR['responseText'];
-      } else {
-        message = "An unknown error has occured."
-      }
-      this.$emit('update-err', message);
     },
     cancelAddGroc() {
       this.showAddGroc = false;
       this.grocName = '';
       this.plusGrocChar = '+';
     },
-    findRec(recipe) {
-      for (let i = 0; i < this.$store.state.recipeList.length; i += 1) {
-        if (JSON.stringify(this.$store.state.recipeList[i]) === JSON.stringify(recipe)) {
+    findGroc(grocery) {
+      for (let i = 0; i < this.$store.state.groceryList.length; i += 1) {
+        if (JSON.stringify(this.$store.state.groceryList[i]) === JSON.stringify(grocery)) {
           return i;
         }
       }
@@ -328,90 +246,96 @@ app.component('Makegrocery', {
   },
   /*html */
   template: `
-  <p class="alert alert-danger" id="error-message" role="alert" v-show="displayWarn">
+  <p class = "alert alert-danger" id = "error-message" role = "alert" v-show = "displayWarn">
     {{this.$store.state.error}}
-</p>
-<div class="clearfix">
-    <div>
-        <div>
-            <h2 class="text text-success">Meal Plans:</h2>
-            <button class="btn btn-dark clearfix" data-placement="right" data-toggle="tooltip" id="plus-groc"
-                title="Add grocery" @click="showAddGrocDiv">{{this.plusGrocChar}}</button>
-        </div>
-        <hr>
-        <div>
-            <ul class="list-group" id="grocery-list">
-                <button type="button" @click="clickGroc(idx)" class="list-group-item list-group-item-action"
-                    :class="{active:groc.active}"
-                    v-for="(rec,idx) in this.$store.state.groceryList">{{groc.name}}</button>
-            </ul>
-            <div id="add-groc-div" v-show="showAddGroc">
-                <input ref="newGrocName" placeholder="New grocery list name..." type="text" v-model="this.grocName"
-                    v-on:keyup.enter="addGroc">
-                <div class="btn-group" role="group">
-                    <button class="btn" id="add-groc" @click="addGroc">
-                        <img src="images/apply.png">
-                    </button>
-                    <button class="btn" id="cancel-groc-rec" @click="cancelAddGroc">
-                        <img src="images/cancel.jpg">
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div v-show="groceriesExist">
-            <strong id="groc-title" v-show="showGrocTitle"
-                class='text text-success'>{{this.$store.state.currentGroc.name}}</strong>&nbsp;&nbsp;&nbsp;
-            <div id="renamed-grocery-name" v-show="showRename">
-                <input id="rename-groc-input" placeholder="New Name..." type="text" v-model="rename"
-                    v-on:keyup.enter="applyGrocRename">
-                <button @click="applyGrocRename" class="btn" id="apply-groc-rename">
-                    <img src="images/apply.png">
-                </button>
-                <button @click="cancelGrocRename" class="btn" id="cancel-groc-rename">
-                    <img src="images/cancel.jpg">
-                </button>
-            </div>
-            <button @click="editgrocName" class="btn btn-outline-dark" id="edit-groc-name" v-show="showGrocTitle">
-                <img src="images/edit.png">
-            </button>
-            <button @click="delGroc" class="btn btn-outline-dark" id="del-groc" v-show="showGrocTitle">
-                <img src="images/del.png">
-            </button>
-            <button @click="plusRec" class="btn btn-dark clearfix" data-placement="left" data-toggle="tooltip"
-                id="plus-rec" title="Add ingredient" v-show="this.showRightButtons">{{plusRecChar}}
-            </button>
-        </div>
-        <hr>
-        <div id="grocery-details-container">
-            <ul id="grocery-details">
-                <li class="ingItem" v-for="(rec,idx) in this.$store.state.currentGroc.recipes" v-show="showRec(idx)">
-                    <button @click="editRec(idx)" class="edit-recipes btn btn-outline-dark">
-                        <img src="images/edit.png">
-                    </button>
-                    <button class="btn btn-outline-dark" @click="delRec(idx)">
-                        <img src="images/del.png" style="width:30px;height:30px;">
-                    </button>
-                <li class="ingItem" v-for="(ing,idx) in rec.ingredients">{{this.line(ing)}}</li>
-                </li>
-            </ul>
-            <form class=" form-inline" id="make-rec" v-show="displayRecDiv">
-                <label class="sr-only" for="rec-dropdown">Recipe</label>
-                <select class="form-control mb-2 mr-sm-2 " id="rec-dropdown" v-model="rec">
-                    <option v-for="rec in this.$store.state.recipeList">{{rec}}</option>
-                </select>
-                <div class="btn-group" role="group">
-                    <button @click="applyAddRec" class="btn">
-                        <img src="images/apply.png">
-                    </button>
-                    <button @click="cancelAddRec" class="btn">
-                        <img src="images/cancel.jpg">
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+  </p>
+  <div class = "clearfix">
+      <div id="left-pane">
+          <div id="left-titles">
+              <h2 class = "text text-success">Meal Plans:</h2>
+              <button class = "btn btn-dark clearfix" data-placement = "right" data-toggle = "tooltip" id = "plus-groc"
+                  title = "Add grocery" @click = "showAddGrocDiv">{{this.plusGrocChar}}</button>
+          </div>
+          <hr>
+          <div>
+              <ul class = "list-group" id = "grocery-list">
+                  <button type = "button" @click = "clickGroc(idx)" class = "list-group-item list-group-item-action"
+                      :class = "{active:groc.active}"
+                      v-for = "(groc,idx) in this.$store.state.groceryList">{{groc.name}}</button>
+              </ul>
+              <div id = "add-groc-div" v-show = "showAddGroc">
+                  <input ref = "newGrocName" placeholder = "New grocery list name..." type = "text" v-model = "this.grocName"
+                      v-on:keyup.enter = "addGroc">
+                  <div class = "btn-group" role = "group">
+                      <button class = "btn" id = "add-groc" @click = "addGroc">
+                          <img src = "images/apply.png">
+                      </button>
+                      <button class = "btn" id = "cancel-groc-rec" @click = "cancelAddGroc">
+                          <img src = "images/cancel.jpg">
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="right-pane">
+          <div>
+              <strong id = "groc-title" v-show = "showGrocTitle"
+                  class = 'text text-success'>{{this.$store.state.currentGroc.name}}</strong>&nbsp;&nbsp;&nbsp;
+              <div id = "renamed-grocery-name" v-show = "showRename">
+                  <input id = "rename-groc-input" placeholder = "New Name..." type = "text" v-model = "rename"
+                      v-on:keyup.enter = "applyGrocRename">
+                  <button @click = "applyGrocRename" class = "btn" id = "apply-groc-rename">
+                      <img src = "images/apply.png">
+                  </button>
+                  <button @click = "cancelGrocRename" class = "btn" id = "cancel-groc-rename">
+                      <img src = "images/cancel.jpg">
+                  </button>
+              </div>
+              <button @click = "editGrocName" class = "btn btn-outline-dark" id = "edit-groc-name" v-show = "showGrocTitle">
+                  <img src = "images/edit.png">
+              </button>
+              <button @click = "delGroc" class = "btn btn-outline-dark" id = "del-groc" v-show = "showGrocTitle">
+                  <img src = "images/del.png">
+              </button>
+              <button @click = "plusRec" class = "btn btn-dark clearfix" data-placement = "left" data-toggle = "tooltip"
+                  id = "plus-rec" title = "Add ingredient" v-show = "this.showRightButtons">{{plusRecChar}}
+              </button>
+          </div>
+          <hr>
+          <div id = "grocery-details-container">
+              <ul id = "grocery-details">
+                  <li class = "ingItem" v-for = "(rec,idx) in this.$store.state.currentGroc.recipes" v-show = "showRec(idx)">
+                      <button class = "btn btn-outline-dark" @click = "delRec(idx)">
+                          <img src = "images/del.png" style = "width:30px;height:30px;">
+                      </button>
+                  </li>
+              </ul>
+              <form class = " form-inline" id = "make-rec" v-show = "displayRecDiv">
+                  <label class = "sr-only" for = "rec-dropdown">Recipe</label>
+                  <select class = "form-control mb-2 mr-sm-2 " id = "rec-dropdown" v-model = "rec">
+                    <option v-for = "(rec,idx) in this.$store.state.recipeList">{{rec}}</option>
+                  </select>
+                  <div class = "btn-group" role = "group">
+                      <button @click = "applyAddRec" class = "btn">
+                          <img src = "images/apply.png">
+                      </button>
+                      <button @click = "cancelAddRec" class = "btn">
+                          <img src = "images/cancel.jpg">
+                      </button>
+                  </div>
+              </form>
+          </div>
+          <hr>
+          <ul>
+              <li v-for = "(rec,idx) in this.$store.state.currentGroc.recipes">
+              <li class = "ingItem" v-for = "(ing,idx) in rec.ingredients">{{this.line(ing)}}</li>
+              </li>
+          </ul>
+          <!--
+              //ingredient pane filled with all ingredients TODO
+              //if unit and name are same, consolidations TODO
+          -->
+      </div>
+  </div>
   `
 })
