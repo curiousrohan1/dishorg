@@ -1,4 +1,4 @@
-app.component('Makegrocery', {
+let makeGrocery = app.component('Makegrocery', {
   emits: ['update-err'],
   data() {
     return {
@@ -15,62 +15,54 @@ app.component('Makegrocery', {
       showAddGroc: false,
       grocName: '',
       plusGrocChar: '+'
-    };
+    }; 
   },
   computed: {
     displayWarn() {
-      return this.$store.state.error !== '';
+      return this.$store.state.error !== ''; 
     },
     groceriesExist() {
-      return this.$store.state.groceryList.length !== 0 && !this.isEmpty(this.$store.state.currentGroc);
+      return this.$store.state.groceryList.length !== 0 && !this.isEmpty(this.$store.state.currentGroc); 
     }
   },
-  // TODO duplication of grocery lists
   mounted() {
-    // Have to add get query here TODO
-    $.get('/groceries', 'json').done(
-      (groceryList) => {
-        this.$store.commit('updateGrocList', groceryList);
-        this.$store.commit('sortGrocList');
-      }
-    )
+    this.reset()
   },
   methods: {
     updateErr(message) {
-      this.$store.commit('setError', message);
+      this.$store.commit('setError', message); 
       window.setTimeout(() => {
-        this.$store.commit('setError', '');
+        this.$store.commit('setError', ''); 
       }, 3000)
     },
     isEmpty(data) {
       if (typeof (data) === 'object') {
         if (JSON.stringify(data) === '{}' || JSON.stringify(data) === '[]') {
-          return true;
+          return true; 
         } else if (!data) {
-          return true;
+          return true; 
         }
-        return false;
+        return false; 
       } else if (typeof (data) === 'string') {
         if (!data.trim()) {
-          return true;
+          return true; 
         }
-        return false;
+        return false; 
       } else if (typeof (data) === 'undefined') {
-        return true;
+        return true; 
       } else {
-        return false;
+        return false; 
       }
     },
     cancelAddRec() {
-      this.displayRecDiv = false;
-      this.rec = {};
-      this.plusRecChar = '+';
+      this.displayRecDiv = false; 
+      this.rec = {}; 
+      this.plusRecChar = '+'; 
     },
     applyAddRec() {
-      this.updateErr('');
+      this.updateErr(''); 
       let otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc))
-      otherGroc.recipes.push(this.rec);
-      //        Sort the recipes and grocery lists TODO
+      otherGroc.recipes.push({ id: this.rec }); 
       $.ajax({
         type: 'PUT',
         url: `/groceries/${otherGroc.id}`,
@@ -80,33 +72,36 @@ app.component('Makegrocery', {
       }).fail(this.failureOnAjaxOfRecipe)
         .done(
           (grocery) => {
-            this.$store.commit('updateCurGroc', grocery);
+            this.$store.commit('updateCurGroc', grocery); 
+            this.$store.commit('sortGrocList'); 
+            this.$store.commit('sortRecList');
+            this.$store.commit('refreshIngredients');
           }
-        );
-      this.rec = {};
+        ); 
+      this.rec = {}; 
     },
     line(ing) {
-      return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
+      return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`)); 
     },
     cancelGrocRename() {
-      this.showRename = false;
-      this.showGrocTitle = true;
+      this.showRename = false; 
+      this.showGrocTitle = true; 
     },
     editGrocName() {
-      this.showRename = true;
-      this.showGrocTitle = false;
-      this.rename = this.$store.state.currentGroc.name;
+      this.showRename = true; 
+      this.showGrocTitle = false; 
+      this.rename = this.$store.state.currentGroc.name; 
     },
     plusRec() {
       if (this.plusRecChar === '+') {
-        if (!this.isEmpty(this.$store.state.currentGroc)) {
-          this.displayRecDiv = true;
-        }
-        this.plusRecChar = '-';
+        this.displayRecDiv = true; 
+        this.plusRecChar = '-'; 
       }
       else {
-        this.cancelAddRec();
+        this.cancelAddRec(); 
       }
+      console.log(this.$store.state.currentGroc)
+      console.log(this.$store.state.recipeList)
     },
     delGroc() {
       $.ajax({
@@ -115,29 +110,30 @@ app.component('Makegrocery', {
         dataType: 'json',
       })
         .fail(this.fail)
-        .done(this.reset);
+        .done(this.reset); 
+      this.$store.commit('setCurGroc',{});
     },
     fail(jqXHR) {
-      let message = '';
+      let message = ''; 
       if (jqXHR.readyState === 0) {
-        message = 'Failed to contact server.';
+        message = 'Failed to contact server.'; 
       } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseJSON')) {
-        message = jqXHR.responseJSON.message;
+        message = jqXHR.responseJSON.message; 
       } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
-        message = jqXHR['responseText'];
+        message = jqXHR['responseText']; 
       } else {
         message = "An unknown error has occurred."
       }
-      this.updateErr(message);
+      this.updateErr(message); 
     },
     applyGrocRename() {
       if (this.rename === this.$store.state.currentGroc.name) {
-        this.cancelGrocRename();
-        return;
+        this.cancelGrocRename(); 
+        return; 
       }
-      this.updateErr('');
-      const otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc));
-      otherGroc.name = this.rename;
+      this.updateErr(''); 
+      const otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc)); 
+      otherGroc.name = this.rename; 
       $.post({
         url: 'groceries',
         data: JSON.stringify(otherGroc),
@@ -145,33 +141,51 @@ app.component('Makegrocery', {
         dataType: 'json',
       }).done(
         (data) => {
-          this.$store.commit('updateCurGroc', data);
-          this.$store.commit('sortGrocList');
+          this.$store.commit('updateCurGroc', data); 
+          this.$store.commit('sortGrocList'); 
         },
       ).fail(
         (jqXHR) => {
-          this.$store.state.showGrocTitle = true;
-          this.showRename = false;
-          this.fail(jqXHR);
+          this.$store.state.showGrocTitle = true; 
+          this.showRename = false; 
+          this.fail(jqXHR); 
         },
-      );
-      this.showRename = false;
-      this.showGrocTitle = true;
+      ); 
+      this.showRename = false; 
+      this.showGrocTitle = true; 
     },
     reset() {
-      this.$store.commit('updateGrocRec', {});
-      $.get('/groceries', 'json')
+      $.get('/groceries', 'json').done(
+        (groceryList) => {
+          this.$store.commit('updateGrocList', groceryList); 
+          this.$store.commit('sortGrocList'); 
+        }
+      ).fail(this.fail)
+      $.get('/recipes', 'json')
         .done(
-          (groceryList) => {
-            this.$store.commit('updateGrocList', groceryList);
-            this.$store.commit('sortGrocList');
+          (recipeList) => {
+            this.$store.commit('updateRecList', recipeList); 
+            this.$store.commit('sortRecList'); 
           },
-        ).fail(this.fail);
-
-      this.updateErr('');
+        ).fail(this.fail); 
+      this.$store.commit('updateCurGroc', {}); 
+      this.updateErr(''); 
+      this.showGrocTitle = true; 
+      this.showRename = false; 
+      this.rename = ''; 
+      this.displayRecDiv = false; 
+      this.quantity = ''; 
+      this.rec = {}; 
+      this.unitList = []; 
+      this.name = ''; 
+      this.updateRecList = false; 
+      this.plusRecChar = '+'; 
+      this.showAddGroc = false; 
+      this.grocName = ''; 
+      this.plusGrocChar = '+'
     },
-    success(recipe) {
-      this.$store.commit('setCurGroc', recipe);
+    success(grocery) {
+      this.$store.commit('setCurGroc', grocery); 
     },
     delRec(idx) {
       this.$store.commit('delRec', idx)
@@ -183,35 +197,37 @@ app.component('Makegrocery', {
         dataType: 'json',
       }).fail(this.fail)
         .done(this.success);
+      this.$store.commit('refreshIngredients')
     },
     showRightButtons() {
-      return !this.isEmpty(this.$store.state.currentGroc);
+      return !this.isEmpty(this.$store.state.currentGroc); 
     },
     showAddGrocDiv() {
       if (this.plusGrocChar === '+') {
-        this.showAddGroc = true;
+        this.showAddGroc = true; 
         this.$nextTick(() => {
-          this.$refs.newGrocName.focus();
-        });
-        this.plusGrocChar = '-';
+          this.$refs.newGrocName.focus(); 
+        }); 
+        this.plusGrocChar = '-'; 
       }
       else {
-        this.cancelAddGroc();
+        this.cancelAddGroc(); 
       }
     },
     clickGroc(idx) {
-      this.$store.commit('activateGroc', idx);
-      this.$store.commit('updateCurGroc', this.$store.state.groceryList[idx]);
+      this.$store.commit('activateGroc', idx); 
+      this.$store.commit('setCurGroc', this.$store.state.groceryList[idx]);
+      this.$store.commit('refreshIngredients');
     },
     addGroc() {
-      this.plusGrocChar = '+';
+      this.plusGrocChar = '+'; 
       const groc = {
         name: this.grocName,
         recipes: [
         ],
         id: this.$store.state.groceryList.length,
         active: false,
-      };
+      }; 
       $.post({
         url: 'groceries',
         data: JSON.stringify(groc),
@@ -219,29 +235,57 @@ app.component('Makegrocery', {
         dataType: 'json',
       }).done(
         (grocery) => {
-          this.$store.commit('updateCurGroc', grocery);
-          this.$store.commit('addGroc', grocery);
-          this.clickGroc(this.findGroc(grocery));
+          console.log(grocery)
+          this.$store.commit('setCurGroc', grocery); 
+          this.$store.commit('addGroc', grocery); 
+          this.clickGroc(this.findGroc(grocery)); 
         },
       ).fail(
         (jqXHR) => {
-          this.fail(jqXHR);
+          this.fail(jqXHR); 
         },
-      );
-      this.showAddGroc = false;
+      ); 
+      this.showAddGroc = false; 
       this.grocName = ''
     },
     cancelAddGroc() {
-      this.showAddGroc = false;
-      this.grocName = '';
-      this.plusGrocChar = '+';
+      this.showAddGroc = false; 
+      this.grocName = ''; 
+      this.plusGrocChar = '+'; 
     },
     findGroc(grocery) {
       for (let i = 0; i < this.$store.state.groceryList.length; i += 1) {
         if (JSON.stringify(this.$store.state.groceryList[i]) === JSON.stringify(grocery)) {
-          return i;
+          return i; 
         }
       }
+    },
+    dupGroc(){
+      const dupGroc = {
+        name: "Copy of "+this.$store.state.currentGroc.name,
+        recipes: this.$store.state.currentGroc.recipes,
+        id: this.$store.state.groceryList.length,
+        active: false,
+      }; 
+      $.post({
+        url: 'groceries',
+        data: JSON.stringify(dupGroc),
+        contentType: 'application/json',
+        dataType: 'json',
+      }).done(
+        (grocery) => {
+          console.log(grocery)
+          this.$store.commit('setCurGroc', grocery); 
+          this.$store.commit('addGroc', grocery); 
+          this.clickGroc(this.findGroc(grocery)); 
+        },
+      ).fail(
+        (jqXHR) => {
+          this.fail(jqXHR); 
+        },
+      ); 
+      this.showAddGroc = false; 
+      this.grocName = ''
     }
   },
   /*html */
@@ -278,9 +322,9 @@ app.component('Makegrocery', {
           </div>
       </div>
       <div id="right-pane">
-          <div>
+          <div v-show="groceriesExist">
               <strong id = "groc-title" v-show = "showGrocTitle"
-                  class = 'text text-success'>{{this.$store.state.currentGroc.name}}</strong>&nbsp;&nbsp;&nbsp;
+                  class = 'text text-success'>{{this.$store.state.currentGroc.name}}</strong>&nbsp; &nbsp; &nbsp; 
               <div id = "renamed-grocery-name" v-show = "showRename">
                   <input id = "rename-groc-input" placeholder = "New Name..." type = "text" v-model = "rename"
                       v-on:keyup.enter = "applyGrocRename">
@@ -297,23 +341,27 @@ app.component('Makegrocery', {
               <button @click = "delGroc" class = "btn btn-outline-dark" id = "del-groc" v-show = "showGrocTitle">
                   <img src = "images/del.png">
               </button>
+              <button @click="dupGroc" class="btn btn-outline-dark" id="dup-groc" v-show="showGrocTitle">
+                  <img src="images/dup.png">
+              </button>
               <button @click = "plusRec" class = "btn btn-dark clearfix" data-placement = "left" data-toggle = "tooltip"
-                  id = "plus-rec" title = "Add ingredient" v-show = "this.showRightButtons">{{plusRecChar}}
+                  id = "plus-rec" title = "Add Recipe" v-show = "this.showRightButtons">{{plusRecChar}}
               </button>
           </div>
           <hr>
           <div id = "grocery-details-container">
               <ul id = "grocery-details">
-                  <li class = "ingItem" v-for = "(rec,idx) in this.$store.state.currentGroc.recipes" v-show = "showRec(idx)">
+                  <li class = "ingItem" v-for = "(rec,idx) in this.$store.state.currentGroc.recipes">
                       <button class = "btn btn-outline-dark" @click = "delRec(idx)">
-                          <img src = "images/del.png" style = "width:30px;height:30px;">
+                          <img src = "images/del.png" style = "width:30px; height:30px; ">
                       </button>
+                      {{rec.name}}
                   </li>
               </ul>
-              <form class = " form-inline" id = "make-rec" v-show = "displayRecDiv">
+              <div id = "make-rec" v-show = "displayRecDiv">
                   <label class = "sr-only" for = "rec-dropdown">Recipe</label>
                   <select class = "form-control mb-2 mr-sm-2 " id = "rec-dropdown" v-model = "rec">
-                    <option v-for = "(rec,idx) in this.$store.state.recipeList">{{rec}}</option>
+                    <option v-for="(rec,idx) in this.$store.state.recipeList" v-bind:value="rec.id">{{rec.name}}</option>
                   </select>
                   <div class = "btn-group" role = "group">
                       <button @click = "applyAddRec" class = "btn">
@@ -323,17 +371,13 @@ app.component('Makegrocery', {
                           <img src = "images/cancel.jpg">
                       </button>
                   </div>
-              </form>
+              </div>
           </div>
           <hr>
           <ul>
-              <li v-for = "(rec,idx) in this.$store.state.currentGroc.recipes">
-              <li class = "ingItem" v-for = "(ing,idx) in rec.ingredients">{{this.line(ing)}}</li>
-              </li>
+              <li class = "ingItem" v-for = "(ing,idx) in this.$store.state.consolidatedIngredients">{{this.line(ing)}}</li>
           </ul>
           <!--
-              //ingredient pane filled with all ingredients TODO
-              //if unit and name are same, consolidations TODO
           -->
       </div>
   </div>

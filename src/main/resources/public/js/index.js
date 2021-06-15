@@ -7,18 +7,17 @@ const store = Vuex.createStore({
       recipeList: [],
       error: '',
       groceryList: [],
-      currentGroc: {},
-      showGrocTitle: true
+      currentGroc: {
+        name:"",
+        recipes:[],
+      },
+      showGrocTitle: true,
+      consolidatedIngredients:[]
     }
   },
   mutations: {
     setCurRec(state, newRec) {
       if (newRec === {}) {
-        //        for (var prop in state.currentRec) {
-        //          if (state.currentRec.hasOwnProperty(prop)) {
-        //            delete state.currentRec[prop];
-        //          }
-        //        }
         state.currentRec = {};
       } else {
         state.currentRec = newRec;
@@ -27,10 +26,22 @@ const store = Vuex.createStore({
     updateCurRec(state, newRec) {
       state.currentRec.ingredients = newRec.ingredients;
       state.currentRec.name = newRec.name;
+      this.commit('refreshIngredients');
     },
     updateCurGroc(state, newGroc) {
-      state.currentGroc.ingredients = newGroc.ingredients;
+      state.currentGroc.recipes = newGroc.recipes;
       state.currentGroc.name = newGroc.name;
+    },
+    setCurGroc(state, newGroc) {
+      if (newGroc === {}) {
+        state.currentGroc = {
+            name:"",
+            recipes:[],
+        };
+      } else {
+        state.currentGroc = newGroc;
+      }
+      this.commit('refreshIngredients');
     },
     updateRecList(state, newRecList) {
       state.recipeList.length = 0;
@@ -107,6 +118,39 @@ const store = Vuex.createStore({
     },
     setError(state, newError) {
       state.error = newError;
+    },
+    refreshIngredients(state){
+        var i;
+        var j;
+        var rec;
+        var ing;
+        var newIngs=[];
+        for(i = 0; i < state.currentGroc.recipes.length; i += 1){
+            rec=state.currentGroc.recipes[i];
+            for(j = 0; j < rec.ingredients.length; j += 1){
+                ing = rec.ingredients[j];
+                newIngs.push(ing);
+            }
+        }
+        state.consolidatedIngredients = newIngs;
+        for(var i=0;i<state.consolidatedIngredients.length;i+=1){//length is 2
+            for(var j=i+1;j<state.consolidatedIngredients.length;j+=1){
+                var ing1=state.consolidatedIngredients[i];//5 cups of water
+                var ing2=state.consolidatedIngredients[j];//6 cups of water
+                if(ing1.unit===ing2.unit){// yep
+                    if(ing2.name === ing1.name){//yep
+                        ing1.quantity += ing2.quantity;//11 now
+                        state.consolidatedIngredients.splice(j,1);
+                    }
+                    else{
+                        j++;
+                    }
+                }
+                else{
+                    j++;
+                }
+            }
+        }
     }
   }
 })
@@ -152,9 +196,4 @@ const app = Vue.createApp({
       this.password = obj.password;
     }
   },
-  computed: {
-
-
-
-  }
 }).use(store);

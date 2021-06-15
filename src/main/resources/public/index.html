@@ -45,12 +45,12 @@
         <nav>
             <ul id="nav">
                 <li>
-                    <router-link to="/make-a-grocery-list">
-                        Make a Grocery List
+                    <router-link to="/make-a-grocery-list" v-show="this.$store.state.recipeList.length !== 0">
+                        Grocery Lists
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/make-a-recipe">Make a Recipe</router-link>
+                    <router-link to="/make-a-recipe">Recipes</router-link>
                 </li>
                 <li>
                     <router-link to="/help">Help</router-link>
@@ -74,8 +74,7 @@
 <!-- Mount App -->
 <script>
       app.mount("#dishorg");
-      $("#make-ing").submit(false);
-
+      $("form").submit(false);
 </script>
 </body>
 </html>
