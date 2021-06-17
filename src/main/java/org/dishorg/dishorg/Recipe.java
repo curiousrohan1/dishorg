@@ -19,11 +19,14 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "grocery_list_id"))
     Set<GroceryList> groceryLists;
+
     private @Id
     @GeneratedValue
     Long id;
+
     @Column(unique = true)
     private String name;
+
     @ElementCollection
     private List<Ingredient> ingredients;
 
