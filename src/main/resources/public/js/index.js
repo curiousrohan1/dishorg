@@ -136,14 +136,14 @@ const store = Vuex.createStore({
       }
       state.consolidatedIngredients = newIngs;
       var l = 0;
-      for (var k = 0; k < state.consolidatedIngredients.length; k += 1) {//length is 2
+      for (var k = 0; k < state.consolidatedIngredients.length; k += 1) {
         l = k + 1;
         while (l < state.consolidatedIngredients.length) {
-          var ing1 = state.consolidatedIngredients[k];//5 cups of water
-          var ing2 = state.consolidatedIngredients[l];//6 cups of water
-          if (ing1.unit === ing2.unit) {// yep
-            if (ing2.name === ing1.name) {//yep
-              ing1.quantity += ing2.quantity;//11 now
+          var ing1 = state.consolidatedIngredients[k];
+          var ing2 = state.consolidatedIngredients[l];
+          if (ing1.unit === ing2.unit) {
+            if (ing2.name === ing1.name) {
+              ing1.quantity += ing2.quantity;
               state.consolidatedIngredients.splice(l, 1);
             }
             else {

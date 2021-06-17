@@ -168,7 +168,6 @@ let rightPane = app.component('Rightpane', {
       }).done(
         (data) => {
           this.$store.commit('updateCurRec', data);
-          this.$store.commit('sortRecList');
         },
       ).fail(
         (jqXHR) => {
@@ -191,7 +190,6 @@ let rightPane = app.component('Rightpane', {
         .done(
           (recipeList) => {
             this.$store.commit('updateRecList', recipeList);
-            this.$store.commit('sortRecList');
           },
         ).fail(this.fail);
       this.$emit('update-err', '');

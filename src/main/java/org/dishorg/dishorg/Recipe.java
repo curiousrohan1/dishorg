@@ -13,7 +13,6 @@ import java.util.Set;
 @Entity
 public class Recipe {
     @JsonIgnore
-//    @ManyToMany(mappedBy = "recipes")
     @ManyToMany
     @JoinTable(
             name = "grocery_list_recipe",

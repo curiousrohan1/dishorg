@@ -10,16 +10,17 @@ import java.util.List;
 @RestController
 public class RecipeController {
     private final RecipeRepository repo;
-    private final GroceryListRepository grocRepo;
 
-    public RecipeController(RecipeRepository repo, GroceryListRepository grocRepo) {
+    public RecipeController(RecipeRepository repo) {
         this.repo = repo;
-        this.grocRepo = grocRepo;
     }
 
     @PostMapping("/recipes")
     Recipe newRecipe(@RequestBody Recipe newRecipe) {
         try {
+            if (repo.count() > 3) {
+                throw new TooManyRecipesException();
+            }
             return repo.save(newRecipe);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateRecipeException(newRecipe);
@@ -53,12 +54,8 @@ public class RecipeController {
     }
 
     @DeleteMapping("/recipes/{id}")
-    String deleteRecipe(@PathVariable Long id) {//1
-//        repo.findById(id).ifPresent(recipe -> {//a
-//            recipe.groceryLists.clear();//a doesn't have c
-//            repo.save(recipe);// artificial put
-//        });
-        repo.deleteById(id);//all done, should work
+    String deleteRecipe(@PathVariable Long id) {
+        repo.deleteById(id);
         return "{\"status\": \"Success\"}";
     }
 

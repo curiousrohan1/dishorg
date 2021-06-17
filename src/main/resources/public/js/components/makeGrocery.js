@@ -64,8 +64,6 @@ let makeGrocery = app.component('Makegrocery', {
         .done(
           (grocery) => {
             this.$store.commit('updateCurGroc', grocery);
-            this.$store.commit('sortGrocList');
-            this.$store.commit('sortRecList');
             this.$store.commit('refreshIngredients');
           }
         );
@@ -134,7 +132,6 @@ let makeGrocery = app.component('Makegrocery', {
       }).done(
         (data) => {
           this.$store.commit('updateCurGroc', data);
-          this.$store.commit('sortGrocList');
         },
       ).fail(
         (jqXHR) => {
@@ -150,14 +147,12 @@ let makeGrocery = app.component('Makegrocery', {
       $.get('/groceries', 'json').done(
         (groceryList) => {
           this.$store.commit('updateGrocList', groceryList);
-          this.$store.commit('sortGrocList');
         }
       ).fail(this.fail)
       $.get('/recipes', 'json')
         .done(
           (recipeList) => {
             this.$store.commit('updateRecList', recipeList);
-            this.$store.commit('sortRecList');
           },
         ).fail(this.fail);
       this.$store.commit('updateCurGroc', {});
@@ -369,8 +364,6 @@ let makeGrocery = app.component('Makegrocery', {
           <ul>
               <li class = "ingItem" v-for = "(ing,idx) in this.$store.state.consolidatedIngredients">{{this.line(ing)}}</li>
           </ul>
-          <!--
-          -->
       </div>
   </div>
   `

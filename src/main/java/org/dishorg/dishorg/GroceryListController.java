@@ -16,6 +16,9 @@ public class GroceryListController {
     @PostMapping("/groceries")
     GroceryList newGrocList(@RequestBody GroceryList newGroceryList) {
         try {
+            if (repo.count() > 150) {
+                throw new TooManyGroceriesException();
+            }
             return repo.save(newGroceryList);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateGroceryListException(newGroceryList);

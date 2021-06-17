@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Cook It Best</title>
-    <meta name="viewport" top="width=device-width, initial-scale=1" />
+    <meta name="viewport" top="width=device-width, initial-scale=1"/>
     <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            rel="stylesheet"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -14,70 +14,70 @@
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/vue-router@4"></script>
     <script src="https://unpkg.com/vuex@next"></script>
-    <link href="style.css" rel="stylesheet" />
-  </head>
+    <link href="style.css" rel="stylesheet"/>
+</head>
 
-  <body>
-    <audio id="success">
-      <source
-        src="http://soundbible.com/grab.php?id=1003&type=mp3"
-        type="audio/mp3"
-      />
-      <source
-        src="http://soundbible.com/grab.php?id=1003&type=wav"
-        type="audio/wav"
-      />
-    </audio>
-    <audio id="fail">
-      <source
-        src="http://soundbible.com/grab.php?id=1945&type=mp3"
-        type="audio/mp3"
-      />
-      <source
-        src="http://soundbible.com/grab.php?id=1945&type=wav"
-        type="audio/wav"
-      />
-    </audio>
-    <div id="dishorg">
-      <!-- Button trigger modal -->
-      <header id="nav-bar">
-        <router-link to="/"><img src="images/logo.png" /></router-link>
+<body>
+<audio id="success">
+    <source
+            src="http://soundbible.com/grab.php?id=1003&type=mp3"
+            type="audio/mp3"
+    />
+    <source
+            src="http://soundbible.com/grab.php?id=1003&type=wav"
+            type="audio/wav"
+    />
+</audio>
+<audio id="fail">
+    <source
+            src="http://soundbible.com/grab.php?id=1945&type=mp3"
+            type="audio/mp3"
+    />
+    <source
+            src="http://soundbible.com/grab.php?id=1945&type=wav"
+            type="audio/wav"
+    />
+</audio>
+<div id="dishorg">
+    <header id="nav-bar">
+        <router-link to="/"><img src="images/logo.png"/></router-link>
         <nav>
-          <ul id="nav">
-            <li>
-              <router-link
-                to="/make-a-grocery-list"
-                v-show="this.$store.state.recipeList.length !== 0"
-              >
-                Grocery Lists
-              </router-link>
-            </li>
-            <li>
-              <router-link to="/make-a-recipe">Recipes</router-link>
-            </li>
-            <li>
-              <router-link to="/help">Help</router-link>
-            </li>
-          </ul>
+            <ul id="nav">
+                <li>
+                    <router-link
+                            to="/make-a-grocery-list"
+                            v-show="this.$store.state.recipeList.length !== 0"
+                    >
+                        Grocery Lists
+                    </router-link>
+                </li>
+                <li>
+                    <router-link to="/make-a-recipe">Recipes</router-link>
+                </li>
+                <li>
+                    <router-link to="/help">Help</router-link>
+                </li>
+            </ul>
         </nav>
-      </header>
-      <router-view></router-view>
-    </div>
-    <!-- Import App -->
-    <script src="js/index.js"></script>
-    <!-- Import Components -->
-    <script src="js/components/leftPane.js"></script>
-    <script src="js/components/rightPane.js"></script>
-    <script src="js/components/makeRec.js"></script>
-    <script src="js/components/makeGrocery.js"></script>
-    <script src="js/components/home.js"></script>
-    <script src="js/components/help.js"></script>
-    <!-- Import Router -->
-    <script src="js/router.js"></script>
-    <!-- Mount App -->
-    <script>
+    </header>
+    <router-view></router-view>
+</div>
+<!-- Import App -->
+<script src="js/index.js"></script>
+<!-- Import Components -->
+<script src="js/components/leftPane.js"></script>
+<script src="js/components/rightPane.js"></script>
+<script src="js/components/makeRec.js"></script>
+<script src="js/components/makeGrocery.js"></script>
+<script src="js/components/home.js"></script>
+<script src="js/components/help.js"></script>
+<!-- Import Router -->
+<script src="js/router.js"></script>
+<!-- Mount App -->
+<script>
       app.mount("#dishorg");
       $("form").submit(false);
-    </script>
-  </body>
+
+</script>
+</body>
 </html>

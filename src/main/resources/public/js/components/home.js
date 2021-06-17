@@ -4,13 +4,11 @@ app.component('Home', {
       .done(
         (recipeList) => {
           this.$store.commit('updateRecList', recipeList);
-          this.$store.commit('sortRecList');
         },
       )
     $.get('/groceries', 'json').done(
       (groceryList) => {
         this.$store.commit('updateGrocList', groceryList);
-        this.$store.commit('sortGrocList');
       }
     )
   },

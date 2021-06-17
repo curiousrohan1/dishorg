@@ -12,7 +12,6 @@ let leftPane = app.component('Leftpane', {
       .done(
         (recipeList) => {
           this.$store.commit('updateRecList', recipeList);
-          this.$store.commit('sortRecList');
         },
       ).fail(this.failureOnAjaxOfRecipe);
   },
