@@ -18,7 +18,7 @@ public class RecipeController {
     @PostMapping("/recipes")
     Recipe newRecipe(@RequestBody Recipe newRecipe) {
         try {
-            if (repo.count() > 3) {
+            if (repo.count() > 150) {
                 throw new TooManyRecipesException();
             }
             return repo.save(newRecipe);

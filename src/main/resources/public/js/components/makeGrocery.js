@@ -21,9 +21,6 @@ let makeGrocery = app.component('Makegrocery', {
     displayWarn() {
       return this.$store.state.error !== '';
     },
-    groceriesExist() {
-      return this.$store.state.groceryList.length !== 0 && !this.isEmpty(this.$store.state.currentGroc);
-    }
   },
   mounted() {
     this.reset()
@@ -309,7 +306,7 @@ let makeGrocery = app.component('Makegrocery', {
           </div>
       </div>
       <div id="right-pane">
-          <div v-show="groceriesExist">
+          <div>
               <strong id = "groc-title" v-show = "showGrocTitle"
                   class = 'text text-success'>{{this.$store.state.currentGroc.name}}</strong>&nbsp; &nbsp; &nbsp; 
               <div id = "renamed-grocery-name" v-show = "showRename">
