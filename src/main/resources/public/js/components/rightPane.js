@@ -21,7 +21,7 @@ let rightPane = app.component('Rightpane', {
     }
   },
   mounted() {
-   this.reset();
+    this.reset();
   },
   methods: {
     isEmpty(data) {
@@ -182,10 +182,10 @@ let rightPane = app.component('Rightpane', {
     },
     reset() {
       $.get('/units').done(
-            (units) => {
-              this.unitList = units;
-            }
-          ).fail(this.failureOnAjaxOfRecipe);
+        (units) => {
+          this.unitList = units;
+        }
+      ).fail(this.failureOnAjaxOfRecipe);
       this.$store.commit('updateCurRec', {});
       $.get('/recipes', 'json')
         .done(
@@ -195,17 +195,17 @@ let rightPane = app.component('Rightpane', {
           },
         ).fail(this.fail);
       this.$emit('update-err', '');
-            this.showRecTitle= true;
-            this.showRename= false;
-            this.rename= '';
-            this.displayIngDiv= false;
-            this.quantity= '';
-            this.unit= '[No Unit]';
-            this.unitList= [];
-            this.name= '';
-            this.updateRecList= false;
-            this.editIngIdx= -1;
-            this.plusIngChar= '+';
+      this.showRecTitle = true;
+      this.showRename = false;
+      this.rename = '';
+      this.displayIngDiv = false;
+      this.quantity = '';
+      this.unit = '[No Unit]';
+      this.unitList = [];
+      this.name = '';
+      this.updateRecList = false;
+      this.editIngIdx = -1;
+      this.plusIngChar = '+';
     },
     showIng(idx) {
       if (idx === this.editIngIdx) {

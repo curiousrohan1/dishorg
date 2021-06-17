@@ -1,11 +1,13 @@
 package org.dishorg.dishorg;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class GroceryList {
     private @Id

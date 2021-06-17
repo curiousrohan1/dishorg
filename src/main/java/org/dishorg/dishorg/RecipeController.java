@@ -1,13 +1,7 @@
 package org.dishorg.dishorg;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,9 +10,11 @@ import java.util.List;
 @RestController
 public class RecipeController {
     private final RecipeRepository repo;
+    private final GroceryListRepository grocRepo;
 
-    public RecipeController(RecipeRepository repo) {
+    public RecipeController(RecipeRepository repo, GroceryListRepository grocRepo) {
         this.repo = repo;
+        this.grocRepo = grocRepo;
     }
 
     @PostMapping("/recipes")
@@ -57,8 +53,12 @@ public class RecipeController {
     }
 
     @DeleteMapping("/recipes/{id}")
-    String deleteRecipe(@PathVariable Long id) {
-        repo.deleteById(id);
+    String deleteRecipe(@PathVariable Long id) {//1
+//        repo.findById(id).ifPresent(recipe -> {//a
+//            recipe.groceryLists.clear();//a doesn't have c
+//            repo.save(recipe);// artificial put
+//        });
+        repo.deleteById(id);//all done, should work
         return "{\"status\": \"Success\"}";
     }
 

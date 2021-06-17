@@ -15,14 +15,14 @@ let makeGrocery = app.component('Makegrocery', {
       showAddGroc: false,
       grocName: '',
       plusGrocChar: '+'
-    }; 
+    };
   },
   computed: {
     displayWarn() {
-      return this.$store.state.error !== ''; 
+      return this.$store.state.error !== '';
     },
     groceriesExist() {
-      return this.$store.state.groceryList.length !== 0 && !this.isEmpty(this.$store.state.currentGroc); 
+      return this.$store.state.groceryList.length !== 0 && !this.isEmpty(this.$store.state.currentGroc);
     }
   },
   mounted() {
@@ -30,39 +30,30 @@ let makeGrocery = app.component('Makegrocery', {
   },
   methods: {
     updateErr(message) {
-      this.$store.commit('setError', message); 
+      this.$store.commit('setError', message);
       window.setTimeout(() => {
-        this.$store.commit('setError', ''); 
+        this.$store.commit('setError', '');
       }, 3000)
     },
     isEmpty(data) {
-      if (typeof (data) === 'object') {
-        if (JSON.stringify(data) === '{}' || JSON.stringify(data) === '[]') {
-          return true; 
-        } else if (!data) {
-          return true; 
-        }
-        return false; 
-      } else if (typeof (data) === 'string') {
-        if (!data.trim()) {
-          return true; 
-        }
-        return false; 
-      } else if (typeof (data) === 'undefined') {
-        return true; 
-      } else {
-        return false; 
+      if (JSON.stringify(data) === '{}' || JSON.stringify(data) === '[]') {
+        return true;
+      } else if (!data) {
+        return true;
+      } else if (data.hasOwnProperty("name")) {
+        return true;
       }
+      return false;
     },
     cancelAddRec() {
-      this.displayRecDiv = false; 
-      this.rec = {}; 
-      this.plusRecChar = '+'; 
+      this.displayRecDiv = false;
+      this.rec = {};
+      this.plusRecChar = '+';
     },
     applyAddRec() {
-      this.updateErr(''); 
+      this.updateErr('');
       let otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc))
-      otherGroc.recipes.push({ id: this.rec }); 
+      otherGroc.recipes.push({ id: this.rec });
       $.ajax({
         type: 'PUT',
         url: `/groceries/${otherGroc.id}`,
@@ -72,33 +63,33 @@ let makeGrocery = app.component('Makegrocery', {
       }).fail(this.failureOnAjaxOfRecipe)
         .done(
           (grocery) => {
-            this.$store.commit('updateCurGroc', grocery); 
-            this.$store.commit('sortGrocList'); 
+            this.$store.commit('updateCurGroc', grocery);
+            this.$store.commit('sortGrocList');
             this.$store.commit('sortRecList');
             this.$store.commit('refreshIngredients');
           }
-        ); 
-      this.rec = {}; 
+        );
+      this.rec = {};
     },
     line(ing) {
-      return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`)); 
+      return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
     },
     cancelGrocRename() {
-      this.showRename = false; 
-      this.showGrocTitle = true; 
+      this.showRename = false;
+      this.showGrocTitle = true;
     },
     editGrocName() {
-      this.showRename = true; 
-      this.showGrocTitle = false; 
-      this.rename = this.$store.state.currentGroc.name; 
+      this.showRename = true;
+      this.showGrocTitle = false;
+      this.rename = this.$store.state.currentGroc.name;
     },
     plusRec() {
       if (this.plusRecChar === '+') {
-        this.displayRecDiv = true; 
-        this.plusRecChar = '-'; 
+        this.displayRecDiv = true;
+        this.plusRecChar = '-';
       }
       else {
-        this.cancelAddRec(); 
+        this.cancelAddRec();
       }
       console.log(this.$store.state.currentGroc)
       console.log(this.$store.state.recipeList)
@@ -110,30 +101,31 @@ let makeGrocery = app.component('Makegrocery', {
         dataType: 'json',
       })
         .fail(this.fail)
-        .done(this.reset); 
-      this.$store.commit('setCurGroc',{});
+        .done(this.reset);
+      this.$store.commit('setCurGroc', {});
+      this.$store.commit('clearIngredients')
     },
     fail(jqXHR) {
-      let message = ''; 
+      let message = '';
       if (jqXHR.readyState === 0) {
-        message = 'Failed to contact server.'; 
+        message = 'Failed to contact server.';
       } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseJSON')) {
-        message = jqXHR.responseJSON.message; 
+        message = jqXHR.responseJSON.message;
       } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
-        message = jqXHR['responseText']; 
+        message = jqXHR['responseText'];
       } else {
         message = "An unknown error has occurred."
       }
-      this.updateErr(message); 
+      this.updateErr(message);
     },
     applyGrocRename() {
       if (this.rename === this.$store.state.currentGroc.name) {
-        this.cancelGrocRename(); 
-        return; 
+        this.cancelGrocRename();
+        return;
       }
-      this.updateErr(''); 
-      const otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc)); 
-      otherGroc.name = this.rename; 
+      this.updateErr('');
+      const otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc));
+      otherGroc.name = this.rename;
       $.post({
         url: 'groceries',
         data: JSON.stringify(otherGroc),
@@ -141,51 +133,51 @@ let makeGrocery = app.component('Makegrocery', {
         dataType: 'json',
       }).done(
         (data) => {
-          this.$store.commit('updateCurGroc', data); 
-          this.$store.commit('sortGrocList'); 
+          this.$store.commit('updateCurGroc', data);
+          this.$store.commit('sortGrocList');
         },
       ).fail(
         (jqXHR) => {
-          this.$store.state.showGrocTitle = true; 
-          this.showRename = false; 
-          this.fail(jqXHR); 
+          this.$store.state.showGrocTitle = true;
+          this.showRename = false;
+          this.fail(jqXHR);
         },
-      ); 
-      this.showRename = false; 
-      this.showGrocTitle = true; 
+      );
+      this.showRename = false;
+      this.showGrocTitle = true;
     },
     reset() {
       $.get('/groceries', 'json').done(
         (groceryList) => {
-          this.$store.commit('updateGrocList', groceryList); 
-          this.$store.commit('sortGrocList'); 
+          this.$store.commit('updateGrocList', groceryList);
+          this.$store.commit('sortGrocList');
         }
       ).fail(this.fail)
       $.get('/recipes', 'json')
         .done(
           (recipeList) => {
-            this.$store.commit('updateRecList', recipeList); 
-            this.$store.commit('sortRecList'); 
+            this.$store.commit('updateRecList', recipeList);
+            this.$store.commit('sortRecList');
           },
-        ).fail(this.fail); 
-      this.$store.commit('updateCurGroc', {}); 
-      this.updateErr(''); 
-      this.showGrocTitle = true; 
-      this.showRename = false; 
-      this.rename = ''; 
-      this.displayRecDiv = false; 
-      this.quantity = ''; 
-      this.rec = {}; 
-      this.unitList = []; 
-      this.name = ''; 
-      this.updateRecList = false; 
-      this.plusRecChar = '+'; 
-      this.showAddGroc = false; 
-      this.grocName = ''; 
+        ).fail(this.fail);
+      this.$store.commit('updateCurGroc', {});
+      this.updateErr('');
+      this.showGrocTitle = true;
+      this.showRename = false;
+      this.rename = '';
+      this.displayRecDiv = false;
+      this.quantity = '';
+      this.rec = {};
+      this.unitList = [];
+      this.name = '';
+      this.updateRecList = false;
+      this.plusRecChar = '+';
+      this.showAddGroc = false;
+      this.grocName = '';
       this.plusGrocChar = '+'
     },
     success(grocery) {
-      this.$store.commit('setCurGroc', grocery); 
+      this.$store.commit('setCurGroc', grocery);
     },
     delRec(idx) {
       this.$store.commit('delRec', idx)
@@ -200,34 +192,34 @@ let makeGrocery = app.component('Makegrocery', {
       this.$store.commit('refreshIngredients')
     },
     showRightButtons() {
-      return !this.isEmpty(this.$store.state.currentGroc); 
+      return !this.isEmpty(this.$store.state.currentGroc);
     },
     showAddGrocDiv() {
       if (this.plusGrocChar === '+') {
-        this.showAddGroc = true; 
+        this.showAddGroc = true;
         this.$nextTick(() => {
-          this.$refs.newGrocName.focus(); 
-        }); 
-        this.plusGrocChar = '-'; 
+          this.$refs.newGrocName.focus();
+        });
+        this.plusGrocChar = '-';
       }
       else {
-        this.cancelAddGroc(); 
+        this.cancelAddGroc();
       }
     },
     clickGroc(idx) {
-      this.$store.commit('activateGroc', idx); 
+      this.$store.commit('activateGroc', idx);
       this.$store.commit('setCurGroc', this.$store.state.groceryList[idx]);
       this.$store.commit('refreshIngredients');
     },
     addGroc() {
-      this.plusGrocChar = '+'; 
+      this.plusGrocChar = '+';
       const groc = {
         name: this.grocName,
         recipes: [
         ],
         id: this.$store.state.groceryList.length,
         active: false,
-      }; 
+      };
       $.post({
         url: 'groceries',
         data: JSON.stringify(groc),
@@ -236,37 +228,37 @@ let makeGrocery = app.component('Makegrocery', {
       }).done(
         (grocery) => {
           console.log(grocery)
-          this.$store.commit('setCurGroc', grocery); 
-          this.$store.commit('addGroc', grocery); 
-          this.clickGroc(this.findGroc(grocery)); 
+          this.$store.commit('setCurGroc', grocery);
+          this.$store.commit('addGroc', grocery);
+          this.clickGroc(this.findGroc(grocery));
         },
       ).fail(
         (jqXHR) => {
-          this.fail(jqXHR); 
+          this.fail(jqXHR);
         },
-      ); 
-      this.showAddGroc = false; 
+      );
+      this.showAddGroc = false;
       this.grocName = ''
     },
     cancelAddGroc() {
-      this.showAddGroc = false; 
-      this.grocName = ''; 
-      this.plusGrocChar = '+'; 
+      this.showAddGroc = false;
+      this.grocName = '';
+      this.plusGrocChar = '+';
     },
     findGroc(grocery) {
       for (let i = 0; i < this.$store.state.groceryList.length; i += 1) {
         if (JSON.stringify(this.$store.state.groceryList[i]) === JSON.stringify(grocery)) {
-          return i; 
+          return i;
         }
       }
     },
-    dupGroc(){
+    dupGroc() {
       const dupGroc = {
-        name: "Copy of "+this.$store.state.currentGroc.name,
+        name: "Copy of " + this.$store.state.currentGroc.name,
         recipes: this.$store.state.currentGroc.recipes,
         id: this.$store.state.groceryList.length,
         active: false,
-      }; 
+      };
       $.post({
         url: 'groceries',
         data: JSON.stringify(dupGroc),
@@ -275,16 +267,16 @@ let makeGrocery = app.component('Makegrocery', {
       }).done(
         (grocery) => {
           console.log(grocery)
-          this.$store.commit('setCurGroc', grocery); 
-          this.$store.commit('addGroc', grocery); 
-          this.clickGroc(this.findGroc(grocery)); 
+          this.$store.commit('setCurGroc', grocery);
+          this.$store.commit('addGroc', grocery);
+          this.clickGroc(this.findGroc(grocery));
         },
       ).fail(
         (jqXHR) => {
-          this.fail(jqXHR); 
+          this.fail(jqXHR);
         },
-      ); 
-      this.showAddGroc = false; 
+      );
+      this.showAddGroc = false;
       this.grocName = ''
     }
   },

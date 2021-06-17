@@ -1,21 +1,30 @@
 package org.dishorg.dishorg;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Recipe {
+    @JsonIgnore
+//    @ManyToMany(mappedBy = "recipes")
+    @ManyToMany
+    @JoinTable(
+            name = "grocery_list_recipe",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "grocery_list_id"))
+    Set<GroceryList> groceryLists;
     private @Id
     @GeneratedValue
     Long id;
-
     @Column(unique = true)
     private String name;
-
     @ElementCollection
     private List<Ingredient> ingredients;
 

@@ -8,16 +8,16 @@ const store = Vuex.createStore({
       error: '',
       groceryList: [],
       currentGroc: {
-        name:"",
-        recipes:[],
+        name: "",
+        recipes: [],
       },
       showGrocTitle: true,
-      consolidatedIngredients:[]
+      consolidatedIngredients: []
     }
   },
   mutations: {
     setCurRec(state, newRec) {
-      if (newRec === {}) {
+      if (!newRec.hasOwnProperty("name")) {
         state.currentRec = {};
       } else {
         state.currentRec = newRec;
@@ -26,17 +26,22 @@ const store = Vuex.createStore({
     updateCurRec(state, newRec) {
       state.currentRec.ingredients = newRec.ingredients;
       state.currentRec.name = newRec.name;
-      this.commit('refreshIngredients');
     },
     updateCurGroc(state, newGroc) {
-      state.currentGroc.recipes = newGroc.recipes;
-      state.currentGroc.name = newGroc.name;
+      if (!newGroc.hasOwnProperty("name")) {
+        state.currentGroc.name = "";
+        state.currentGroc.recipes = [];
+      } else {
+        state.currentGroc.name = newGroc.name;
+        state.currentGroc.recipes = newGroc.recipes;
+      }
+      this.commit('refreshIngredients');
     },
     setCurGroc(state, newGroc) {
-      if (newGroc === {}) {
+      if (!newGroc.hasOwnProperty("name")) {
         state.currentGroc = {
-            name:"",
-            recipes:[],
+          name: "",
+          recipes: [],
         };
       } else {
         state.currentGroc = newGroc;
@@ -48,12 +53,34 @@ const store = Vuex.createStore({
       for (let i = 0; i < newRecList.length; i += 1) {
         state.recipeList.splice(state.recipeList.length, 0, newRecList[i]);
       }
+      state.recipeList.sort(
+        (a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        }
+      );
     },
     updateGrocList(state, newGrocList) {
       state.groceryList.length = 0;
       for (let i = 0; i < newGrocList.length; i += 1) {
         state.groceryList.splice(state.groceryList.length, 0, newGrocList[i]);
       }
+      state.groceryList.sort(
+        (a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        }
+      );
     },
     activateRec(state, idx) {
       for (let i = 0; i < state.recipeList.length; i += 1) {
@@ -81,32 +108,6 @@ const store = Vuex.createStore({
       }
       state.groceryList.splice(i, 0, grocery);
     },
-    sortRecList(state) {
-      state.recipeList.sort(
-        (a, b) => {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
-        }
-      );
-    },
-    sortGrocList(state) {
-      state.groceryList.sort(
-        (a, b) => {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
-        }
-      );
-    },
     updateEditIng(state, obj) {
       state.currentRec.ingredients[obj.idx] = obj.ing;
     },
@@ -119,38 +120,44 @@ const store = Vuex.createStore({
     setError(state, newError) {
       state.error = newError;
     },
-    refreshIngredients(state){
-        var i;
-        var j;
-        var rec;
-        var ing;
-        var newIngs=[];
-        for(i = 0; i < state.currentGroc.recipes.length; i += 1){
-            rec=state.currentGroc.recipes[i];
-            for(j = 0; j < rec.ingredients.length; j += 1){
-                ing = rec.ingredients[j];
-                newIngs.push(ing);
-            }
+    refreshIngredients(state) {
+      var i = 0;
+      var j = 0;
+      var rec = {};
+      var ing = {};
+      var newIngs = [];
+      console.log(state.currentGroc)
+      for (i = 0; i < state.currentGroc.recipes.length; i += 1) {
+        rec = state.currentGroc.recipes[i];
+        for (j = 0; j < rec.ingredients.length; j += 1) {
+          ing = rec.ingredients[j];
+          newIngs.push(ing);
         }
-        state.consolidatedIngredients = newIngs;
-        for(var i=0;i<state.consolidatedIngredients.length;i+=1){//length is 2
-            for(var j=i+1;j<state.consolidatedIngredients.length;j+=1){
-                var ing1=state.consolidatedIngredients[i];//5 cups of water
-                var ing2=state.consolidatedIngredients[j];//6 cups of water
-                if(ing1.unit===ing2.unit){// yep
-                    if(ing2.name === ing1.name){//yep
-                        ing1.quantity += ing2.quantity;//11 now
-                        state.consolidatedIngredients.splice(j,1);
-                    }
-                    else{
-                        j++;
-                    }
-                }
-                else{
-                    j++;
-                }
+      }
+      state.consolidatedIngredients = newIngs;
+      var l = 0;
+      for (var k = 0; k < state.consolidatedIngredients.length; k += 1) {//length is 2
+        l = k + 1;
+        while (l < state.consolidatedIngredients.length) {
+          var ing1 = state.consolidatedIngredients[k];//5 cups of water
+          var ing2 = state.consolidatedIngredients[l];//6 cups of water
+          if (ing1.unit === ing2.unit) {// yep
+            if (ing2.name === ing1.name) {//yep
+              ing1.quantity += ing2.quantity;//11 now
+              state.consolidatedIngredients.splice(l, 1);
             }
+            else {
+              l++;
+            }
+          }
+          else {
+            l++;
+          }
         }
+      }
+    },
+    clearIngredients(state) {
+      state.consolidatedIngredients = [];
     }
   }
 })
