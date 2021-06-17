@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(value = {DuplicateRecipeException.class})
+    @ExceptionHandler(value = {DuplicateRecipeException.class, DuplicateGroceryListException.class, TooManyGroceriesException.class, TooManyRecipesException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);

@@ -1,48 +1,58 @@
+
 const store = Vuex.createStore({
-  state () {
+  state() {
     return {
       currentRec: {},
       showRecTitle: true,
-      recipeList: []
+      recipeList: [],
+      error: '',
+      groceryList: [],
+      currentGroc: {
+        name: "",
+        recipes: [],
+      },
+      showGrocTitle: true,
+      consolidatedIngredients: []
     }
   },
   mutations: {
-    setCurRec (state, newRec) {
-      if (newRec === {}) {
-//        for (var prop in state.currentRec) {
-//          if (state.currentRec.hasOwnProperty(prop)) {
-//            delete state.currentRec[prop];
-//          }
-//        }
-        state.currentRec={};
+    setCurRec(state, newRec) {
+      if (!newRec.hasOwnProperty("name")) {
+        state.currentRec = {};
       } else {
         state.currentRec = newRec;
       }
     },
-    updateCurRec (state, newRec) {
+    updateCurRec(state, newRec) {
       state.currentRec.ingredients = newRec.ingredients;
       state.currentRec.name = newRec.name;
     },
-    updateRecList (state, newRecList) {
+    updateCurGroc(state, newGroc) {
+      if (!newGroc.hasOwnProperty("name")) {
+        state.currentGroc.name = "";
+        state.currentGroc.recipes = [];
+      } else {
+        state.currentGroc.name = newGroc.name;
+        state.currentGroc.recipes = newGroc.recipes;
+      }
+      this.commit('refreshIngredients');
+    },
+    setCurGroc(state, newGroc) {
+      if (!newGroc.hasOwnProperty("name")) {
+        state.currentGroc = {
+          name: "",
+          recipes: [],
+        };
+      } else {
+        state.currentGroc = newGroc;
+      }
+      this.commit('refreshIngredients');
+    },
+    updateRecList(state, newRecList) {
       state.recipeList.length = 0;
       for (let i = 0; i < newRecList.length; i += 1) {
         state.recipeList.splice(state.recipeList.length, 0, newRecList[i]);
       }
-    },
-    activateRec (state, idx) {
-      for (let i = 0; i < state.recipeList.length; i += 1) {
-        state.recipeList[i].active = false;
-      }
-      state.recipeList[idx].active = true;
-    },
-    addRecipe (state, recipe) {
-      let i = 0;
-      while (i < state.recipeList.length && state.recipeList[i].name < recipe.name) {
-        i += 1;
-      }
-      state.recipeList.splice(i, 0, recipe);
-    },
-    sortRecList (state) {
       state.recipeList.sort(
         (a, b) => {
           if (a.name < b.name) {
@@ -55,21 +65,108 @@ const store = Vuex.createStore({
         }
       );
     },
-    updateEditIng (state, obj) {
+    updateGrocList(state, newGrocList) {
+      state.groceryList.length = 0;
+      for (let i = 0; i < newGrocList.length; i += 1) {
+        state.groceryList.splice(state.groceryList.length, 0, newGrocList[i]);
+      }
+      state.groceryList.sort(
+        (a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        }
+      );
+    },
+    activateRec(state, idx) {
+      for (let i = 0; i < state.recipeList.length; i += 1) {
+        state.recipeList[i].active = false;
+      }
+      state.recipeList[idx].active = true;
+    },
+    activateGroc(state, idx) {
+      for (let i = 0; i < state.groceryList.length; i += 1) {
+        state.groceryList[i].active = false;
+      }
+      state.groceryList[idx].active = true;
+    },
+    addRecipe(state, recipe) {
+      let i = 0;
+      while (i < state.recipeList.length && state.recipeList[i].name < recipe.name) {
+        i += 1;
+      }
+      state.recipeList.splice(i, 0, recipe);
+    },
+    addGroc(state, grocery) {
+      let i = 0;
+      while (i < state.groceryList.length && state.groceryList[i].name < grocery.name) {
+        i += 1;
+      }
+      state.groceryList.splice(i, 0, grocery);
+    },
+    updateEditIng(state, obj) {
       state.currentRec.ingredients[obj.idx] = obj.ing;
     },
-    delIng (state, idx) {
+    delIng(state, idx) {
       state.currentRec.ingredients.splice(idx, 1);
+    },
+    delRec(state, idx) {
+      state.currentGroc.recipes.splice(idx, 1);
+    },
+    setError(state, newError) {
+      state.error = newError;
+    },
+    refreshIngredients(state) {
+      var i = 0;
+      var j = 0;
+      var rec = {};
+      var ing = {};
+      var newIngs = [];
+      console.log(state.currentGroc)
+      for (i = 0; i < state.currentGroc.recipes.length; i += 1) {
+        rec = state.currentGroc.recipes[i];
+        for (j = 0; j < rec.ingredients.length; j += 1) {
+          ing = rec.ingredients[j];
+          newIngs.push(ing);
+        }
+      }
+      state.consolidatedIngredients = newIngs;
+      var l = 0;
+      for (var k = 0; k < state.consolidatedIngredients.length; k += 1) {
+        l = k + 1;
+        while (l < state.consolidatedIngredients.length) {
+          var ing1 = state.consolidatedIngredients[k];
+          var ing2 = state.consolidatedIngredients[l];
+          if (ing1.unit === ing2.unit) {
+            if (ing2.name === ing1.name) {
+              ing1.quantity += ing2.quantity;
+              state.consolidatedIngredients.splice(l, 1);
+            }
+            else {
+              l++;
+            }
+          }
+          else {
+            l++;
+          }
+        }
+      }
+    },
+    clearIngredients(state) {
+      state.consolidatedIngredients = [];
     }
   }
 })
 const app = Vue.createApp({
-  data () {
+  data() {
     return {
       displayBod: false,
       displayIngDiv: false,
       disabled: true,
-      error: '',
       recName: '',
       curRec: {},
       updateRecList: false,
@@ -81,65 +178,29 @@ const app = Vue.createApp({
         'Delete Account',
       ],
       showRecTitle: true,
-      hovered: false,
-      classObj: {
-        'btn-dark': this.hovered, 'btn-light': !this.hovered
-      },
       username: '',
-      password: '',
-      signIn: true,
-      rightPaneShow:true
+      password: ''
     }
   },
   methods: {
-    hideIngDiv () {
+    hideIngDiv() {
       this.displayIngDiv = false;
     },
-    openModal () {
+    openModal() {
       this.showModal = !this.showModal;
     },
-    updateErr (message) {
-      this.error = message;
-      window.setTimeout(() => {
-        this.error = '';
-      }, 3000)
-    },
-    setHover (boole) {
-      this.hovered = boole;
-    },
-    logIn () {
-      this.signIn = false;
-    },
-    isEmpty (obj) {
+
+    isEmpty(obj) {
       for (var key in obj) {
-        if (obj.hasOwnProperty(key))
+        if (Object.prototype.hasOwnProperty.call(obj, key))
           return false;
       }
       return true;
     },
-    hideRightPane(){
-      this.displayRightPane=false;
-    },
-    displayRightPane(){
-      this.displayRightPane=true;
+
+    setCreds(obj) {
+      this.username = obj.username;
+      this.password = obj.password;
     }
   },
-  computed: {
-    displayWarn () {
-      return this.error !== '';
-    },
-    displayModalButton () {
-      return (this.username !== '') && (this.password !== '');
-    },
-    showRightPane () {
-      this.displayRightPane=!this.isEmpty(this.$store.state.currentRec);
-      return !this.isEmpty(this.$store.state.currentRec);
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.$refs.username.focus();
-    });
-  },
-});
-app.use(store);
+}).use(store);

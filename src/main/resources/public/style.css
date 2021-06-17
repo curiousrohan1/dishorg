@@ -1,156 +1,161 @@
 header img {
-    height: 80px;
-    margin-left: 40px;
+  height: 80px;
+  margin-left: 40px;
 }
 body {
-    height: 125vh;
-    background-size: cover;
-    font-family: sans-serif;
-    margin-top: 80px;
-    padding: 30px;
+  height: 125vh;
+  background-size: cover;
+  font-family: sans-serif;
+  margin-top: 80px;
+  padding: 30px;
 }
 
 header {
-    background-color: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 0 25px 0 black;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 25px 0 black;
 }
 
 header * {
-    display: inline;
+  display: inline;
 }
 
 header li {
-    margin: 20px;
+  margin: 20px;
 }
 
 header li a {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 
-#left-pane{
-    position:relative;
-    width:49%;
-    float:left;
-    padding-left:1rem;
+#left-pane {
+  position: relative;
+  width: 49%;
+  float: left;
+  padding-left: 1rem;
 }
-#right-pane{
-    position:relative;
-    width:49%;
-    float:right;
-    padding-right:1.5rem;
+#right-pane {
+  position: relative;
+  width: 49%;
+  float: right;
+  padding-right: 1.5rem;
 }
-#make-ing{
-    width:100%;
-    display:inline;
+#make-ing {
+  width: 100%;
+  display: inline;
 }
-#make-ing *{
-    display: inline;
+#make-rec {
+  width: 100%;
+  display: inline;
 }
-img{
-    height:30px;
+#make-ing * {
+  display: inline;
 }
-#unit-dropdown{
-    width:5rem;
+#make-rec * {
+  display: inline;
+}
+img {
+  height: 30px;
+}
+#unit-dropdown {
+  width: 5rem;
 }
 
-#left-titles *{
-    display: inline;
+#left-titles * {
+  display: inline;
 }
-#plus-rec{
-    float:right;
+#plus-rec,
+#plus-ing,
+#plus-groc {
+  float: right;
 }
-.disabled{
-    cursor: not-allowed;
+.disabled {
+  cursor: not-allowed;
 }
-#plus-ing{
-    float:right;
+#error-message {
+  text-align: center;
 }
-#error-message{
-    text-align: center;
+#account-img {
+  width: 50px;
+  height: 50px;
 }
-#account-img{
-    width: 50px;
-    height: 50px;
-}
-#nav{
-    float:left;
-    position:relative;
+#nav {
+  float: left;
+  position: relative;
 }
 .modal {
-    display: none;
-    position: fixed;
-    padding-top: 50px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  position: fixed;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .modal-content {
-    position: relative;
-    background-color: white;
-    padding: 20px;
-    margin: auto;
-    width: 75%;
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
-    animation-duration: 0.4s
+  position: relative;
+  background-color: white;
+  padding: 20px;
+  margin: auto;
+  width: 75%;
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
 }
 .close-btn {
-    float: right;
-    color: lightgray;
-    font-size: 24px;
-    font-weight: bold;
+  float: right;
+  color: lightgray;
+  font-size: 24px;
+  font-weight: bold;
 }
 .close-btn:hover {
-    color: darkgray;
+  color: darkgray;
 }
-#sign-in {
-    margin: auto;
-    width: 50%;
-    padding: 5px;
-    border: 3px solid rgb(0, 0, 0);
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    vertical-align: middle;
+#nav-bar {
+  margin: auto;
+  width: 50%;
+  padding: 5px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: middle;
 }
-#sign-in *{
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    vertical-align: middle;
+#logo {
+  margin: auto;
+  width: auto;
+  padding: auto;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: middle;
+  height: auto;
 }
-#nav-bar{
-    margin: auto;
-    width: 50%;
-    padding: 5px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    vertical-align: middle;
+#prof-pic {
+  width: 50px;
+  height: 50px;
 }
-#logo{
-    margin: auto;
-    width: auto;
-    padding: auto;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    vertical-align: middle;
-    height:auto
+.centered {
+  padding: 70px 0;
+  text-align: center;
 }
-#prof-pic{
-    width: 50px;
-    height: 50px;
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+#recipe-details-container {
+  position: inherit;
+}
+#grocery-details-container {
+  position: inherit;
 }
