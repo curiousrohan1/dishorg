@@ -266,7 +266,7 @@ let rightPane = app.component('Rightpane', {
                     {{this.line(ing)}}
                 </li>
             </ul>
-            <form class="form-inline" id="make-ing" v-show="displayIngDiv">
+            <div class="form-inline" id="make-ing" v-show="displayIngDiv">
                 <label class="sr-only" for="quantity">Quantity</label>
                 <input class="form-control mb-2 mr-sm-2 inputIngInfo" ref="quantity" placeholder="Quantity" type="text"
                         v-model="quantity" v-on:keyup.enter="applyAddIng"/>
@@ -285,7 +285,7 @@ let rightPane = app.component('Rightpane', {
                         <img src="images/cancel.jpg">
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     `

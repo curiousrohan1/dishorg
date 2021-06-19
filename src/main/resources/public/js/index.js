@@ -130,7 +130,7 @@ const store = Vuex.createStore({
       for (i = 0; i < state.currentGroc.recipes.length; i += 1) {
         rec = state.currentGroc.recipes[i];
         for (j = 0; j < rec.ingredients.length; j += 1) {
-          ing = rec.ingredients[j];
+          ing = JSON.parse(JSON.stringify(rec.ingredients[j]));
           newIngs.push(ing);
         }
       }

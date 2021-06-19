@@ -38,7 +38,6 @@ let leftPane = app.component('Leftpane', {
         name: this.recName,
         ingredients: [
         ],
-        id: this.$store.state.recipeList.length,
         active: false,
       };
       $.post({

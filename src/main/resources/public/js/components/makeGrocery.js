@@ -61,7 +61,6 @@ let makeGrocery = app.component('Makegrocery', {
         .done(
           (grocery) => {
             this.$store.commit('updateCurGroc', grocery);
-            this.$store.commit('refreshIngredients');
           }
         );
       this.rec = {};
@@ -181,7 +180,6 @@ let makeGrocery = app.component('Makegrocery', {
         dataType: 'json',
       }).fail(this.fail)
         .done(this.success);
-      this.$store.commit('refreshIngredients')
     },
     showRightButtons() {
       return !this.isEmpty(this.$store.state.currentGroc);
@@ -201,7 +199,6 @@ let makeGrocery = app.component('Makegrocery', {
     clickGroc(idx) {
       this.$store.commit('activateGroc', idx);
       this.$store.commit('setCurGroc', this.$store.state.groceryList[idx]);
-      this.$store.commit('refreshIngredients');
     },
     addGroc() {
       this.plusGrocChar = '+';
@@ -209,7 +206,6 @@ let makeGrocery = app.component('Makegrocery', {
         name: this.grocName,
         recipes: [
         ],
-        id: this.$store.state.groceryList.length,
         active: false,
       };
       $.post({
@@ -248,7 +244,6 @@ let makeGrocery = app.component('Makegrocery', {
       const dupGroc = {
         name: "Copy of " + this.$store.state.currentGroc.name,
         recipes: this.$store.state.currentGroc.recipes,
-        id: this.$store.state.groceryList.length,
         active: false,
       };
       $.post({
