@@ -353,9 +353,61 @@ let makeGrocery = app.component('Makegrocery', {
               </div>
           </div>
           <hr>
-          <ul>
-              <li class = "ingItem" v-for = "(ing,idx) in this.$store.state.consolidatedIngredients">{{this.line(ing)}}</li>
-          </ul>
+          <table v-show="this.$store.state.consolidatedIngredients.length>0">
+            <tr>
+              <th scope="row">Unit</th>
+              <td v-for="ing in this.$store.state.consolidatedIngredients">{{ing.unit}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Name</th>
+              <td v-for="ing in this.$store.state.consolidatedIngredients">{{ing.name}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Quantity</th>
+              <td v-for="ing in this.$store.state.consolidatedIngredients">{{ing.quantity}}</td>
+            </tr>
+          </table>
+      </div>
+  </div>
+  <div class="modal fade">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="cont-del-ing">Are you sure?</h5>
+                  <button
+                          aria-label="Close"
+                          class="close btn"
+                          data-dismiss="modal"
+                          type="button"
+                  >
+                      <span aria-hidden="true">&times</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <p>
+                      Ingredient deletion cannot be undone. Please confirm that you want
+                      to delete this ingredient.
+                  </p>
+              </div>
+              <div class="modal-footer">
+                  <button
+                          class="btn btn-secondary"
+                          data-dismiss="modal"
+                          id="cancel-del"
+                          type="button"
+                  >
+                      Cancel Deletion
+                  </button>
+                  <button
+                          class="btn btn-primary delIng"
+                          data-dismiss="modal"
+                          id="cont-del"
+                          type="button"
+                  >
+                      Confirm Deletion
+                  </button>
+              </div>
+          </div>
       </div>
   </div>
   `

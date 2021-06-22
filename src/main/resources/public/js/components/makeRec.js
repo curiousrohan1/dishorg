@@ -11,6 +11,9 @@ app.component('Makerec', {
         this.$store.commit('setError', '');
       }, 3000)
     },
+    focus(){
+        this.$refs.rightPane.plusIng(true);
+    }
   },
   /*html*/
   template: `
@@ -27,10 +30,12 @@ app.component('Makerec', {
           <Leftpane
             @update-err="updateErr($event)"
             id="left-pane"
+            @focus="focus"
           ></Leftpane>
           <Rightpane
             @update-err="updateErr($event)"
             id="right-pane"
+            ref="rightPane"
           ></Rightpane>
         </div>
     </div>
