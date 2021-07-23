@@ -199,6 +199,8 @@ let makeGrocery = app.component('Makegrocery', {
     clickGroc(idx) {
       this.$store.commit('activateGroc', idx);
       this.$store.commit('setCurGroc', this.$store.state.groceryList[idx]);
+      this.showRename = false;
+      this.displayRecDiv = false;
     },
     addGroc() {
       this.plusGrocChar = '+';

@@ -56,8 +56,8 @@ let rightPane = app.component('Rightpane', {
     },
     applyAddIng() {
       this.$emit('update-err', '');
-      if(this.name===''){
-        this.$emit('update-err','Sorry, you can\'t submit an ingredient that lacks a name.')
+      if (this.name === '') {
+        this.$emit('update-err', 'Sorry, you can\'t submit an ingredient that lacks a name.')
       }
       else if (this.editIngIdx === -1) {
         let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
@@ -116,11 +116,11 @@ let rightPane = app.component('Rightpane', {
       this.rename = this.$store.state.currentRec.name;
     },
     plusIng(isFromMakeRec) {
-      if(isFromMakeRec) {
+      if (isFromMakeRec) {
         this.displayIngDiv = true;
         this.$refs.quantity.focus();
         this.plusIngChar = '-';
-      } else if(this.plusIngChar==='+'){
+      } else if (this.plusIngChar === '+') {
         if (this.$store.state.currentRec !== {}) {
           this.displayIngDiv = true;
           this.$nextTick(() => {
@@ -231,7 +231,7 @@ let rightPane = app.component('Rightpane', {
     showRightButtons() {
       return this.$store.state.currentRec !== {};
     }
-    },
+  },
   /* html */
   template: `
     <div>

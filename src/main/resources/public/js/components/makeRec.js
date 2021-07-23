@@ -11,8 +11,8 @@ app.component('Makerec', {
         this.$store.commit('setError', '');
       }, 3000)
     },
-    focus(){
-        this.$refs.rightPane.plusIng(true);
+    focus() {
+      this.$refs.rightPane.plusIng(true);
     }
   },
   /*html*/
