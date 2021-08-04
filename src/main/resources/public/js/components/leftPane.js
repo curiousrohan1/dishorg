@@ -1,5 +1,5 @@
 let leftPane = app.component('Leftpane', {
-  emits: ['update-err', 'focus'],
+  emits: ['update-err', 'focus','switch'],
   data() {
     return {
       showAddRec: false,
