@@ -1,4 +1,24 @@
-
+function ingComparator(a,b){
+    if (a.name < b.name) {
+        return -1;
+    }
+    if (a.name > b.name) {
+        return 1;
+    }
+    if (a.quantity < b.quantity) {
+        return -1;
+    }
+    if (a.quantity > b.quantity) {
+        return 1;
+    }
+    if (a.unit < b.unit) {
+        return -1;
+    }
+    if (a.unit > b.unit) {
+        return 1;
+    }
+    return 0;
+}
 const store = Vuex.createStore({
   state() {
     return {
@@ -22,29 +42,7 @@ const store = Vuex.createStore({
       } else {
         state.currentRec = newRec;
       }
-      state.currentRec.ingredients.sort(
-        (a, b) => {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          if (a.quantity < b.quantity) {
-            return -1;
-          }
-          if (a.quantity > b.quantity) {
-            return 1;
-          }
-          if (a.unit < b.unit) {
-            return -1;
-          }
-          if (a.unit > b.unit) {
-            return 1;
-          }
-          return 0;
-        }
-      );
+      state.currentRec.ingredients.sort(ingComparator);
     },
     updateCurRec(state, newRec) {
       state.currentRec.ingredients = newRec.ingredients;
@@ -178,29 +176,7 @@ const store = Vuex.createStore({
           }
         }
       }
-      state.consolidatedIngredients.sort(
-        (a, b) => {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          if (a.quantity < b.quantity) {
-            return -1;
-          }
-          if (a.quantity > b.quantity) {
-            return 1;
-          }
-          if (a.unit < b.unit) {
-            return -1;
-          }
-          if (a.unit > b.unit) {
-            return 1;
-          }
-          return 0;
-        }
-      );
+      state.consolidatedIngredients.sort(ingComparator);
     },
     clearIngredients(state) {
       state.consolidatedIngredients = [];
