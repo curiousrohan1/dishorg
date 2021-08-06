@@ -1,5 +1,5 @@
 let leftPane = app.component('Leftpane', {
-  emits: ['update-err', 'focus', 'switch'],
+  emits: ['update-err', 'focus'],
   data() {
     return {
       showAddRec: false,
@@ -32,7 +32,6 @@ let leftPane = app.component('Leftpane', {
       this.$store.commit('activateRec', idx);
       this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
       this.$emit('focus')
-      this.$emit('switch')
       this.showRename = false;
       this.displayRecDiv = false;
     },
