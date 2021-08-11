@@ -101,7 +101,6 @@ function ingApply(idx) {
 */
 function successOnAjaxOfRecipe(recipe) {
   $('error-message').hide();
-
   $('#recipe-details').empty();
   currentRec = recipe;
   $('#rec-title').text(currentRec.name);

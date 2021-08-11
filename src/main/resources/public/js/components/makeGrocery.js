@@ -66,7 +66,7 @@ let makeGrocery = app.component('Makegrocery', {
       this.rec = {};
     },
     line(ing) {
-      return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
+      return (ing.unit === '[No Unit]' ? (`${ing.name} - ${ing.quantity}`) : (`${ing.name} - ${ing.quantity} ${ing.unit}`));
     },
     cancelGrocRename() {
       this.showRename = false;
@@ -199,6 +199,8 @@ let makeGrocery = app.component('Makegrocery', {
     clickGroc(idx) {
       this.$store.commit('activateGroc', idx);
       this.$store.commit('setCurGroc', this.$store.state.groceryList[idx]);
+      this.showRename = false;
+      this.displayRecDiv = false;
     },
     addGroc() {
       this.plusGrocChar = '+';
@@ -353,9 +355,50 @@ let makeGrocery = app.component('Makegrocery', {
               </div>
           </div>
           <hr>
-          <ul>
-              <li class = "ingItem" v-for = "(ing,idx) in this.$store.state.consolidatedIngredients">{{this.line(ing)}}</li>
+          <ul v-show="this.$store.state.consolidatedIngredients.length>0">
+            <li v-for="ing in this.$store.state.consolidatedIngredients">{{this.line(ing)}}</li>
           </ul>
+      </div>
+  </div>
+  <div class="modal fade">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="cont-del-ing">Are you sure?</h5>
+                  <button
+                          aria-label="Close"
+                          class="close btn"
+                          data-dismiss="modal"
+                          type="button"
+                  >
+                      <span aria-hidden="true">&times</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <p>
+                      Recipe deletion cannot be undone. Please confirm that you want
+                      to delete this recipe.
+                  </p>
+              </div>
+              <div class="modal-footer">
+                  <button
+                          class="btn btn-secondary"
+                          data-dismiss="modal"
+                          id="cancel-del"
+                          type="button"
+                  >
+                      Cancel Deletion
+                  </button>
+                  <button
+                          class="btn btn-primary delIng"
+                          data-dismiss="modal"
+                          id="cont-del"
+                          type="button"
+                  >
+                      Confirm Deletion
+                  </button>
+              </div>
+          </div>
       </div>
   </div>
   `

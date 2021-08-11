@@ -15,11 +15,6 @@ let rightPane = app.component('Rightpane', {
       plusIngChar: '+'
     };
   },
-  computed: {
-    recipesExist() {
-      return this.$store.state.recipeList.length !== 0 && !this.isEmpty(this.$store.state.currentRec);
-    }
-  },
   mounted() {
     this.reset();
   },
@@ -61,7 +56,10 @@ let rightPane = app.component('Rightpane', {
     },
     applyAddIng() {
       this.$emit('update-err', '');
-      if (this.editIngIdx === -1) {
+      if (this.name === '') {
+        this.$emit('update-err', 'Sorry, you can\'t submit an ingredient that lacks a name.')
+      }
+      else if (this.editIngIdx === -1) {
         let otherRec = JSON.parse(JSON.stringify(this.$store.state.currentRec))
         otherRec.ingredients.push({ quantity: this.quantity, name: this.name, unit: this.unit });
         $.ajax({
@@ -79,6 +77,7 @@ let rightPane = app.component('Rightpane', {
         this.quantity = 0;
         this.name = '';
         this.unit = '[No Unit]';
+        this.plusIng(true);
       } else {
         var editIngObj = {
           idx: this.editIngIdx,
@@ -116,8 +115,12 @@ let rightPane = app.component('Rightpane', {
       this.showRecTitle = false;
       this.rename = this.$store.state.currentRec.name;
     },
-    plusIng() {
-      if (this.plusIngChar === '+') {
+    plusIng(isFromMakeRec) {
+      if (isFromMakeRec) {
+        this.displayIngDiv = true;
+        this.$refs.quantity.focus();
+        this.plusIngChar = '-';
+      } else if (this.plusIngChar === '+') {
         if (this.$store.state.currentRec !== {}) {
           this.displayIngDiv = true;
           this.$nextTick(() => {
@@ -232,7 +235,7 @@ let rightPane = app.component('Rightpane', {
   /* html */
   template: `
     <div>
-        <div v-show="recipesExist">
+        <div>
             <strong id="rec-title" v-show="showRecTitle" class='text text-success'>{{this.$store.state.currentRec.name}}</strong>&nbsp;&nbsp;&nbsp;
             <div id="renamed-recipe-name" v-show="showRename">
                 <input id="rename-rec-input" placeholder="New Name..." type="text" v-model="rename" v-on:keyup.enter="applyRecRename">
@@ -249,7 +252,7 @@ let rightPane = app.component('Rightpane', {
             <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="showRecTitle">
                 <img src="images/del.png">
             </button>
-            <button @click="plusIng" class="btn btn-dark clearfix" data-placement="left" data-toggle="tooltip"
+            <button @click="plusIng(false)" class="btn btn-dark clearfix" data-placement="left" data-toggle="tooltip"
                     id="plus-ing" title="Add ingredient" v-show="this.showRightButtons">{{plusIngChar}}
             </button>
         </div>
