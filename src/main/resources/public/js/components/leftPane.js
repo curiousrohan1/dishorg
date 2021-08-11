@@ -53,7 +53,7 @@ let leftPane = app.component('Leftpane', {
           this.$store.commit('setCurRec', recipe);
           this.$store.commit('addRecipe', recipe);
           this.clickRec(this.findRec(recipe));
-          this.$emit('focus')
+          this.$emit('focus');
         },
       ).fail(
         (jqXHR) => {
