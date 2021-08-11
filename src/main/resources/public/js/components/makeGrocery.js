@@ -376,8 +376,8 @@ let makeGrocery = app.component('Makegrocery', {
               </div>
               <div class="modal-body">
                   <p>
-                      Ingredient deletion cannot be undone. Please confirm that you want
-                      to delete this ingredient.
+                      Recipe deletion cannot be undone. Please confirm that you want
+                      to delete this recipe.
                   </p>
               </div>
               <div class="modal-footer">
