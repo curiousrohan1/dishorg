@@ -5,16 +5,16 @@ function ingComparator(a,b){
     if (a.name > b.name) {
         return 1;
     }
-    if (a.quantity < b.quantity) {
-        return -1;
-    }
-    if (a.quantity > b.quantity) {
-        return 1;
-    }
     if (a.unit < b.unit) {
         return -1;
     }
     if (a.unit > b.unit) {
+        return 1;
+    }
+    if (a.quantity < b.quantity) {
+        return -1;
+    }
+    if (a.quantity > b.quantity) {
         return 1;
     }
     return 0;

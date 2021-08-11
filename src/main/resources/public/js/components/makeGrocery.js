@@ -66,7 +66,7 @@ let makeGrocery = app.component('Makegrocery', {
       this.rec = {};
     },
     line(ing) {
-      return (ing.unit === '[No Unit]' ? (`${ing.quantity} ${ing.name}`) : (`${ing.quantity} ${ing.unit} of ${ing.name}`));
+      return (ing.unit === '[No Unit]' ? (`${ing.name} - ${ing.quantity}`) : (`${ing.name} - ${ing.quantity} ${ing.unit}`));
     },
     cancelGrocRename() {
       this.showRename = false;
@@ -355,20 +355,9 @@ let makeGrocery = app.component('Makegrocery', {
               </div>
           </div>
           <hr>
-          <table v-show="this.$store.state.consolidatedIngredients.length>0">
-            <tr>
-              <th scope="row">Unit</th>
-              <td v-for="ing in this.$store.state.consolidatedIngredients">{{ing.unit}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Name</th>
-              <td v-for="ing in this.$store.state.consolidatedIngredients">{{ing.name}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Quantity</th>
-              <td v-for="ing in this.$store.state.consolidatedIngredients">{{ing.quantity}}</td>
-            </tr>
-          </table>
+          <ul v-show="this.$store.state.consolidatedIngredients.length>0">
+            <li v-for="ing in this.$store.state.consolidatedIngredients">{{this.line(ing)}}</li>
+          </ul>
       </div>
   </div>
   <div class="modal fade">
