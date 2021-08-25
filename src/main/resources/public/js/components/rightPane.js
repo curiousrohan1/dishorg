@@ -117,7 +117,9 @@ let rightPane = app.component('Rightpane', {
     },
     plusIng(isFromMakeRec) {
       if (isFromMakeRec) {
+        console.log('Got to plusIng.');
         this.displayIngDiv = true;
+        console.log(this.$refs);
         this.$refs.quantity.focus();
         this.plusIngChar = '-';
       } else if (this.plusIngChar === '+') {
