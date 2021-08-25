@@ -1,5 +1,5 @@
 let rightPane = app.component('Rightpane', {
-  emits: ['update-err'],
+  emits: ['update-err','show-modal'],
   data() {
     return {
       showRecTitle: true,
@@ -232,6 +232,9 @@ let rightPane = app.component('Rightpane', {
     },
     showRightButtons() {
       return this.$store.state.currentRec !== {};
+    },
+    confirmRecDel(){
+        this.$emit('show-modal');
     }
   },
   /* html */
@@ -251,7 +254,7 @@ let rightPane = app.component('Rightpane', {
             <button @click="editRecName" class="btn btn-outline-dark" id="edit-rec-name" v-show="showRecTitle">
                 <img src="images/edit.png">
             </button>
-            <button @click="delRec" class="btn btn-outline-dark" id="del-rec" v-show="showRecTitle">
+            <button @click="confirmRecDel" class="btn btn-outline-dark" id="del-rec" v-show="showRecTitle">
                 <img src="images/del.png">
             </button>
             <button @click="plusIng(false)" class="btn btn-dark clearfix" data-placement="left" data-toggle="tooltip"

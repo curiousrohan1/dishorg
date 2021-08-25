@@ -192,7 +192,6 @@ const app = Vue.createApp({
       recName: '',
       curRec: {},
       updateRecList: false,
-      showModal: false,
       actions: [
         'Change x',
         'Change Password',
@@ -208,10 +207,6 @@ const app = Vue.createApp({
     hideIngDiv() {
       this.displayIngDiv = false;
     },
-    openModal() {
-      this.showModal = !this.showModal;
-    },
-
     isEmpty(obj) {
       for (var key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key))
