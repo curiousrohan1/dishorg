@@ -1,9 +1,4 @@
 app.component('Makerec', {
-  data() {
-    return{
-        displayModal:false,
-    };
-  },
   computed: {
     displayWarn() {
       return this.$store.state.error !== '';
@@ -18,9 +13,6 @@ app.component('Makerec', {
     },
     focus() {
       this.$refs.rightPane.plusIng(true);
-    },
-    showModal(exhibitModal){
-        this.displayModal=exhibitModal;
     }
   },
   /*html*/
@@ -43,7 +35,6 @@ app.component('Makerec', {
           <Rightpane
             @update-err="updateErr($event)"
             ref="rightPane"
-            @show-modal="showModal(true)"
           ></Rightpane>
         </div>
     </div>

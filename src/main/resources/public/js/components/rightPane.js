@@ -1,5 +1,5 @@
 let rightPane = app.component('Rightpane', {
-  emits: ['update-err','show-modal'],
+  emits: ['update-err'],
   data() {
     return {
       showRecTitle: true,
