@@ -1,13 +1,13 @@
 app.component('Makerec', {
-  computed: {
-    displayWarn() {
-      return this.$store.state.error !== '';
-    },
-  },
   data() {
     return{
         displayModal:false,
     };
+  },
+  computed: {
+    displayWarn() {
+      return this.$store.state.error !== '';
+    },
   },
   methods: {
     updateErr(message) {

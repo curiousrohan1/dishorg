@@ -1,6 +1,22 @@
 app.component('Modal', {
         props: { 'target': String,'tarName':String },
         emits:['cont-del'],
+        data() {
+            return {
+                showModal: false
+            }
+        },
+        methods: {
+            hideModal(cont) {
+                this.showModal = false;
+                if (cont) {
+                    this.continueDel();
+                }
+            },
+            continueDel() {
+                this.$emit('cont-del');
+            }
+        },
         template: `
         <button id="show-modal" @click="showModal = true" class="btn btn-outline-dark"><img src="images/del.png"></button>
         <div class="modal-mask" v-if="showModal">
@@ -32,20 +48,4 @@ app.component('Modal', {
           </div>
         </div>
         `,
-        data() {
-            return {
-                showModal: false
-            }
-        },
-        methods: {
-            hideModal(cont) {
-                this.showModal = false;
-                if (cont) {
-                    this.continueDel();
-                }
-            },
-            continueDel() {
-                this.$emit('cont-del');
-            }
-        },
     })
