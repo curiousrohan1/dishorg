@@ -12,7 +12,8 @@ let rightPane = app.component('Rightpane', {
       name: '',
       updateRecList: false,
       editIngIdx: -1,
-      plusIngChar: '+'
+      plusIngChar: '+',
+      tar:"Recipe"
     };
   },
   mounted() {
@@ -233,9 +234,6 @@ let rightPane = app.component('Rightpane', {
     showRightButtons() {
       return this.$store.state.currentRec !== {};
     },
-    confirmRecDel(){
-        this.$emit('show-modal');
-    }
   },
   /* html */
   template: `
@@ -254,9 +252,7 @@ let rightPane = app.component('Rightpane', {
             <button @click="editRecName" class="btn btn-outline-dark" id="edit-rec-name" v-show="showRecTitle">
                 <img src="images/edit.png">
             </button>
-            <button @click="confirmRecDel" class="btn btn-outline-dark" id="del-rec" v-show="showRecTitle">
-                <img src="images/del.png">
-            </button>
+            <Modal :target="this.tar" :tarName="this.$store.state.currentRec.name" @cont-del="delRec" v-show="showRecTitle"></Modal>
             <button @click="plusIng(false)" class="btn btn-dark clearfix" data-placement="left" data-toggle="tooltip"
                     id="plus-ing" title="Add ingredient" v-show="this.showRightButtons">{{plusIngChar}}
             </button>
@@ -296,5 +292,6 @@ let rightPane = app.component('Rightpane', {
             </div>
         </div>
     </div>
+
     `
 })

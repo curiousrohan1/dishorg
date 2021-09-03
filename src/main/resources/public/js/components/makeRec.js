@@ -6,7 +6,7 @@ app.component('Makerec', {
   },
   data() {
     return{
-        displayModal:false
+        displayModal:false,
     };
   },
   methods: {
@@ -42,36 +42,9 @@ app.component('Makerec', {
           ></Leftpane>
           <Rightpane
             @update-err="updateErr($event)"
-            id="right-pane"
             ref="rightPane"
             @show-modal="showModal(true)"
           ></Rightpane>
-        </div>
-    </div>
-    <div class="modal fade" v-show="this.displayModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Are you sure you want to delete this recipe?</h5>
-                    <button class="close btn">
-                        <span aria-hidden="true">&times</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        Recipe deletion cannot be undone. Please confirm that you want
-                        to delete this recipe.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="showModal(false)">
-                        Cancel Deletion
-                    </button>
-                    <button class="btn btn-primary" @click="this.$refs.rightPane.delRec()">
-                        Confirm Deletion
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 `

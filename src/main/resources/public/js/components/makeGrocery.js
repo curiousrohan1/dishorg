@@ -14,7 +14,8 @@ let makeGrocery = app.component('Makegrocery', {
       plusRecChar: '+',
       showAddGroc: false,
       grocName: '',
-      plusGrocChar: '+'
+      plusGrocChar: '+',
+      tar:"Grocery list"
     };
   },
   computed: {
@@ -319,9 +320,7 @@ let makeGrocery = app.component('Makegrocery', {
               <button @click = "editGrocName" class = "btn btn-outline-dark" id = "edit-groc-name" v-show = "showGrocTitle">
                   <img src = "images/edit.png">
               </button>
-              <button @click = "delGroc" class = "btn btn-outline-dark" id = "del-groc" v-show = "showGrocTitle">
-                  <img src = "images/del.png">
-              </button>
+              <Modal :target="this.tar" @cont-del="delGroc" v-show="showGrocTitle" :tarName="this.$store.state.currentGroc.name"></Modal>
               <button @click="dupGroc" class="btn btn-outline-dark" id="dup-groc" v-show="showGrocTitle">
                   <img src="images/dup.png">
               </button>
