@@ -14,7 +14,8 @@ let makeGrocery = app.component('Makegrocery', {
       plusRecChar: '+',
       showAddGroc: false,
       grocName: '',
-      plusGrocChar: '+'
+      plusGrocChar: '+',
+      tar:"Grocery list"
     };
   },
   computed: {
@@ -319,9 +320,7 @@ let makeGrocery = app.component('Makegrocery', {
               <button @click = "editGrocName" class = "btn btn-outline-dark" id = "edit-groc-name" v-show = "showGrocTitle">
                   <img src = "images/edit.png">
               </button>
-              <button @click = "delGroc" class = "btn btn-outline-dark" id = "del-groc" v-show = "showGrocTitle">
-                  <img src = "images/del.png">
-              </button>
+              <Modal :target="this.tar" @cont-del="delGroc" v-show="showGrocTitle" :tarName="this.$store.state.currentGroc.name"></Modal>
               <button @click="dupGroc" class="btn btn-outline-dark" id="dup-groc" v-show="showGrocTitle">
                   <img src="images/dup.png">
               </button>
@@ -358,47 +357,6 @@ let makeGrocery = app.component('Makegrocery', {
           <ul v-show="this.$store.state.consolidatedIngredients.length>0">
             <li v-for="ing in this.$store.state.consolidatedIngredients">{{this.line(ing)}}</li>
           </ul>
-      </div>
-  </div>
-  <div class="modal fade">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="cont-del-ing">Are you sure?</h5>
-                  <button
-                          aria-label="Close"
-                          class="close btn"
-                          data-dismiss="modal"
-                          type="button"
-                  >
-                      <span aria-hidden="true">&times</span>
-                  </button>
-              </div>
-              <div class="modal-body">
-                  <p>
-                      Recipe deletion cannot be undone. Please confirm that you want
-                      to delete this recipe.
-                  </p>
-              </div>
-              <div class="modal-footer">
-                  <button
-                          class="btn btn-secondary"
-                          data-dismiss="modal"
-                          id="cancel-del"
-                          type="button"
-                  >
-                      Cancel Deletion
-                  </button>
-                  <button
-                          class="btn btn-primary delIng"
-                          data-dismiss="modal"
-                          id="cont-del"
-                          type="button"
-                  >
-                      Confirm Deletion
-                  </button>
-              </div>
-          </div>
       </div>
   </div>
   `

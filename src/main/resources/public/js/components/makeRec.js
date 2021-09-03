@@ -34,7 +34,6 @@ app.component('Makerec', {
           ></Leftpane>
           <Rightpane
             @update-err="updateErr($event)"
-            id="right-pane"
             ref="rightPane"
           ></Rightpane>
         </div>
