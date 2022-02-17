@@ -1,3 +1,6 @@
 app.component('Help', {
-  template: `<div>Help</div>`
+  template: `<div>
+        Contact help at info@cookit.best
+
+    </div>`
 })
