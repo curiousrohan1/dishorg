@@ -59,7 +59,7 @@ header li a {
   display: inline;
 }
 #make-rec * {
-  display: inline;
+  display: inline-block;
 }
 img {
   height: 30px;
@@ -211,4 +211,34 @@ table {
 .modal-default-button {
   display: block;
   margin-top: 1rem;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+.form-inline .form-control {
+  width: auto;
+  vertical-align: middle;
+}
+.mr-sm-2 {
+  margin-right: 0.5rem !important;
+}
+.form-control {
+  height: calc(1.5rem+0.75rem+2px);
+}
+button,
+input {
+  overflow: visible;
+}
+input {
+  appearance: auto;
+}
+
+select {
+  appearance: auto;
 }
