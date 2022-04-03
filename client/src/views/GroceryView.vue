@@ -1,45 +1,49 @@
+<script setup>
+import ModalBox from "@/components/ModalBox.vue";
+</script>
+
 <script>
 export default {
- emits: ['update-err'],
+  emits: ["update-err"],
   data() {
     return {
       showGrocTitle: true,
       showRename: false,
-      rename: '',
+      rename: "",
       displayRecDiv: false,
-      quantity: '',
+      quantity: "",
       rec: {},
       unitList: [],
-      name: '',
+      name: "",
       updateRecList: false,
-      plusRecChar: '+',
+      plusRecChar: "+",
       showAddGroc: false,
-      grocName: '',
-      plusGrocChar: '+',
-      tar:"Grocery list"
+      grocName: "",
+      plusGrocChar: "+",
+      tar: "Grocery list",
     };
   },
   computed: {
     displayWarn() {
-      return this.$store.state.error !== '';
+      return this.$store.state.error !== "";
     },
   },
   mounted() {
-    this.reset()
+    this.reset();
   },
   methods: {
     updateErr(message) {
-      this.$store.commit('setError', message);
+      this.$store.commit("setError", message);
       window.setTimeout(() => {
-        this.$store.commit('setError', '');
-      }, 3000)
+        this.$store.commit("setError", "");
+      }, 3000);
     },
     isEmpty(data) {
-      if (JSON.stringify(data) === '{}' || JSON.stringify(data) === '[]') {
+      if (JSON.stringify(data) === "{}" || JSON.stringify(data) === "[]") {
         return true;
       } else if (!data) {
         return true;
-      } else if (Object.prototype.hasOwnProperty.call(data,"name")) {
+      } else if (Object.prototype.hasOwnProperty.call(data, "name")) {
         return true;
       }
       return false;
@@ -47,11 +51,11 @@ export default {
     cancelAddRec() {
       this.displayRecDiv = false;
       this.rec = {};
-      this.plusRecChar = '+';
+      this.plusRecChar = "+";
     },
     applyAddRec() {
-      this.updateErr('');
-      let otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc))
+      this.updateErr("");
+      let otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc));
       otherGroc.recipes.push({ id: this.rec });
       // $.ajax({
       //   type: 'PUT',
@@ -65,11 +69,13 @@ export default {
       //       this.$store.commit('updateCurGroc', grocery);
       //     }
       //   );
-      this.$store.commit('updateCurGroc', otherGroc);
+      this.$store.commit("updateCurGroc", otherGroc);
       this.rec = {};
     },
     line(ing) {
-      return (ing.unit === '[No Unit]' ? (`${ing.name} - ${ing.quantity}`) : (`${ing.name} - ${ing.quantity} ${ing.unit}`));
+      return ing.unit === "[No Unit]"
+        ? `${ing.name} - ${ing.quantity}`
+        : `${ing.name} - ${ing.quantity} ${ing.unit}`;
     },
     cancelGrocRename() {
       this.showRename = false;
@@ -81,15 +87,14 @@ export default {
       this.rename = this.$store.state.currentGroc.name;
     },
     plusRec() {
-      if (this.plusRecChar === '+') {
+      if (this.plusRecChar === "+") {
         this.displayRecDiv = true;
-        this.plusRecChar = '-';
-      }
-      else {
+        this.plusRecChar = "-";
+      } else {
         this.cancelAddRec();
       }
-      console.log(this.$store.state.currentGroc)
-      console.log(this.$store.state.recipeList)
+      console.log(this.$store.state.currentGroc);
+      console.log(this.$store.state.recipeList);
     },
     delGroc() {
       // $.ajax({
@@ -99,20 +104,20 @@ export default {
       // })
       //   .fail(this.fail)
       //   .done(this.reset);
-      this.$store.commit('setCurGroc', {});
-      this.$store.commit('clearIngredients')
+      this.$store.commit("setCurGroc", {});
+      this.$store.commit("clearIngredients");
       this.reset();
     },
     fail(jqXHR) {
-      let message = '';
+      let message = "";
       if (jqXHR.readyState === 0) {
-        message = 'Failed to contact server.';
-      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseJSON')) {
+        message = "Failed to contact server.";
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, "responseJSON")) {
         message = jqXHR.responseJSON.message;
-      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
-        message = jqXHR['responseText'];
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, "responseText")) {
+        message = jqXHR["responseText"];
       } else {
-        message = "An unknown error has occurred."
+        message = "An unknown error has occurred.";
       }
       this.updateErr(message);
     },
@@ -121,8 +126,10 @@ export default {
         this.cancelGrocRename();
         return;
       }
-      this.updateErr('');
-      const otherGroc = JSON.parse(JSON.stringify(this.$store.state.currentGroc));
+      this.updateErr("");
+      const otherGroc = JSON.parse(
+        JSON.stringify(this.$store.state.currentGroc)
+      );
       otherGroc.name = this.rename;
       // $.post({
       //   url: 'groceries',
@@ -140,7 +147,7 @@ export default {
       //     this.fail(jqXHR);
       //   },
       // );
-      this.$store.commit('updateCurGroc', otherGroc);
+      this.$store.commit("updateCurGroc", otherGroc);
       this.showRename = false;
       this.showGrocTitle = true;
     },
@@ -156,27 +163,301 @@ export default {
       //       this.$store.commit('updateRecList', recipeList);
       //     },
       //   ).fail(this.fail);
-      this.$store.commit('updateCurGroc', {});
-      this.updateErr('');
+      var grocList = [
+        {
+          id: 13,
+          name: "Vegas week",
+          recipes: [
+            {
+              id: 15,
+              name: "Varan",
+              ingredients: [
+                {
+                  name: "Toor dal",
+                  unit: "cups",
+                  quantity: 1,
+                },
+                {
+                  name: "Haldi",
+                  unit: "tsp",
+                  quantity: 1,
+                },
+                {
+                  name: "Hing",
+                  unit: "pinch",
+                  quantity: 1,
+                },
+              ],
+            },
+            {
+              id: 17,
+              name: "Black eyed beans with spinach",
+              ingredients: [
+                {
+                  name: "Black eyed beans",
+                  unit: "cups",
+                  quantity: 1,
+                },
+                {
+                  name: "Oil",
+                  unit: "tsp",
+                  quantity: 1,
+                },
+                {
+                  name: "Onion",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Garlic",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Tomatoes",
+                  unit: "[No Unit]",
+                  quantity: 2,
+                },
+                {
+                  name: "Haldi",
+                  unit: "pinch",
+                  quantity: 1,
+                },
+                {
+                  name: "Red chili powder",
+                  unit: "tsp",
+                  quantity: 1,
+                },
+                {
+                  name: "Spinach",
+                  unit: "cups",
+                  quantity: 2,
+                },
+                {
+                  name: "Salt",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+              ],
+            },
+            {
+              id: 19,
+              name: "Ghavan",
+              ingredients: [
+                {
+                  name: "Atta",
+                  unit: "cups",
+                  quantity: 2,
+                },
+                {
+                  name: "Besan",
+                  unit: "cups",
+                  quantity: 1,
+                },
+                {
+                  name: "Haldi",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "Red chili powder",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "Carrots",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "Coriander powder",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+              ],
+            },
+          ],
+          active: true,
+        },
+        {
+          id: 60,
+          name: "Week 1",
+          recipes: [
+            {
+              id: 62,
+              name: "Tuna risotto",
+              ingredients: [
+                {
+                  name: "tuna",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "chicken vroth",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "onion",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "garlic",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "rice",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "cheese",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+              ],
+            },
+            {
+              id: 15,
+              name: "Varan",
+              ingredients: [
+                {
+                  name: "Toor dal",
+                  unit: "cups",
+                  quantity: 1,
+                },
+                {
+                  name: "Haldi",
+                  unit: "tsp",
+                  quantity: 1,
+                },
+                {
+                  name: "Hing",
+                  unit: "pinch",
+                  quantity: 1,
+                },
+              ],
+            },
+            {
+              id: 39,
+              name: "Pasta",
+              ingredients: [
+                {
+                  name: "Broccoli",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Carrots",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Mozzarella cheese",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Mushrooms",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Parmesan Cheese",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Pasta",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Pasta sauce",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "Ricotta cheese",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+                {
+                  name: "eggplant",
+                  unit: "[No Unit]",
+                  quantity: 1,
+                },
+              ],
+            },
+            {
+              id: 61,
+              name: "Bean quesadilla",
+              ingredients: [
+                {
+                  name: "black beans",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "taco seasoning",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "tortillas",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "mexican cheese",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "guac",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "sour cream",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+                {
+                  name: "salsa",
+                  unit: "[No Unit]",
+                  quantity: 0,
+                },
+              ],
+            },
+          ],
+          active: false,
+        },
+      ];
+      this.$store.commit("updateGrocList", grocList);
+      this.$store.commit("updateCurGroc", {});
+      this.updateErr("");
       this.showGrocTitle = true;
       this.showRename = false;
-      this.rename = '';
+      this.rename = "";
       this.displayRecDiv = false;
-      this.quantity = '';
+      this.quantity = "";
       this.rec = {};
       this.unitList = [];
-      this.name = '';
+      this.name = "";
       this.updateRecList = false;
-      this.plusRecChar = '+';
+      this.plusRecChar = "+";
       this.showAddGroc = false;
-      this.grocName = '';
-      this.plusGrocChar = '+'
+      this.grocName = "";
+      this.plusGrocChar = "+";
     },
     success(grocery) {
-      this.$store.commit('setCurGroc', grocery);
+      this.$store.commit("setCurGroc", grocery);
     },
     delRec(idx) {
-      this.$store.commit('delRec', idx)
+      this.$store.commit("delRec", idx);
       // $.ajax({
       //   type: 'PUT',
       //   url: `/groceries/${this.$store.state.currentGroc.id}`,
@@ -191,29 +472,27 @@ export default {
       return !this.isEmpty(this.$store.state.currentGroc);
     },
     showAddGrocDiv() {
-      if (this.plusGrocChar === '+') {
+      if (this.plusGrocChar === "+") {
         this.showAddGroc = true;
         this.$nextTick(() => {
           this.$refs.newGrocName.focus();
         });
-        this.plusGrocChar = '-';
-      }
-      else {
+        this.plusGrocChar = "-";
+      } else {
         this.cancelAddGroc();
       }
     },
     clickGroc(idx) {
-      this.$store.commit('activateGroc', idx);
-      this.$store.commit('setCurGroc', this.$store.state.groceryList[idx]);
+      this.$store.commit("activateGroc", idx);
+      this.$store.commit("setCurGroc", this.$store.state.groceryList[idx]);
       this.showRename = false;
       this.displayRecDiv = false;
     },
     addGroc() {
-      this.plusGrocChar = '+';
+      this.plusGrocChar = "+";
       const groc = {
         name: this.grocName,
-        recipes: [
-        ],
+        recipes: [],
         active: false,
       };
       // $.post({
@@ -232,20 +511,23 @@ export default {
       //     this.fail(jqXHR);
       //   },
       // );
-      this.$store.commit('setCurGroc', groc);
-      this.$store.commit('addGroc', groc);
+      this.$store.commit("setCurGroc", groc);
+      this.$store.commit("addGroc", groc);
       this.clickGroc(this.findGroc(groc));
       this.showAddGroc = false;
-      this.grocName = '';
+      this.grocName = "";
     },
     cancelAddGroc() {
       this.showAddGroc = false;
-      this.grocName = '';
-      this.plusGrocChar = '+';
+      this.grocName = "";
+      this.plusGrocChar = "+";
     },
     findGroc(grocery) {
       for (let i = 0; i < this.$store.state.groceryList.length; i += 1) {
-        if (JSON.stringify(this.$store.state.groceryList[i]) === JSON.stringify(grocery)) {
+        if (
+          JSON.stringify(this.$store.state.groceryList[i]) ===
+          JSON.stringify(grocery)
+        ) {
           return i;
         }
       }
@@ -272,14 +554,14 @@ export default {
       //     this.fail(jqXHR);
       //   },
       // );
-      this.$store.commit('setCurGroc', dupGroc);
-      this.$store.commit('addGroc', dupGroc);
+      this.$store.commit("setCurGroc", dupGroc);
+      this.$store.commit("addGroc", dupGroc);
       this.clickGroc(this.findGroc(dupGroc));
       this.showAddGroc = false;
-      this.grocName = ''
-    }
-  }
-}
+      this.grocName = "";
+    },
+  },
+};
 </script>
 <template>
    <p class = "alert alert-danger" id = "error-message" role = "alert" v-show = "displayWarn">
@@ -331,7 +613,7 @@ export default {
               <button @click = "editGrocName" class = "btn btn-outline-dark" id = "edit-groc-name" v-show = "showGrocTitle">
                   <img src = "src/assets/edit.png">
               </button>
-              <Modal :target="this.tar" @cont-del="delGroc" v-show="showGrocTitle" :tarName="this.$store.state.currentGroc.name"></Modal>
+              <ModalBox :target="this.tar" @cont-del="delGroc" v-show="showGrocTitle" :tarName="this.$store.state.currentGroc.name"></ModalBox>
               <button @click="dupGroc" class="btn btn-outline-dark" id="dup-groc" v-show="showGrocTitle">
                   <img src="src/assets/dup.png">
               </button>
@@ -373,7 +655,7 @@ export default {
 </template>
 
 <style>
-@import '@/assets/style.css';
+@import "@/assets/style.css";
 /* @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
