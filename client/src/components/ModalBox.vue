@@ -1,11 +1,14 @@
-<script>
-export default {
-  props: { 'target': String, 'tarName': String },
-  emits: ['cont-del'],
+<script lang="ts" setup>
+import { defineComponent } from "vue";
+</script>
+<script lang="ts">
+export default defineComponent({
+  props: { target: String, tarName: String },
+  emits: ["cont-del"],
   data() {
     return {
-      showModal: false
-    }
+      showModal: false,
+    };
   },
   methods: {
     hideModal(cont) {
@@ -15,10 +18,10 @@ export default {
       }
     },
     continueDel() {
-      this.$emit('cont-del');
-    }
+      this.$emit("cont-del");
+    },
   },
-}
+});
 </script>
 
 <template>

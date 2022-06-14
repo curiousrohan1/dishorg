@@ -1,9 +1,10 @@
-<script setup>
+<script lang="ts" setup>
 import ModalBox from "@/components/ModalBox.vue";
+import { defineComponent } from "vue";
 </script>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   emits: ["update-err"],
   data() {
     return {
@@ -561,7 +562,7 @@ export default {
       this.grocName = "";
     },
   },
-};
+});
 </script>
 <template>
    <p class = "alert alert-danger" id = "error-message" role = "alert" v-show = "displayWarn">

@@ -1,27 +1,22 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-//import HelloWorld from '@/components/HelloWorld.vue'
+<script lang="ts" setup>
+import { RouterLink, RouterView } from "vue-router";
+import { defineComponent } from "vue";
 </script>
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   data() {
     return {
       displayBod: false,
       displayIngDiv: false,
       disabled: true,
-      recName: '',
+      recName: "",
       curRec: {},
       updateRecList: false,
-      actions: [
-        'Change x',
-        'Change Password',
-        'Log out',
-        'Delete Account',
-      ],
+      actions: ["Change x", "Change Password", "Log out", "Delete Account"],
       showRecTitle: true,
-      username: '',
-      password: ''
-    }
+      username: "",
+      password: "",
+    };
   },
   methods: {
     hideIngDiv() {
@@ -29,8 +24,7 @@ export default {
     },
     isEmpty(obj) {
       for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key))
-          return false;
+        if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
       }
       return true;
     },
@@ -38,9 +32,9 @@ export default {
     setCreds(obj) {
       this.username = obj.username;
       this.password = obj.password;
-    }
-  }
-}
+    },
+  },
+});
 </script>
 
 <template>

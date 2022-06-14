@@ -2,23 +2,20 @@
   "name": "dishorg",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "author": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/curiousrohan1/dishorg.git"
+  "main": "index.js",
+  "dependencies": {
+    "@vue/cli-service": "^5.0.4",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^9.1.2"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/curiousrohan1/dishorg/issues"
-  },
-  "homepage": "https://github.com/curiousrohan1/dishorg#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
+    "@vue/cli-plugin-typescript": "~4.5.12",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-google": "^0.14.0",
@@ -30,6 +27,16 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^7.7.0",
+    "typescript": "~4.1.5",
     "vue-eslint-parser": "^7.6.0"
+  },
+  "bugs": {
+    "url": "https://github.com/curiousrohan1/dishorg/issues"
+  },
+  "homepage": "https://github.com/curiousrohan1/dishorg#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curiousrohan1/dishorg.git"
   }
 }

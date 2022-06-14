@@ -1,85 +1,88 @@
-<script>
-export default {
-  emits: ['update-err', 'focus'],
+<script lang="ts" setup >
+import { defineComponent } from "vue";
+</script>
+<script lang="ts">
+export default defineComponent({
+  emits: ["update-err", "focus"],
   data() {
     return {
       showAddRec: false,
-      recName: '',
-      plusRecChar: '+'
+      recName: "",
+      plusRecChar: "+",
     };
   },
   mounted() {
     var recipeList = [
       {
-        "id": 49,
-        "name": "Bajra Dosa",
-        "ingredients": [
+        id: 49,
+        name: "Bajra Dosa",
+        ingredients: [
           {
-            "name": "bajra",
-            "unit": "cups",
-            "quantity": 1.5
+            name: "bajra",
+            unit: "cups",
+            quantity: 1.5,
           },
           {
-            "name": "wheat flour",
-            "unit": "cups",
-            "quantity": 0.25
+            name: "wheat flour",
+            unit: "cups",
+            quantity: 0.25,
           },
           {
-            "name": "onion",
-            "unit": "[No Unit]",
-            "quantity": 0.5
+            name: "onion",
+            unit: "[No Unit]",
+            quantity: 0.5,
           },
           {
-            "name": "coriander leaves",
-            "unit": "tbsp",
-            "quantity": 1
+            name: "coriander leaves",
+            unit: "tbsp",
+            quantity: 1,
           },
           {
-            "name": "cumin seeds",
-            "unit": "tsp",
-            "quantity": 1
+            name: "cumin seeds",
+            unit: "tsp",
+            quantity: 1,
           },
           {
-            "name": "ginger",
-            "unit": "tsp",
-            "quantity": 1
+            name: "ginger",
+            unit: "tsp",
+            quantity: 1,
           },
           {
-            "name": "salt",
-            "unit": "[No Unit]",
-            "quantity": 1
+            name: "salt",
+            unit: "[No Unit]",
+            quantity: 1,
           },
           {
-            "name": "oil",
-            "unit": "[No Unit]",
-            "quantity": 1
-          }
-        ]
+            name: "oil",
+            unit: "[No Unit]",
+            quantity: 1,
+          },
+        ],
       },
 
       {
-        "id": 20,
-        "name": "Besan Ladoo",
-        "ingredients": [
+        id: 20,
+        name: "Besan Ladoo",
+        ingredients: [
           {
-            "name": "besan",
-            "unit": "cups",
-            "quantity": 1
+            name: "besan",
+            unit: "cups",
+            quantity: 1,
           },
           {
-            "name": "sugar",
-            "unit": "cups",
-            "quantity": 0.5
+            name: "sugar",
+            unit: "cups",
+            quantity: 0.5,
           },
           {
-            "name": "ghee",
-            "unit": "cups",
-            "quantity": 0.25
-          }
-        ]
-      }
-    ]
-    this.$store.commit('updateRecList', recipeList);
+            name: "ghee",
+            unit: "cups",
+            quantity: 0.25,
+          },
+        ],
+      },
+    ];
+    this.$store.commit("updateRecList", recipeList);
     // TODO: sandman: Make get call
     // $.get('/recipes', 'json')
     //   .done(
@@ -90,26 +93,25 @@ export default {
   },
   methods: {
     showAddRecDiv() {
-      if (this.plusRecChar === '+') {
+      if (this.plusRecChar === "+") {
         this.showAddRec = true;
         this.$nextTick(() => {
           this.$refs.newRecName.focus();
         });
-        this.plusRecChar = '-';
-      }
-      else {
+        this.plusRecChar = "-";
+      } else {
         this.cancelAddRec();
       }
     },
     clickRec(idx) {
-      this.$store.commit('activateRec', idx);
-      this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
-      this.$emit('focus')
+      this.$store.commit("activateRec", idx);
+      this.$store.commit("setCurRec", this.$store.state.recipeList[idx]);
+      this.$emit("focus");
       this.showRename = false;
       this.displayRecDiv = false;
     },
     addRec() {
-      this.plusRecChar = '+';
+      this.plusRecChar = "+";
       // TODO: sandman: Implement new recipe upload.
       // const rec = {
       //   name: this.recName,
@@ -135,35 +137,38 @@ export default {
       //   },
       // );
       this.showAddRec = false;
-      this.recName = ''
+      this.recName = "";
     },
     failureOnAjaxOfRecipe(jqXHR) {
-      let message = '';
+      let message = "";
       if (jqXHR.readyState === 0) {
-        message = 'Failed to contact server.';
-      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseJSON')) {
+        message = "Failed to contact server.";
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, "responseJSON")) {
         message = jqXHR.responseJSON.message;
-      } else if (Object.prototype.hasOwnProperty.call(jqXHR, 'responseText')) {
-        message = jqXHR['responseText'];
+      } else if (Object.prototype.hasOwnProperty.call(jqXHR, "responseText")) {
+        message = jqXHR["responseText"];
       } else {
-        message = "An unknown error has occured."
+        message = "An unknown error has occured.";
       }
-      this.$emit('update-err', message);
+      this.$emit("update-err", message);
     },
     cancelAddRec() {
       this.showAddRec = false;
-      this.recName = '';
-      this.plusRecChar = '+';
+      this.recName = "";
+      this.plusRecChar = "+";
     },
     findRec(recipe) {
       for (let i = 0; i < this.$store.state.recipeList.length; i += 1) {
-        if (JSON.stringify(this.$store.state.recipeList[i]) === JSON.stringify(recipe)) {
+        if (
+          JSON.stringify(this.$store.state.recipeList[i]) ===
+          JSON.stringify(recipe)
+        ) {
           return i;
         }
       }
-    }
-  }
-}
+    },
+  },
+});
 </script>
 <template>
     <div>

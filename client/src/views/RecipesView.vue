@@ -1,27 +1,28 @@
-<script setup>
-import LeftPane from '@/components/LeftPane.vue'
-import RightPane from '@/components/RightPane.vue'
+<script lang="ts" setup>
+import LeftPane from "@/components/LeftPane.vue";
+import RightPane from "@/components/RightPane.vue";
+import { defineComponent } from "vue";
 </script>
 
-<script>
-export default {
-    computed: {
+<script lang="ts">
+export default defineComponent({
+  computed: {
     displayWarn() {
-      return this.$store.state.error !== '';
+      return this.$store.state.error !== "";
     },
   },
   methods: {
     updateErr(message) {
-      this.$store.commit('setError', message);
+      this.$store.commit("setError", message);
       window.setTimeout(() => {
-        this.$store.commit('setError', '');
-      }, 3000)
+        this.$store.commit("setError", "");
+      }, 3000);
     },
     focus() {
       this.$refs.rightPane.plusIng(true);
-    }
-  }
-}
+    },
+  },
+});
 </script>
 <template>
     <div>
@@ -48,7 +49,7 @@ export default {
 </template>
 
 <style>
-@import '@/assets/style.css';
+@import "@/assets/style.css";
 /* @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
