@@ -8,11 +8,22 @@ import createAuth0Client, {
 } from "@auth0/auth0-spa-js";
 import { inject, provide, ref } from "vue";
 import router from "../router";
+// import { webpack } from "webpack";
+// new webpack.EnvironmentPlugin([
+//   "VUE_APP_AUTH0_DOMAIN",
+//   "VUE_APP_AUTH0_CLIENT_ID",
+//   "VUE_APP_AUTH0_AUDIENCE",
+//   "VUE_APP_AUTH0_CALLBACK_URL",
+// ]);
+// const domain = process.env.VUE_APP_AUTH0_DOMAIN;
+// const clientId = process.env.VUE_APP_AUTH0_CLIENT_ID;
+// const audience = process.env.VUE_APP_AUTH0_AUDIENCE;
+// const callbackUrl = process.env.VUE_APP_AUTH0_CALLBACK_URL;
 
-const domain = process.env.VUE_APP_AUTH0_DOMAIN;
-const clientId = process.env.VUE_APP_AUTH0_CLIENT_ID;
-const audience = process.env.VUE_APP_AUTH0_AUDIENCE;
-const callbackUrl = process.env.VUE_APP_AUTH0_CALLBACK_URL;
+const domain = "dev-miycrao1.us.auth0.com";
+const clientId = "Bijd2kOV0icRBKgT7KcI7v7F7T8VTDPo";
+const audience = "https://cookit.best";
+const callbackUrl = "http://localhost:4040/about";
 
 const auth0Client = ref<Auth0Client | null>(null);
 export const isAuthenticated = ref(false);
