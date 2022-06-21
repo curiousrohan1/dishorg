@@ -5,13 +5,12 @@
 </template>
 
 <script lang="ts">
-import { useAuth0 } from "@/services/auth0-plugin";
+import { useAuth0 } from "../../services/auth0-plugin";
 
 export default {
   name: "LoginButton",
   setup(): { login: () => void } {
     const auth0 = useAuth0();
-
     const login = (): void => {
       if (!auth0) {
         return;

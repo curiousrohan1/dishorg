@@ -3,7 +3,7 @@ import { defineComponent } from "vue";
 </script>
 <script lang="ts">
 export default defineComponent({
-  emits: ["update-err", "focus"],
+  emits: ["update-err"],
   data() {
     return {
       showAddRec: false,
@@ -106,7 +106,6 @@ export default defineComponent({
     clickRec(idx) {
       this.$store.commit("activateRec", idx);
       this.$store.commit("setCurRec", this.$store.state.recipeList[idx]);
-      this.$emit("focus");
       this.showRename = false;
       this.displayRecDiv = false;
     },
@@ -129,7 +128,6 @@ export default defineComponent({
       //     this.$store.commit('setCurRec', recipe);
       //     this.$store.commit('addRecipe', recipe);
       //     this.clickRec(this.findRec(recipe));
-      //     this.$emit('focus');
       //   },
       // ).fail(
       //   (jqXHR) => {

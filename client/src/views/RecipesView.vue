@@ -18,9 +18,6 @@ export default defineComponent({
         this.$store.commit("setError", "");
       }, 3000);
     },
-    focus() {
-      this.$refs.rightPane.plusIng(true);
-    },
   },
 });
 </script>
@@ -38,7 +35,6 @@ export default defineComponent({
           <LeftPane
             @update-err="updateErr($event)"
             id="left-pane"
-            @focus="focus"
           ></LeftPane>
           <RightPane
             @update-err="updateErr($event)"

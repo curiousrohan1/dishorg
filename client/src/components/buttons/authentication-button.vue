@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { useAuth0 } from "@/services/auth0-plugin";
+import { useAuth0 } from "../../services/auth0-plugin";
 import LoginButton from "@/components/buttons/login-button.vue";
 import LogoutButton from "@/components/buttons/logout-button.vue";
 import { computed, ComputedRef } from "vue";
