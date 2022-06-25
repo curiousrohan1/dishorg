@@ -1,6 +1,12 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-//import HelloWorld from '@/components/HelloWorld.vue'
+import { RouterLink, RouterView } from "vue-router";
+import { computed } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+const stack = computed(() => {
+  return store.state.stack;
+});
 </script>
 <script>
 export default {
@@ -9,19 +15,14 @@ export default {
       displayBod: false,
       displayIngDiv: false,
       disabled: true,
-      recName: '',
+      recName: "",
       curRec: {},
       updateRecList: false,
-      actions: [
-        'Change x',
-        'Change Password',
-        'Log out',
-        'Delete Account',
-      ],
+      actions: ["Change x", "Change Password", "Log out", "Delete Account"],
       showRecTitle: true,
-      username: '',
-      password: ''
-    }
+      username: "",
+      password: "",
+    };
   },
   methods: {
     hideIngDiv() {
@@ -29,8 +30,7 @@ export default {
     },
     isEmpty(obj) {
       for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key))
-          return false;
+        if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
       }
       return true;
     },
@@ -38,9 +38,9 @@ export default {
     setCreds(obj) {
       this.username = obj.username;
       this.password = obj.password;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <template>

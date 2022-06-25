@@ -587,10 +587,10 @@ export default {
                       v-on:keyup.enter = "addGroc">
                   <div class = "btn-group" role = "group">
                       <button class = "btn" id = "add-groc" @click = "addGroc">
-                          <img src = "src/assets/apply.png">
+                          <img src = "../assets/apply.png">
                       </button>
                       <button class = "btn" id = "cancel-groc-rec" @click = "cancelAddGroc">
-                          <img src = "src/assets/cancel.jpg">
+                          <img src = "../assets/cancel.jpg">
                       </button>
                   </div>
               </div>
@@ -604,18 +604,18 @@ export default {
                   <input id = "rename-groc-input" placeholder = "New Name..." type = "text" v-model = "rename"
                       v-on:keyup.enter = "applyGrocRename">
                   <button @click = "applyGrocRename" class = "btn" id = "apply-groc-rename">
-                      <img src = "src/assets/apply.png">
+                      <img src = "../assets/apply.png">
                   </button>
                   <button @click = "cancelGrocRename" class = "btn" id = "cancel-groc-rename">
-                      <img src = "src/assets/cancel.jpg">
+                      <img src = "../assets/cancel.jpg">
                   </button>
               </div>
               <button @click = "editGrocName" class = "btn btn-outline-dark" id = "edit-groc-name" v-show = "showGrocTitle">
-                  <img src = "src/assets/edit.png">
+                  <img src = "../assets/edit.png">
               </button>
               <ModalBox :target="this.tar" @cont-del="delGroc" v-show="showGrocTitle" :tarName="this.$store.state.currentGroc.name"></ModalBox>
               <button @click="dupGroc" class="btn btn-outline-dark" id="dup-groc" v-show="showGrocTitle">
-                  <img src="src/assets/dup.png">
+                  <img src="../assets/dup.png">
               </button>
               <button @click = "plusRec" class = "btn btn-dark clearfix" data-placement = "left" data-toggle = "tooltip"
                   id = "plus-rec" title = "Add Recipe" v-show = "this.showRightButtons">{{plusRecChar}}
@@ -626,7 +626,7 @@ export default {
               <ul id = "grocery-details">
                   <li class = "ingItem" :key="idx" v-for = "(rec,idx) in this.$store.state.currentGroc.recipes">
                       <button class = "btn btn-outline-dark" @click = "delRec(idx)">
-                          <img src = "src/assets/del.png" style = "width:30px; height:30px; ">
+                          <img src = "../assets/del.png" style = "width:30px; height:30px; ">
                       </button>
                       {{rec.name}}
                   </li>
@@ -638,10 +638,10 @@ export default {
                   </select>
                   <div class = "btn-group" role = "group">
                       <button @click = "applyAddRec" class = "btn">
-                          <img src = "src/assets/apply.png">
+                          <img src = "../assets/apply.png">
                       </button>
                       <button @click = "cancelAddRec" class = "btn">
-                          <img src = "src/assets/cancel.jpg">
+                          <img src = "../assets/cancel.jpg">
                       </button>
                   </div>
               </div>

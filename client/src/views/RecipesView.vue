@@ -16,9 +16,6 @@ export default {
       window.setTimeout(() => {
         this.$store.commit('setError', '');
       }, 3000)
-    },
-    focus() {
-      this.$refs.rightPane.plusIng(true);
     }
   }
 }
@@ -37,7 +34,6 @@ export default {
           <LeftPane
             @update-err="updateErr($event)"
             id="left-pane"
-            @focus="focus"
           ></LeftPane>
           <RightPane
             @update-err="updateErr($event)"

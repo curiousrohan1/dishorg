@@ -231,7 +231,7 @@ table {
   margin-right: 0.5rem !important;
 }
 .form-control {
-  height: calc(1.5rem+0.75rem+2px);
+  height: calc(1.5rem + 0.75rem + 2px);
 }
 button,
 input {

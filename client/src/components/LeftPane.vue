@@ -1,6 +1,6 @@
 <script>
 export default {
-  emits: ['update-err', 'focus'],
+  emits: ['update-err'],
   data() {
     return {
       showAddRec: false,
@@ -104,7 +104,6 @@ export default {
     clickRec(idx) {
       this.$store.commit('activateRec', idx);
       this.$store.commit('setCurRec', this.$store.state.recipeList[idx]);
-      this.$emit('focus')
       this.showRename = false;
       this.displayRecDiv = false;
     },
